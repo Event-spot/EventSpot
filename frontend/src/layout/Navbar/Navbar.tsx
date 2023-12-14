@@ -1,11 +1,11 @@
 'use client'
 
 import Link from 'next/link';
-import Menu from '../Menu/Menu';
+import Menu from '@/layout/Menu/Menu';
 import styles from './Navbar.module.scss';
-import Hamburger from "@/components/Hamburger/Hamburger";
+import Hamburger from "@/layout/Hamburger/Hamburger";
 import { useState } from 'react';
-import Overlay from "@/components/Overlay/Overlay";
+import Overlay from "@/layout/Overlay/Overlay";
 import { IoMdSettings } from "react-icons/io";
 
 export default function Navbar(){
