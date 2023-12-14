@@ -1,0 +1,50 @@
+@import "../../assets/styles/colors";
+
+.container{
+  height: 491px;
+  max-width: 500px;
+  background-color: $secondary;
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  padding: 24px 0;
+  grid-column: 1/5;
+
+  .title{
+    color: $white;
+    font-size: 32px;
+    font-weight: bold;
+  }
+
+  .content{
+    color: $primary;
+    font-weight: bold;
+    font-size: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    .option{
+      text-align: center;
+      width: 80%;
+      margin: 12px 0;
+    }
+
+    .stripe{
+      width: 80%;
+      height: 2px;
+      background-color: $primary;
+      border-radius: 5px;
+    }
+  }
+
+  .btn{
+    font-size: 20px;
+    background: transparent;
+    color: $white;
+    border: 2px solid $white;
+    padding: 10px;
+    border-radius: 10px;
+  }
+}
