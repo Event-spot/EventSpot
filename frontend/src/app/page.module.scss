@@ -1,0 +1,186 @@
+@import '../assets/styles/colors';
+
+.container{
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-column-gap: 16px;
+  padding: 0 16px;
+  background-image: url('../assets/images/home_background.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  overflow-x: hidden;
+}
+
+.welcomeSection{
+  height: calc(100vh - 80px);
+  position: relative;
+  grid-column: 1/5;
+
+  .mobileShape{
+    position: absolute;
+    left: -16px;
+    bottom: 0;
+  }
+
+  .desktopTopShape{
+    display: none;
+  }
+
+  .content{
+    color: $white;
+    position: absolute;
+    left: 0;
+    bottom: 130px;
+  }
+
+  .title{
+    font-size: 42px;
+  }
+
+  .text {
+    width: 300px;
+    font-size: 20px;
+  }
+
+  .btnContainer{
+    width: 100vw;
+    display: flex;
+    justify-content: center;
+    position: absolute;
+    left: -16px;
+    top: 170px;
+  }
+
+  .skyline{
+    display: none;
+  }
+}
+
+.infoCardContainer{
+  min-height: 100vh;
+  grid-column: 1/5;
+  padding: 50px 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  row-gap: 50px;
+  position: relative;
+
+  .desktopBottomShape{
+    display: none;
+  }
+}
+
+@media (min-width: 600px){
+  .container{
+    grid-template-columns: repeat(8, 1fr);
+    grid-column-gap: 24px;
+    padding: 0 24px;
+  }
+
+  .welcomeSection{
+    grid-column: 1/9;
+  }
+
+  .infoCardContainer{
+    grid-column: 1/9;
+  }
+}
+
+@media (min-width: 992px){
+  .container{
+    grid-template-columns: repeat(12, 1fr);
+    background-image: none;
+  }
+
+  .welcomeSection{
+    grid-column: 1/13;
+
+    .content{
+      color: $primary;
+      left: 100px;
+      top: 200px;
+
+      .title{
+        font-size: 72px;
+      }
+
+      .text{
+        font-size: 32px;
+        width: 400px;
+        font-weight: bold;
+      }
+    }
+
+    .mobileShape{
+      display: none;
+    }
+
+    .desktopTopShape{
+      display: block;
+      position: absolute;
+      bottom: 0;
+      left: -24px;
+    }
+
+    .btnContainer{
+      display: none;
+    }
+
+    .skyline{
+      display: block;
+      width: 600px;
+      height: auto;
+      position: absolute;
+      bottom: 0;
+      right: -80px;
+      z-index: 10;
+    }
+  }
+
+  .infoCardContainer{
+    grid-column: 1/13;
+    flex-direction: row;
+    justify-content: center;
+    column-gap: 50px;
+    padding-top: 200px;
+
+    .desktopBottomShape{
+      display: block;
+      position: absolute;
+      left: -24px;
+      top: 0;
+    }
+  }
+}
+
+@media (min-width: 1200px){
+
+  .welcomeSection{
+    .skyline{
+      bottom: 50px;
+      right: -50px;
+    }
+  }
+
+  .infoCardContainer{
+    grid-column: 1/13;
+    column-gap: 100px;
+  }
+}
+
+@media (min-width: 1400px){
+
+  .welcomeSection{
+    .skyline{
+      width: 800px;
+      bottom: 150px;
+      right: 0;
+    }
+  }
+
+  .infoCardContainer{
+    grid-column: 1/13;
+    column-gap: 200px;
+  }
+}
