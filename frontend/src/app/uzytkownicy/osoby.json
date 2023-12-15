@@ -1,0 +1,52 @@
+[
+    {
+      "imie": "Anna",
+      "nazwisko": "Kowalska",
+      "lokalizacja": "Warszawa",
+      "odwiedzoneSpoty": 15,
+      "obserwowani": 200,
+      "obserwujacy": 150
+    },
+    {
+      "imie": "Jan",
+      "nazwisko": "Nowak",
+      "lokalizacja": "Kraków",
+      "odwiedzoneSpoty": 20,
+      "obserwowani": 180,
+      "obserwujacy": 120
+    },
+    {
+      "imie": "Karolina",
+      "nazwisko": "Wiśniewska",
+      "lokalizacja": "Gdańsk",
+      "odwiedzoneSpoty": 10,
+      "obserwowani": 250,
+      "obserwujacy": 220
+    },
+    {
+        "imie": "Karolina",
+        "nazwisko": "Wiśniewska",
+        "lokalizacja": "Gdańsk",
+        "odwiedzoneSpoty": 10,
+        "obserwowani": 250,
+        "obserwujacy": 220
+      },
+      {
+        "imie": "Karolina",
+        "nazwisko": "Wiśniewska",
+        "lokalizacja": "Gdańsk",
+        "odwiedzoneSpoty": 10,
+        "obserwowani": 250,
+        "obserwujacy": 220
+      },
+      {
+        "imie": "Karolina",
+        "nazwisko": "Wiśniewska",
+        "lokalizacja": "Gdańsk",
+        "odwiedzoneSpoty": 10,
+        "obserwowani": 250,
+        "obserwujacy": 220
+      }
+    
+  ]
+  
