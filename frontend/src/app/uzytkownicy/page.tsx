@@ -7,7 +7,17 @@ import { useState } from 'react';
 
 export default function Users() {
     const [currentPage, setCurrentPage] = useState(1);
-    const lastPage = 20; //Zmienić później tak aby pobierało z bazy danych.
+    //const lastPage = 20; //Zmienić później tak aby pobierało z bazy danych.
+    // Ograniczenie liczby osób na stronie
+    const itemsPerPage = 12;
+    // Obliczenie całkowitej liczby stron
+    const totalNumOfPages = Math.ceil(osoby.length / itemsPerPage);
+    // Obliczenie indeksów osób dla obecnej strony
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, osoby.length);
+    // Wyświetlenie osób dla obecnej strony
+    const currentOsoby = osoby.slice(startIndex, endIndex);
+
     return(
         <div className={styles.main}>
             <div className={styles.upbar}>
@@ -30,7 +40,7 @@ export default function Users() {
             <div className={styles.users}>
             <div className={styles.pages}>
                 <div className={styles.container}>
-                    {osoby.map((osoba, index) => (
+                    {currentOsoby.map((osoba, index) => (
                         <Person
                         key={index}
                         imie={osoba.imie}
@@ -47,7 +57,7 @@ export default function Users() {
             <div className={styles.downbar}>
                 <Pagination
                     currentPage={currentPage}
-                    lastPage={lastPage}
+                    lastPage={totalNumOfPages}
                     maxLength={7}
                     setCurrentPage={setCurrentPage}
                 />
