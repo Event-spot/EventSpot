@@ -1,0 +1,60 @@
+@import '../../assets/styles/colors';
+.page-link {
+    position: relative;
+    display: inline-flex;
+    border: 1px solid $light-gray;
+    background-color: $light-gray;
+    padding: 10px 15px;
+    color: $black;
+    font-size: 16px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: color 0.15s ease-in-out, background-color 0.15s ease-in-out,
+      border-color 0.15s ease-in-out;
+    cursor: pointer;
+  }
+  
+  .page-link:first-child {
+    border-radius: 50%;
+    margin-right: 5px;
+    font-size: 20px;
+  }
+  
+  .page-link:last-child {
+    border-radius: 50%;
+    margin-left: 5px;
+    font-size: 20px;
+  }
+  
+  .page-link:nth-child(2):not(:last-child) {
+    border-top-left-radius: 50%;
+    border-bottom-left-radius: 50%;
+  }
+  
+  .page-link:nth-last-child(2):not(:first-child) {
+    border-top-right-radius: 50%;
+    border-bottom-right-radius: 50%;
+  }
+  
+  .page-link:hover,
+  .page-link:focus {
+    color: $white;
+    background-color: $primary;
+    border-color: $primary;
+  }
+  
+  .page-link:focus {
+    z-index: 3;
+  }
+  
+  .page-link.active {
+    z-index: 2;
+    color: $white;
+    border-color: $primary;
+    background-color: $primary;
+  }
+  
+  .page-link.disabled {
+    color: $dark-gray;
+    pointer-events: none;
+  }

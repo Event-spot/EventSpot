@@ -1,8 +1,13 @@
+'use client'
 import styles from './users.module.scss';
 import osoby from './osoby.json';
 import Person from '../../components/Person/Person';
+import Pagination from '../../components/Pagination/Pagination';
+import { useState } from 'react';
 
 export default function Users() {
+    const [currentPage, setCurrentPage] = useState(1);
+    const lastPage = 20; //Zmienić później tak aby pobierało z bazy danych.
     return(
         <div className={styles.main}>
             <div className={styles.upbar}>
@@ -40,7 +45,12 @@ export default function Users() {
             </div>
           
             <div className={styles.downbar}>
-                
+                <Pagination
+                    currentPage={currentPage}
+                    lastPage={lastPage}
+                    maxLength={7}
+                    setCurrentPage={setCurrentPage}
+                />
             </div>
         </div>
        

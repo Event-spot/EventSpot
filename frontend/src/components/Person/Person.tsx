@@ -1,6 +1,6 @@
 import styles from './Person.module.scss'; // Import styli
 import Image from "next/image";
-import Question from '../../assets/images/question.png';
+import Question from '../../assets/images/question.png'; 
 
 type PersonProps = {
   imie: string;
@@ -22,7 +22,7 @@ const Person: React.FC<PersonProps> = ({
   return (
     <div className={styles.person}>
       <div>
-      <Image className={styles.avatar} src={Question} alt={'Nissan Skyline R34 GT-R'}/>
+      <Image priority={true} className={styles.avatar} src={Question} alt={'Person Avatar'}/>  
       </div>
       <div className={styles.name}>
         <p>{imie} {nazwisko}</p>
