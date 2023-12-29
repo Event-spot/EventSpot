@@ -7,9 +7,12 @@ import Hamburger from "@/layout/Hamburger/Hamburger";
 import { useState } from 'react';
 import Overlay from "@/layout/Overlay/Overlay";
 import { IoMdSettings } from "react-icons/io";
+import LoginPopover from "@/layout/LoginPopover/LoginPopover";
+import { useDisclosure } from "@mantine/hooks";
 
 export default function Navbar(){
     const [menuIsOpen, setMenuIsOpen] = useState(false);
+    const [opened, {close, open}] = useDisclosure(false);
 
     const ShowMenu = () => {
         setMenuIsOpen(!menuIsOpen);
@@ -31,8 +34,8 @@ export default function Navbar(){
                 <Link href={'/kontakt'}><li className={styles.option}>Kontakt</li></Link>
             </ul>
             <ul className={styles.profileSection}>
-                <li className={styles.option}>Zaloguj się</li>
-                <li className={styles.option}><IoMdSettings className={styles.icon} /></li>
+                <LoginPopover isOpened={opened} open={open} close={close}/>
+                <li className={styles.option} onClick={open}><IoMdSettings className={styles.icon} /></li>
             </ul>
             <Overlay className={menuIsOpen && styles.overlayShow} onClick={CloseMenu}/>
         </div>

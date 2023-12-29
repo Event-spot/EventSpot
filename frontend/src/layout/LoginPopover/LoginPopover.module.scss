@@ -1,0 +1,73 @@
+@import "../../assets/styles/colors";
+
+.dropdown{
+  height: 400px;
+  z-index: 999;
+  background-color: $white;
+  box-shadow: 1px 1px 10px $black;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  align-items: center;
+}
+
+.wrapper{
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+.root{
+  width: 100%;
+}
+
+.input{
+  border: none;
+  border-radius: 0;
+  outline: none;
+  width: 90%;
+  border-bottom: 2px solid $light-gray;
+  transition: border-bottom-color .3s;
+
+  &:focus{
+    border-bottom-color: $secondary;
+  }
+}
+
+.passwordOuterInput{
+  width: 90%;
+  border-radius: 0;
+}
+
+.passwordInput{
+  width: 100%;
+  border-bottom: 2px solid $light-gray;
+  transition: border-bottom-color .3s;
+
+  &:focus{
+    border-bottom-color: $secondary;
+  }
+}
+
+.button{
+  background-color: $secondary;
+  width: 60%;
+
+  &:hover{
+    background-color: lighten($secondary, 10%);
+  }
+}
+
+.loginButton{
+  background-color: $secondary;
+
+  &:hover{
+    background-color: lighten($secondary, 10%);
+  }
+}
+
+.text{
+  color: $secondary;
+  width: 50%;
+  cursor: pointer;
+}
