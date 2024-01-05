@@ -1,5 +1,5 @@
 import { Injectable } from '@nestjs/common';
-import {UserEntity} from "./users.entity";
+import {UserEntity} from "./dto/users.entity";
 import {Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
 import {AddUserArgs} from "./args/addUser.args";
@@ -26,6 +26,8 @@ export class UsersService {
 
     async addUser(addUserArgs: AddUserArgs): Promise<string>{
         let user: UserEntity = new UserEntity();
+        user.email = addUserArgs.email;
+        user.password = addUserArgs.password;
         user.firstname = addUserArgs.firstname;
         user.lastname = addUserArgs.lastname;
         user.localization = addUserArgs.localization;
