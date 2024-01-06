@@ -1,7 +1,7 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UsersModule } from './users/users.module';
+import { UserModule } from './user/user.module';
 import {join} from "path";
 import { ConfigModule } from '@nestjs/config';
 import {GraphQLModule} from '@nestjs/graphql'
@@ -18,7 +18,7 @@ import {typeormConfigAsync} from "./config/typeorm.config";
       playground: true
     }),
     TypeOrmModule.forRootAsync(typeormConfigAsync),
-    UsersModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],
