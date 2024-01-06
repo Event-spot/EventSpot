@@ -13,16 +13,16 @@ export class UserEntity {
     @Column()
     password: string;
 
-    @Column()
+    @Column({name: "first_name"})
     firstname: string;
 
-    @Column()
+    @Column({name: "last_name"})
     lastname: string;
 
     @Column({nullable: true})
     localization?: string;
 
-    @Column()
+    @Column({name: "spots_visited"})
     spotsVisited: number;
 
     @Column()
