@@ -1,5 +1,6 @@
 // import {ObjectType, Field, Int} from "@nestjs/graphql";
-import {Column, PrimaryGeneratedColumn, Entity} from "typeorm";
+import {Column, PrimaryGeneratedColumn, Entity, ManyToMany, JoinTable} from "typeorm";
+import EventEntity from "../../event/entities/event.entity";
 
 @Entity({name: "user"})
 export class UserEntity {
@@ -30,4 +31,7 @@ export class UserEntity {
 
     @Column()
     following: number;
+
+    @ManyToMany(() => EventEntity, (event) => event.attendees, {nullable: true})
+    events?: EventEntity[];
 }

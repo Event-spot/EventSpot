@@ -1,8 +1,9 @@
-import {Args, Int, Mutation, Query, Resolver} from '@nestjs/graphql';
+import {Args, Int, Mutation, Parent, Query, ResolveField, Resolver} from '@nestjs/graphql';
 import {UserService} from "./user.service";
 import {User} from "./schema/user.schema";
 import {AddUserArgs} from "./dto/addUser.args";
 import {UpdateUserArgs} from "./dto/updateUser.args";
+import {Event} from "../event/schema/event.schema";
 
 @Resolver(of => User)
 export class UserResolver {
@@ -16,6 +17,11 @@ export class UserResolver {
     @Query(returns => User, {name: 'userById'})
     getUserById(@Args({name: "userId", type: () => Int}) id: number) {
         return this.userService.findUserById(id)
+    }
+
+    @ResolveField(returns => [Event], {name: 'events'})
+    getEvents(@Parent() user: User) {
+        return user.events || [];
     }
 
     @Mutation(returns => String, {name: "deleteUser"})
