@@ -28,7 +28,7 @@ export default function wydarzenia() {
   return (
 <div className={styles.main}>
 
-<div className={styles.upmenu}>
+  <div>
     <Upbar/>
   </div>
   
