@@ -1,23 +1,29 @@
 'use client'
 import styles from './users.module.scss';
-import osoby from './osoby.json';
 import Person from '../../components/Person/Person';
 import Pagination from '../../components/Pagination/Pagination';
 import { useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { GET_USERS } from './graphql/schema';
+
+interface Person {
+    firstname: string;
+    lastname: string;
+    localization: string;
+    spotsVisited: number;
+    followers: number;
+    following: number;
+}
 
 export default function Users() {
     const [currentPage, setCurrentPage] = useState(1);
-    //const lastPage = 20; //Zmienić później tak aby pobierało z bazy danych.
+    const {loading,error, data} = useQuery(GET_USERS);
     // Ograniczenie liczby osób na stronie
-    const itemsPerPage = 12;
-    // Obliczenie całkowitej liczby stron
-    const totalNumOfPages = Math.ceil(osoby.length / itemsPerPage);
-    // Obliczenie indeksów osób dla obecnej strony
+    const itemsPerPage = 10;
+    const totalNumOfPages = Math.ceil((data?.users.length || 0) / itemsPerPage);
     const startIndex = (currentPage - 1) * itemsPerPage;
-    const endIndex = Math.min(startIndex + itemsPerPage, osoby.length);
-    // Wyświetlenie osób dla obecnej strony
-    const currentOsoby = osoby.slice(startIndex, endIndex);
-
+    const endIndex = Math.min(startIndex + itemsPerPage, data?.users.length);
+    const currentOsoby = data?.users.slice(startIndex, endIndex) || [];
     return(
         <div className={styles.main}>
             <div className={styles.upbar}>
@@ -40,16 +46,19 @@ export default function Users() {
             <div className={styles.users}>
             <div className={styles.pages}>
                 <div className={styles.container}>
-                    {currentOsoby.map((osoba, index) => (
-                        <Person
-                        key={index}
-                        imie={osoba.imie}
-                        nazwisko={osoba.nazwisko}
-                        lokalizacja={osoba.lokalizacja}
-                        odwiedzoneSpoty={osoba.odwiedzoneSpoty}
-                        obserwowani={osoba.obserwowani}
-                        obserwujacy={osoba.obserwujacy}
-                        />))}
+                    {!loading && data?.users &&
+                        currentOsoby.map((osoba: Person, index: number) => (
+                            <Person
+                            key={index}
+                            imie={osoba.firstname}
+                            nazwisko={osoba.lastname}
+                            lokalizacja={osoba.localization}
+                            odwiedzoneSpoty={osoba.spotsVisited}
+                            obserwowani={osoba.following}
+                            obserwujacy={osoba.followers}
+                            />
+                        ))
+                    }
                     </div>
                 </div>
             </div>

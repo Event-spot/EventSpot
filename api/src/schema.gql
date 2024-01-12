@@ -1,0 +1,44 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  id: Int!
+  email: String!
+  password: String!
+  firstname: String!
+  lastname: String!
+  localization: String
+  spotsVisited: Int!
+  followers: Int!
+  following: Int!
+}
+
+type Query {
+  users: [User!]!
+  userById(userId: Int!): User!
+}
+
+type Mutation {
+  deleteUser(userId: Int!): String!
+  addUser(addUserArgs: AddUserArgs!): String!
+  updateUser(updateUserArgs: UpdateUserArgs!): String!
+}
+
+input AddUserArgs {
+  email: String!
+  password: String!
+  firstname: String!
+  lastname: String!
+  localization: String
+}
+
+input UpdateUserArgs {
+  id: Int!
+  firstname: String!
+  lastname: String!
+  localization: String
+  spotsVisited: Int!
+  following: Int!
+  followers: Int!
+}
