@@ -5,13 +5,12 @@
   width: 100wv;
   height: 80px;
   padding: 0 16px;
-  overflow-x: hidden;
   display: grid;
   grid-template-columns: repeat(4, 1fr);
   grid-column-gap: 16px;
-  position: sticky;
+  position: fixed;
   top: 0;
-  z-index: 999;
+  z-index: 100;
   box-shadow: 0 4px 4px 0 rgba(00, 00, 00, .25);
 
   a{
@@ -90,7 +89,7 @@
 
   .profileSection{
     display: flex;
-    grid-column: 11/13;
+    grid-column: 10/13;
     list-style-type: none;
     font-weight: bold;
     align-items: center;
@@ -109,7 +108,7 @@
 
 @media (min-width: 1200px){
   .navigation{
-    grid-column: 5/10;
+    grid-column: 4/9;
   }
 
   .option{
