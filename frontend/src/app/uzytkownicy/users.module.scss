@@ -3,13 +3,14 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin: 2%;
+    margin: 5%;
     padding: 5px;
   
     .upbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
+      padding-left: 5%;
       //padding: 10px; /* Dodałem padding dla lepszego wyglądu */
       
       
@@ -55,7 +56,7 @@
     .container {
       display: flex;
       flex-direction: row;
-      justify-content: left;
+      justify-content: center;
       flex-wrap: wrap;
     }
 

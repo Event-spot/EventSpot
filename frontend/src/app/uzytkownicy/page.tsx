@@ -9,7 +9,7 @@ export default function Users() {
     const [currentPage, setCurrentPage] = useState(1);
     //const lastPage = 20; //Zmienić później tak aby pobierało z bazy danych.
     // Ograniczenie liczby osób na stronie
-    const itemsPerPage = 12;
+    const itemsPerPage = 10;
     // Obliczenie całkowitej liczby stron
     const totalNumOfPages = Math.ceil(osoby.length / itemsPerPage);
     // Obliczenie indeksów osób dla obecnej strony
