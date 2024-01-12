@@ -6,109 +6,177 @@
   row-gap: 10px;
 }
 
-.container {
+.container{
   margin-top: 50px;
   width: 100vw;
   color: $white;
 
-  .navigation,
-  .credentials,
-  .title,
-  .footerNav,
-  .credit,
-  .section1,
-  .section2,
-  .section3,
-  .section4,
-  .contact,
-  .social {
-    width: 100%; // Set each section to span the entire width
-  }
-
-  .navigation {
+  .navigation{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 16px;
+    padding: 20px 16px;
     background-color: $primary;
     min-height: 200px;
-    padding: 20px 16px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 16px;
+    width: 100vw;
+    grid-row-gap: 20px;
   }
 
-  .credentials {
+  .credentials{
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    grid-column-gap: 16px;
+    padding: 0 16px;
     background-color: $black;
     height: 50px;
-    padding: 0 16px;
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    gap: 16px;
+    width: 100vw;
   }
 
-  .title {
+  .title{
     color: $light-gray;
     font-weight: bold;
   }
 
-  .footerNav {
+  .footerNav{
     list-style-type: none;
     display: flex;
     flex-direction: column;
     row-gap: 2px;
   }
 
-  .credit {
+  .credit{
+    grid-column: 1/3;
     height: 100%;
     display: flex;
     align-items: center;
-    flex: 1 0 50%; // Two columns on smaller screens
   }
 
-  .section1,
-  .section2,
-  .section3,
-  .section4,
-  .contact {
+  .section1{
+    grid-column: 1/3;
     @include sectionFlex;
-    flex: 1; // Each section takes equal space
-    margin-right: 16px; // Add some spacing between sections
   }
 
-  .social {
+  .section2{
+    grid-column: 3/5;
+    @include sectionFlex;
+  }
+
+  .section3 {
+    grid-column: 1/3;
+    @include sectionFlex;
+  }
+
+  .section4{
+    grid-column: 3/5;
+    @include sectionFlex;
+  }
+
+  .contact{
+    grid-column: 1/5;
+    @include sectionFlex;
+  }
+
+  .social{
+    height: 100%;
+    grid-column: 3/5;
     font-size: 32px;
     display: flex;
     justify-content: center;
     align-items: center;
+    column-gap: 10px;
+  }
+}
+
+@media (min-width: 600px){
+  .navigation{
+    grid-template-columns: repeat(8, 1fr) !important;
+    grid-column-gap: 24px !important;
+    padding: 20px 24px !important;
   }
 
-  @media (min-width: 600px) {
-    .navigation,
-    .credentials {
-      justify-content: space-between;
-      gap: 24px;
-      padding: 20px 24px !important;
-    }
-
-    .credit {
-      flex: 1 0 50%; // Two columns on smaller screens
-    }
-
-    .section1,
-    .section2,
-    .section3,
-    .section4,
-    .contact {
-      margin-right: 24px;
-    }
-
-    .social {
-      flex: 1 0 24%; // Adjust the width on larger screens
-    }
+  .credentials{
+    grid-template-columns: repeat(8, 1fr) !important;
+    grid-column-gap: 24px !important;
+    padding: 0 24px !important;
   }
 
-  @media (min-width: 992px) {
-    .social {
-      flex: 1 0 8%; // Adjust the width on larger screens
-    }
+  .credit{
+    grid-column: 2/6 !important;
+  }
+
+  .section1{
+    grid-column: 2/6 !important;
+    @include sectionFlex;
+  }
+
+  .section2{
+    grid-column: 6/8 !important;
+    @include sectionFlex;
+  }
+
+  .section3 {
+    grid-column: 2/6 !important;
+    @include sectionFlex;
+  }
+
+  .section4{
+    grid-column: 6/8 !important;
+    @include sectionFlex;
+  }
+
+  .contact{
+    grid-column: 2/8 !important;
+    @include sectionFlex;
+  }
+
+  .social{
+    grid-column: 6/8 !important;
+  }
+}
+
+@media (min-width: 992px) {
+  .navigation{
+    grid-template-columns: repeat(12, 1fr) !important;
+  }
+
+  .credentials{
+    grid-template-columns: repeat(12, 1fr) !important;
+  }
+
+  .credit{
+    grid-column: 2/11 !important;
+  }
+
+  .section1{
+    grid-column: 2/8 !important;
+    @include sectionFlex;
+  }
+
+  .section2{
+    grid-column: 8/11 !important;
+    @include sectionFlex;
+  }
+
+  .section3 {
+    grid-column: 2/8 !important;
+    @include sectionFlex;
+  }
+
+  .section4{
+    grid-column: 8/11 !important;
+    @include sectionFlex;
+  }
+
+  .contact{
+    grid-column: 2/11 !important;
+    @include sectionFlex;
+  }
+
+  .social{
+    grid-column: 11/12 !important;
+  }
+
+  .credit{
+    grid-column: 2/6 !important;
   }
 }
