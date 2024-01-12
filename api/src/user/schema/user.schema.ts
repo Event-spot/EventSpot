@@ -1,4 +1,5 @@
 import {ObjectType, Field, Int} from '@nestjs/graphql';
+import {Event} from "../../event/schema/event.schema";
 
 @ObjectType()
 export class User {
@@ -29,4 +30,7 @@ export class User {
 
     @Field(type => Int)
     following: number;
+
+    @Field(type => [Event], {nullable: true})
+    events?: Event[]
 }

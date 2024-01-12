@@ -1,22 +1,35 @@
-import { Injectable } from '@nestjs/common';
+import {forwardRef, Inject, Injectable, OnModuleInit} from '@nestjs/common';
 import {UserEntity} from "./entities/user.entity";
 import {Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
 import {AddUserArgs} from "./dto/addUser.args";
 import {UpdateUserArgs} from "./dto/updateUser.args";
+import {EventService} from "../event/event.service";
+import {ModuleRef} from "@nestjs/core";
+import EventEntity from "../event/entities/event.entity";
 
 @Injectable()
-export class UserService {
+export class UserService implements OnModuleInit {
+    private eventService: EventService
+    constructor(@InjectRepository(UserEntity)public readonly usersRepo: Repository<UserEntity>,
+                private moduleRef: ModuleRef) {}
 
-    constructor(@InjectRepository(UserEntity)public readonly usersRepo: Repository<UserEntity>) {}
+    onModuleInit() {
+        this.eventService = this.moduleRef.get(EventService, {strict: false});
+    }
+
     async findAllUsers(): Promise<UserEntity[]>{
-        let users = await this.usersRepo.find();
+        let users = await this.usersRepo.find({relations: {events: true}});
         return users;
     }
 
     async findUserById(id: number): Promise<UserEntity> {
         let user = await this.usersRepo.findOne({where: {id: id}});
         return user;
+    }
+
+    async getEvents(eventId: number): Promise<EventEntity> {
+        return this.eventService.findEventById(eventId);
     }
 
     async deleteUser(id: number): Promise<string> {

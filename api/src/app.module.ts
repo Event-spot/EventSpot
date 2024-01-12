@@ -8,6 +8,9 @@ import {GraphQLModule} from '@nestjs/graphql'
 import { ApolloDriver, ApolloDriverConfig} from "@nestjs/apollo";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {typeormConfigAsync} from "./config/typeorm.config";
+import { EventModule } from './event/event.module';
+import {UserService} from "./user/user.service";
+import {EventService} from "./event/event.service";
 
 @Module({
   imports: [
@@ -19,6 +22,7 @@ import {typeormConfigAsync} from "./config/typeorm.config";
     }),
     TypeOrmModule.forRootAsync(typeormConfigAsync),
     UserModule,
+    EventModule,
   ],
   controllers: [AppController],
   providers: [AppService],
