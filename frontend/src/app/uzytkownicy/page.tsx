@@ -3,10 +3,13 @@ import styles from './users.module.scss';
 import osoby from './osoby.json';
 import Person from '../../components/Person/Person';
 import Pagination from '../../components/Pagination/Pagination';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 export default function Users() {
     const [currentPage, setCurrentPage] = useState(1);
+    useEffect(() =>{
+        
+    }, [])
     //const lastPage = 20; //Zmienić później tak aby pobierało z bazy danych.
     // Ograniczenie liczby osób na stronie
     const itemsPerPage = 10;
