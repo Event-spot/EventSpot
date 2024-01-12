@@ -22,7 +22,7 @@ const Event: React.FC<EventProps> = ({ nazwa }) => {
             <p>{truncatedName}</p>
           </div>
           <div>
-           <button className={styles.Button}>Zobacz Profil</button>
+           <button className={styles.Button}>Zobacz Więcej</button>
          </div>
       </div>
     </div>
