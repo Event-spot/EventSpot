@@ -10,7 +10,7 @@ export default class EventEntity {
     @Column()
     name: string;
 
-    @Column({type: 'timestamptz'})
+    @Column({type: 'date'})
     date: Date;
 
     @CreateDateColumn({name: 'create_date', type: 'timestamptz'})
@@ -26,7 +26,7 @@ export default class EventEntity {
 
     // TODO: Comments relation
 
-    @ManyToMany(() => UserEntity, (user) => user.events, {nullable: true})
+    @ManyToMany(() => UserEntity, (user) => user.events, {nullable: true, onDelete: "CASCADE"})
     @JoinTable()
     attendees?: UserEntity[];
 }

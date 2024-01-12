@@ -31,6 +31,11 @@ export class EventResolver {
         return this.eventService.addEvent(addEventArgs);
     }
 
+    @Mutation(returns => String, {name: 'deleteEvent'})
+    deleteEvent(@Args('eventId') eventId: number) {
+        return this.eventService.deleteEvent(eventId);
+    }
+
     @Mutation(returns => String, {name: 'updateEvent'})
     updateEvent(@Args('updateEventArgs') updateEventArgs: UpdateEventArgs) {
         return this.eventService.updateEvent(updateEventArgs);

@@ -10,10 +10,10 @@ export class Event{
     @Field()
     name: string;
 
-    @Field(type => GraphQLISODateTime)
+    @Field(type => String)
     date: Date;
 
-    @Field(type => GraphQLISODateTime)
+    @Field(type => String)
     createDate: Date;
 
     @Field()

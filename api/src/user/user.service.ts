@@ -7,7 +7,6 @@ import {UpdateUserArgs} from "./dto/updateUser.args";
 import {EventService} from "../event/event.service";
 import {ModuleRef} from "@nestjs/core";
 import EventEntity from "../event/entities/event.entity";
-import * as events from "events";
 
 @Injectable()
 export class UserService implements OnModuleInit {
