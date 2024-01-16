@@ -1,0 +1,55 @@
+// participation.module.scss
+@import '../../assets/styles/colors';
+
+.participantscomp {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  padding: 10px;  // Dodatkowy odstęp wewnątrz ramki
+  margin: auto;
+  width: min-content;
+  color:$primary;
+}
+
+.participantsHeader {
+  padding-left: 10px; // Dodatkowy padding po lewej stronie
+}
+
+.participantsTable {
+  border: 2px solid $primary;
+  border-radius: 10px;  // Zaokrąglenie ramki
+    
+  
+}
+
+.tableContent {
+  width: 100%;
+  max-height: 150px;  // Ustaw maksymalną wysokość, po której pojawi się suwak
+  overflow-y: auto;  // Dodaj suwak, jeśli przekroczy maksymalną wysokość
+
+  &::-webkit-scrollbar {
+    width: 8px;  // Zmniejsz szerokość suwaka
+  }
+
+  &::-webkit-scrollbar-thumb {
+    background-color: purple;  // Kolor znacznika suwaka
+    border-radius: 10px;  // Zaokrąglenie znacznika suwaka
+  }
+
+  &::-webkit-scrollbar-track {
+    background-color: grey;  // Kolor tła suwaka
+    border-radius: 10px;  // Zaokrąglenie tła suwaka
+  }
+  }
+
+.row {
+  display: flex;
+  justify-content: center;  // Wyśrodkuj imię i nazwisko poziomo
+}
+
+.cell {
+  border: none;  // Usuń ramkę dla pojedynczej komórki
+  padding: 0 5px;  // Dodaj odstęp między imieniem a nazwiskiem
+}
