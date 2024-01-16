@@ -1,8 +1,10 @@
-import styles from './Person.module.scss'; // Import styli
+import styles from './Person.module.scss';
 import Image from "next/image";
 import Question from '../../assets/images/question.png'; 
+import Link from 'next/link';
 
 type PersonProps = {
+  id: number;
   imie: string;
   nazwisko: string;
   lokalizacja: string;
@@ -12,6 +14,7 @@ type PersonProps = {
 };
 
 const Person: React.FC<PersonProps> = ({
+  id,
   imie,
   nazwisko,
   lokalizacja,
@@ -45,7 +48,9 @@ const Person: React.FC<PersonProps> = ({
             </div>
         </div>
         <div>
-            <button className={styles.Button}>Zobacz Profil</button>
+        <Link href={`/uzytkownicy/[userID]`} as={`/uzytkownicy/${id}`}>
+          <p className={styles.Button}>Zobacz Profil</p>
+        </Link>
         </div>
     </div>
   );
