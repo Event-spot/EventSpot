@@ -1,13 +1,13 @@
 'use client'
 import { useState } from 'react';
 import styles from './event.module.scss';
-import Upbar from '../../components/Upbar/Upbar';
+import Upbar from '../../../components/Upbar/Upbar';
 import Image from 'next/image';
-import eventimage from '../../assets/images/isb.png';
-import Participation from '../../components/Participation/Participation';
-import Maps from '../../components/Maps/maps';
-import Comments from '../../components/comments/comments';
-import Details from '../../components/details/details'; // Zaimportuj komponent Details
+import eventimage from '../../../assets/images/isb.png';
+import Participation from '../../../components/Participation/Participation';
+import Maps from '../../../components/Maps/maps';
+import Comments from '../../../components/comments/comments';
+import Details from '../../../components/details/details'; // Zaimportuj komponent Details
 
 export default function Event() {
   return (
