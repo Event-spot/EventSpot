@@ -1,0 +1,59 @@
+/* comments.module.scss */
+
+@import '../../assets/styles/colors';
+
+.comments {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+
+  .write {
+    width: 80%;
+    margin-bottom: 10px;
+  }
+
+  .write textarea {
+    margin-top: 10px;
+    width: 100%;
+    min-height: 100px;
+    border-radius: 20px;
+    resize: none;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow-y: hidden;
+  }
+
+  .user {
+    display: flex; /* Add display flex to user */
+    align-items: flex-start; /* Align items at the top of the flex container */
+    border-radius: 20px;
+    background-color: grey;
+    width: 80%;
+    min-height: 200px;
+
+    .userimage {
+      width: 20%;
+      
+      display: flex;
+      flex-direction: column;
+      align-items: center;/* Optional: Add padding to userimage */
+    }
+
+    .usercomment {
+      display: flex; /* Add display flex to usercomment */
+      flex-direction: column;
+      width: 80%; /* Adjust width as needed */
+      min-height: 200px;
+      padding: 10px;
+
+      .nickndate {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        border-bottom: 2px solid black;
+        width: 100%;
+        
+      }
+    }
+  }
+}

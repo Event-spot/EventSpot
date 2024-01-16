@@ -1,0 +1,60 @@
+@import '../../../assets/styles/colors';
+
+.main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 5px;
+  margin: 5%;
+  
+  .emptyDiv {
+    height: 100px;
+  }
+
+  .up {
+    position: relative;
+    width: 100%;
+    height: 300px;
+    background-color: red;
+  }
+
+  .eventbanner {
+    object-fit: cover;
+  }
+
+  .next {
+    display: flex;
+    flex-direction: row;
+    width: 100%;
+    /* height: 400px; Usuń to */
+  
+    .insidenext1 {
+      height: 100%;
+      width: 20%;
+    }
+  
+    .insidenext2 {
+     background-color: grey;
+      /* height: 100%; Usuń to */
+      flex-grow: 1;
+    }
+  
+    .insidenext3 {
+      
+      height: 100%;
+      width: 20%;
+    }
+  }
+
+  .afternext {
+    height: 300px;
+    width: 100%;
+
+    .komentarze {
+      width: 60%;
+      height: 100%;
+      background-color: green;
+      margin: auto; /* Dodana właściwość do wycentrowania */
+    }
+  }
+}

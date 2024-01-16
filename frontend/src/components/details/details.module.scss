@@ -1,0 +1,41 @@
+// ./src/components/details/details.module.scss
+
+.details {
+  margin: 10px 5px;
+  position: relative;
+  min-height: 300px;
+  
+  
+ 
+
+  
+  
+  
+  .tabHeaders {
+    display: flex;
+    margin: 0; // Dodaj zresetowanie marginesu
+  }
+  
+  .tabHeader {
+    flex: 1;
+    text-align: center;
+    cursor: pointer;
+    background-color: gray;
+    border-top-right-radius: 10px;
+    
+    &.active {
+      background-color: white;
+      border-bottom: 0; // Dolne obramowanie znikające przy kliknięciu
+    }
+    
+  }
+  
+  .tabContent {
+    background-color: white; // Tło białe
+    min-height: 500px; // Minimalna wysokość 300px
+  }
+  
+  .tabPanel {
+    background-color: rgb(255, 255, 255);
+  }
+}
