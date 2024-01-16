@@ -8,6 +8,7 @@ import { GET_USERS } from './graphql/schema';
 import Upbar from '@/components/Upbar/Upbar';
 
 interface Person {
+    id: number;
     firstname: string;
     lastname: string;
     localization: string;
@@ -25,6 +26,8 @@ export default function Users() {
     const startIndex = (currentPage - 1) * itemsPerPage;
     const endIndex = Math.min(startIndex + itemsPerPage, data?.users.length);
     const currentOsoby = data?.users.slice(startIndex, endIndex) || [];
+
+
     return(
         <div className={styles.main}>
             <div>
@@ -37,6 +40,7 @@ export default function Users() {
                     {!loading && data?.users &&
                         currentOsoby.map((osoba: Person, index: number) => (
                             <Person
+                            id={osoba.id}
                             key={index}
                             imie={osoba.firstname}
                             nazwisko={osoba.lastname}
