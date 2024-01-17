@@ -1,11 +1,10 @@
-/* comments.module.scss */
-
 @import '../../assets/styles/colors';
 
 .comments {
   display: flex;
   flex-direction: column;
   align-items: center;
+  font-weight:bold;
 
   .write {
     width: 80%;
@@ -24,35 +23,46 @@
   }
 
   .user {
-    display: flex; /* Add display flex to user */
-    align-items: flex-start; /* Align items at the top of the flex container */
+    display: flex;
+    justify-content: center;
+    text-align: center;
+    align-items: center;
     border-radius: 20px;
-    background-color: grey;
+    background-color: $light-gray;
     width: 80%;
-    min-height: 200px;
+    height: 200px;
+    margin-bottom:10px;
+    overflow: hidden;
+  
 
     .userimage {
       width: 20%;
-      
       display: flex;
-      flex-direction: column;
-      align-items: center;/* Optional: Add padding to userimage */
+      justify-content: center;
+      
+      
+      .accountimage{
+        width:80px;
+        height:80px;
+        border-radius:50px;
+      }
+      
     }
 
     .usercomment {
-      display: flex; /* Add display flex to usercomment */
+      display: flex;
       flex-direction: column;
-      width: 80%; /* Adjust width as needed */
+      width: 80%;
       min-height: 200px;
       padding: 10px;
+      
 
       .nickndate {
         display: flex;
         flex-direction: row;
         justify-content: space-between;
-        border-bottom: 2px solid black;
+        border-bottom: 2px solid $black;
         width: 100%;
-        
       }
     }
   }

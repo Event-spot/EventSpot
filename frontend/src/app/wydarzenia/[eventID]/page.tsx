@@ -1,20 +1,52 @@
 'use client'
+
+import { useQuery } from "@apollo/client";
+import { GET_EVENTS } from "../graphql/schema";
 import { useState } from 'react';
+import Attendee from "../../../components/attendeelist/attendeelist"
 import styles from './event.module.scss';
-import Upbar from '../../../components/Upbar/Upbar';
 import Image from 'next/image';
 import eventimage from '../../../assets/images/isb.png';
-import Participation from '../../../components/Participation/Participation';
 import Maps from '../../../components/Maps/maps';
 import Comments from '../../../components/comments/comments';
-import Details from '../../../components/details/details'; // Zaimportuj komponent Details
+import Details from '../../../components/details/details';
 
-export default function Event() {
+type Event = {
+  id:number,
+ name:string;
+};
+type Attendee = {
+  id:number,
+ name:string;
+firstname:string;
+lastname:string;
+};
+
+
+type Params = {
+  params: {
+    eventID: string;
+  };
+};
+
+export default function Event({ params: { eventID } }: Params) {
+  const { loading, error, data } = useQuery(GET_EVENTS);
+
+  if (loading) return <p>Loading...</p>;
+  if (error) return <p>Error: {error.message}</p>;
+
+  const event = data.events.find((event: Event) => event.id === parseInt(eventID, 10));
+
+  if (!event) return <p>Event not found</p>;
+
+
+
+
+
+
   return (
     <div className={styles.main}>
-      <div>
-        <Upbar />
-      </div>
+    
       
       <div className={styles.up}>
         <Image
@@ -25,14 +57,50 @@ export default function Event() {
           objectFit="cover"
         />
       </div>
-      <div className={styles.emptyDiv}></div> {/* Dodany pusty div o wysokości 100px */}
+
+      
+      <div className={styles.eventDiv}>
+        <div className={styles.eventLeft}>
+          <div className={styles.eventSquare}>
+         
+          </div>
+          <div className={styles.eventName}>
+          <p>{event.name}</p>
+          </div>
+        </div>
+       
+      </div>
+
+
       <div className={styles.next}>
         <div className={styles.insidenext1}>
-        <Participation/>
+        
+        <div className={styles.participantscomp}>
+          <div className={styles.participantsHeader}>
+            Wezmą udział
+          </div>
+          <div className={styles.participantsTable}>
+          {!loading && data?.events &&
+           event.attendees.map((attendee: Attendee, index: number) => (
+          <Attendee
+                key={index}
+                id={attendee.id}
+                imie={attendee.firstname}
+                nazwisko={attendee.lastname}
+              />
+            ))
+          }
         </div>
+        </div>
+        </div>
+
+
         <div className={styles.insidenext2}>
-        <Details/>
+          <Details/>
+
         </div>
+
+
         <div className={styles.insidenext3}>
         <Maps/>
         </div>
