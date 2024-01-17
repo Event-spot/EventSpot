@@ -1,9 +1,19 @@
 // ./src/components/details/details.module.scss
-
+@import '../../assets/styles/colors';
 .details {
-  margin: 10px 5px;
-  position: relative;
+  margin-left: auto;
+  margin-right: auto;
+  margin-bottom:10px;
+  margin-top:10px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
   min-height: 300px;
+  width:80%;
+  font-weight: bold;
+  
+ 
+  
   
   
  
@@ -14,14 +24,20 @@
   .tabHeaders {
     display: flex;
     margin: 0; // Dodaj zresetowanie marginesu
+    
   }
   
   .tabHeader {
     flex: 1;
     text-align: center;
     cursor: pointer;
-    background-color: gray;
+    background-color: $light-gray;
     border-top-right-radius: 10px;
+    border-top-left-radius: 10px;
+    border-top:2px solid $black;
+    border-left:2px solid $black;
+    border-right:2px solid $black;
+    border-bottom:2px solid $black;
     
     &.active {
       background-color: white;
@@ -31,11 +47,16 @@
   }
   
   .tabContent {
-    background-color: white; // Tło białe
-    min-height: 500px; // Minimalna wysokość 300px
+    background-color: $white; // Tło białe
+    min-height: 300px; // Minimalna wysokość 300px
+    border-bottom:2px solid $black;
+    border-left:2px solid $black;
+    border-right:2px solid $black;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
   }
   
   .tabPanel {
-    background-color: rgb(255, 255, 255);
+    background-color: $white;
   }
 }

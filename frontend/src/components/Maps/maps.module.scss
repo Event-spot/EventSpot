@@ -1,40 +1,31 @@
 // maps.module.scss
 @import '../../assets/styles/colors';
-
+.maps {
+  padding: 1%;
+  font-weight: bold;
+  width: 100%;
+  background-color: $light-gray;
+  border-radius:10px;
+  
+  .button {
+    text-align: center;
+    margin-top: 10px;
+    margin-bottom: 5px;
+  
 .roundedButton {
-  background-color: white;
-  color: black;
-  border: 2px solid black;
+  background-color: $white;
+  color: $primary;
+  border: 2px solid $primary;
   padding: 5px 30px;
   border-radius: 30px;
   cursor: pointer;
   transition: background-color 0.3s, color 0.3s, border-color 0.3s;
 
   &:hover {
-    background-color: black;
-    color: white;
+    background-color: $primary;
+    color: $white;
+    }
   }
-}
-
-.buttonnav {
-  background-color: white;
-  color: black;
-  border: 2px solid $secondary;
-  padding: 0px 10px;
-  border-radius: 30px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
-
-  &:hover {
-    background-color: black;
-    color: white;
-  }
-}
-
-.button {
-  text-align: center;
-  margin-top: 10px;
-  margin-bottom: 5px;
 }
 
 .date {
@@ -42,18 +33,42 @@
   margin-bottom: 20px;
 }
 
-.adress {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  
+.address {
+  margin-bottom: 5px;
+  width:100%;
 
-  .addresname {
-    margin: 0;
+  .addressname {
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+    text-align: center;
+    word-wrap: break-word;
   }
 }
 
-.mapa {
+.buttonnav {
+  background-color: $white;
+  margin-bottom: 5px;
+  color: $primary;
+  border: 2px solid $secondary;
+  padding: 0px 10px;
+  border-radius: 30px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s, border-color 0.3s;
+
+  &:hover {
+    background-color: $secondary;
+    color:  $white;
+  }
+  margin-left: auto;
+  margin-right: auto;
+  display: flex;
+}
+
+iframe {
   text-align: center;
-  margin-bottom: 10px;
+  border: 2px solid $primary;
+  border-radius: 10px;
+  min-height:200px;
+}
 }

@@ -1,0 +1,25 @@
+.row {
+    display: flex;
+    justify-content: center;
+    padding:5px;
+    overflow: hidden;
+    align-items:center;
+    
+  .account{
+    width:20%;
+    justify-content: center;
+    
+    .accountimage{
+      height:20px;
+      width:20px;
+      }
+    }
+  }
+
+  .cell {
+    border: none;
+    padding: 0 5px;
+    width:80%;
+    justify-content: left;
+    text-align:left;
+  }

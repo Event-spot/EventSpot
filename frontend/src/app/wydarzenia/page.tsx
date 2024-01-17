@@ -1,25 +1,26 @@
 'use client'
 import styles from './events.module.scss';
-import eventy from './eventy.json';
+
 import Upbar from '../../components/Upbar/Upbar';
 import Event from '../../components/Event/Event';
 import Pagination from '../../components/Pagination/Pagination';
 import { useState } from 'react';
+import { useQuery } from '@apollo/client';
+import { GET_EVENTS} from './graphql/schema';
 
-
+interface Event {
+  id:number;
+ name:string;
+}
 export default function wydarzenia() {
 
   const [currentPage, setCurrentPage] = useState(1);
-  //const lastPage = 20; //Zmienić później tak aby pobierało z bazy danych.
-  // Ograniczenie liczby osób na stronie
+  const {loading,error, data} = useQuery(GET_EVENTS);
   const itemsPerPage = 6;
-  // Obliczenie całkowitej liczby stron
-  const totalNumOfPages = Math.ceil(eventy.length / itemsPerPage);
-  // Obliczenie indeksów osób dla obecnej strony
+  const totalNumOfPages = Math.ceil((data?.events.length || 0) / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, eventy.length);
-  // Wyświetlenie osób dla obecnej strony
-  const currentEventy = eventy.slice(startIndex, endIndex);
+  const endIndex = Math.min(startIndex + itemsPerPage, data?.events.length);
+  const currentEventy = data?.events.slice(startIndex, endIndex) || [];
 
 
 
@@ -36,10 +37,12 @@ export default function wydarzenia() {
   <div className={styles.container}>
             
                 <div className={styles.container}>
-                    {currentEventy.map((event, index) => (
+                {!loading && data?.events &&
+                    currentEventy.map((event: Event, index: number) => (
                         <Event
+                        id={event.id}
                         key={index}
-                        nazwa={event.nazwa}
+                        nazwa={event.name}
                         
                         />))}
                     </div>

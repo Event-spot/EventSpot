@@ -9,7 +9,7 @@ export default function Details() {
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
-    // Dodaj emisję zdarzenia resize przy zmianie zakładki
+   
     window.dispatchEvent(new Event('resize'));
   };
 
