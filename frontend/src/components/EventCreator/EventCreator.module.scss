@@ -1,0 +1,198 @@
+@import '../../assets/styles/colors';
+.Main {
+    margin-top: 5%;
+    margin-bottom:5%;
+    .topic{
+        font-weight:bold;
+        font-size: xx-large;
+        text-align: center;
+        margin-bottom:20px;
+    }
+    .MainForm{
+
+   background-color: $light-gray; border-radius:20px;
+   border:2px solid $primary;
+
+    .up {
+       
+        flex-direction: row;
+        width: 100%; // Ustawienie szerokości na 100%
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        padding-bottom: 20px;
+        background-color: $secondary;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        font-weight:bold;
+        border-bottom:2px solid $primary;
+        height:100px;
+        .upA {
+            
+            
+            width:100%;
+          
+           input{
+            border:2px solid $primary;
+            font-weight:normal;
+            border-radius:5px;
+            text-align: center;
+            height:50px;
+            width:80%;
+            
+           }
+        }
+        .upB {
+            
+            width:100%;
+            input{
+                border:2px solid $primary;
+                border-radius:5px;
+                font-weight:normal;
+                text-align: center;
+                height:50px;
+                width:80%;
+               }
+        }
+        .upC {
+            
+            width:100%;
+            input{
+                border:2px solid $primary;
+                font-weight:normal;
+                border-radius:5px;
+                text-align: center;
+                height:50px;
+                width:80%;
+               }
+        }
+        .upD {
+            
+            width:100%;
+            input{
+                border:2px solid $primary;
+                font-weight:normal;
+                border-radius:5px;
+                text-align: center;
+                height:50px;
+                width:80%;
+               }
+        }
+    }
+
+    .mid {
+        flex-direction: row;
+        width: 100%; // Ustawienie szerokości na 100%
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        padding-bottom: 20px;
+        padding-top:20px;
+        
+        background-color: $light-gray;
+        border-top-left-radius: 20px;
+        border-top-right-radius: 20px;
+        font-weight:bold;
+        .midA{
+            
+            width:100%;
+            textarea{
+                border:2px solid $primary;
+                font-weight:normal;
+                border-radius:5px;
+                resize: none;
+                height:200px;
+                width:80%;
+                
+            }
+        }
+        .midB{
+            
+            width:100%;
+            textarea{
+                border:2px solid $primary;
+                font-weight:normal;
+                border-radius:5px;
+                resize: none;
+                height:200px;
+                width:80%;
+                
+            }
+        }
+        .midC{
+            
+            width:100%;
+            textarea{
+                border:2px solid $primary;
+                font-weight:normal;
+                border-radius:5px;
+                resize: none;
+                height:200px;
+                width:80%;
+                
+            }
+        }
+    }
+
+    .down {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        text-align: center;
+        align-items: center;
+        flex-direction: row;
+        height:100px;
+        
+        
+        background-color: $secondary;
+        border-bottom-left-radius: 20px;
+        border-bottom-right-radius: 20px;
+        border-top:2px solid $primary;
+        font-weight:bold;
+        .downA{
+            width:100%;
+            input{
+                border:2px solid $primary;
+                font-weight: normal;
+                background-color: $white;
+                border-radius:5px;
+                width:80%;
+
+            }
+        }
+        .downB{
+            width:100%;
+            input{
+                border:2px solid $primary;
+                font-weight: normal;
+                background-color: $white;
+                border-radius:5px;
+                width:80%;
+            }
+            
+        }
+        .Submit{
+           
+            width:100%;
+                input{
+                        width:50%;
+                        height:50px;
+                        border-radius:20px;
+                        color:white;
+                        background:$primary;
+                    
+                }
+                input:hover{
+                    background-color: lighten($secondary, 10%);
+                    border:2px solid $primary;
+                    transition: 0.2s;
+                }
+            }
+        
+    }
+}
+.error{
+    font-size:small;
+    color:$red;
+}
+}
