@@ -11,6 +11,7 @@ type User = {
   id: number; 
   firstname: string;
   lastname: string;
+  followers: string;
 };
 
 type Params = {
@@ -47,12 +48,15 @@ export default function Profile({ params: { userID } }: Params) {
           <Image priority={true} className={styles.avatar} src={Question} alt={'Person Avatar'}/>
           </div>
           <div className={styles.profileName}>
-          <p>{user.firstname}</p>
-          <p>{user.lastname}</p>
+            <p>{user.firstname}</p>
+            <p>{user.lastname}</p>
+          </div>
+          <div className={styles.followers}>
+            <p>Obserwujących: {user.followers}</p>
           </div>
         </div>
         <div>
-          <h1>siema</h1>
+          <button className={styles.button}>+ Obserwuj</button>
         </div>
       </div>
       

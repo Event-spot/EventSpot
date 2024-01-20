@@ -3,7 +3,7 @@
 
 .container{
   margin-top: auto;
-  width: 100vw;
+  width: 100%;
   color: $white;
   margin-top: auto;
 
@@ -14,7 +14,6 @@
     padding: 20px 16px;
     background-color: $primary;
     min-height: 200px;
-    width: 100vw;
   }
 
   .credentials{
@@ -24,7 +23,6 @@
     padding: 0 16px;
     background-color: $black;
     height: 50px;
-    width: 100vw;
   }
 
   .title{

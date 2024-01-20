@@ -31,10 +31,13 @@
   .profileDiv{
     display: flex;
     justify-content: space-around;
+    flex-wrap: wrap;
+    align-items: center;
   }
 
   .profileLeft{
     display: flex;
+    align-items: center;
   }
 
   .profileSquare{
@@ -55,12 +58,32 @@
 
   .profileName{
     display: flex;
+    align-items: center;
+
 
     p{
       padding: 4px;
-      font-size: 20px;
+      font-size: 22px;
       font-weight: bold;
     }
+  }
+  .followers{
+    font-size: 16px;
+    padding-left: 20px;
+  }
+  .button{
+    background-color: $secondary;
+    color: $white;
+    font-size: 1.25rem;
+    width: 100%;
+    padding: 0.5rem 1rem;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 1rem;
+    &:hover {
+      background-color: #b831ca;
+    } 
   }
 
   .next {
