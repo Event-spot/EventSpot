@@ -1,16 +1,14 @@
 import { Module } from '@nestjs/common';
 import { AppController } from './app.controller';
 import { AppService } from './app.service';
-import { UserModule } from './user/user.module';
+import { UsersModule } from './users/users.module';
 import {join} from "path";
 import { ConfigModule } from '@nestjs/config';
 import {GraphQLModule} from '@nestjs/graphql'
 import { ApolloDriver, ApolloDriverConfig} from "@nestjs/apollo";
 import {TypeOrmModule} from "@nestjs/typeorm";
 import {typeormConfigAsync} from "./config/typeorm.config";
-import { EventModule } from './event/event.module';
-import {UserService} from "./user/user.service";
-import {EventService} from "./event/event.service";
+import { EventsModule} from "./events/events.module";
 
 @Module({
   imports: [
@@ -21,8 +19,8 @@ import {EventService} from "./event/event.service";
       playground: true
     }),
     TypeOrmModule.forRootAsync(typeormConfigAsync),
-    UserModule,
-    EventModule,
+    UsersModule,
+    EventsModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,11 +1,11 @@
 // import {ObjectType, Field, Int} from "@nestjs/graphql";
 import {Column, PrimaryGeneratedColumn, Entity, ManyToMany, JoinTable} from "typeorm";
-import EventEntity from "../../event/entities/event.entity";
+import EventsEntity from "../../events/entities/events.entity";
 
-@Entity({name: "user"})
-export class UserEntity {
+@Entity({name: "users"})
+export class UsersEntity {
 
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({primaryKeyConstraintName: 'PK_users'})
     id: number;
 
     @Column()
@@ -32,6 +32,6 @@ export class UserEntity {
     @Column()
     following: number;
 
-    @ManyToMany(() => EventEntity, (event) => event.attendees, {nullable: true})
-    events?: EventEntity[];
+    @ManyToMany(() => EventsEntity, (event) => event.attendees, {nullable: true})
+    events?: EventsEntity[];
 }
