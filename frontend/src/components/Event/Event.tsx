@@ -7,9 +7,12 @@ import Link from 'next/link';
 type EventProps = {
   id: number;
   nazwa: string;
+  lokalizacja:string;
+  data:string;
   
 };
-const Event: React.FC<EventProps> = ({ nazwa, id}) => {
+const Event: React.FC<EventProps> = ({ nazwa, id, lokalizacja, data}) => {
+  
 
   const truncatedName = nazwa.length > 27 ? `${nazwa.slice(0, 27)}...` : nazwa;
 
@@ -20,14 +23,14 @@ const Event: React.FC<EventProps> = ({ nazwa, id}) => {
       
 
       <div className={styles.down}>
-          <div className={styles.name}>
-            <p>{truncatedName}</p>
+          <div className={styles.down1}>
+            <div className={styles.localization}><p>{lokalizacja}</p></div>
+            <div className={styles.date}><p>{data}</p></div>
           </div>
-          <div>
-        <Link href={`/wydarzenia/[eventID]`} as={`/wydarzenia/${id}`}>
-          <p className={styles.Button}>Zobacz więcej</p>
-        </Link>
-        </div>
+          <div className={styles.down2}>
+            <div className={styles.name}><p>{truncatedName}</p></div>
+          <div><Link href={`/wydarzenia/[eventID]`} as={`/wydarzenia/${id}`}><p className={styles.Button}>Zobacz więcej</p></Link></div>
+          </div>
       </div>
      
     </div>
