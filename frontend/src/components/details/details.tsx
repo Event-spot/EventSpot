@@ -10,7 +10,7 @@ export default function Details() {
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
    
-    window.dispatchEvent(new Event('resize'));
+   
   };
 
   return (

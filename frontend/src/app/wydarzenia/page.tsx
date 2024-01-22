@@ -11,9 +11,11 @@ import { GET_EVENTS} from './graphql/schema';
 interface Event {
   id:number;
  name:string;
+ localization:string;
+ date:string;
 }
 export default function wydarzenia() {
-
+ 
   const [currentPage, setCurrentPage] = useState(1);
   const {loading,error, data} = useQuery(GET_EVENTS);
   const itemsPerPage = 6;
@@ -30,7 +32,7 @@ export default function wydarzenia() {
 <div className={styles.main}>
 
   <div>
-    <Upbar/>
+    <Upbar pageType="wydarzenia"/>
   </div>
   
 
@@ -42,6 +44,8 @@ export default function wydarzenia() {
                         <Event
                         id={event.id}
                         key={index}
+                        lokalizacja={event.localization}
+                        data={event.date}
                         nazwa={event.name}
                         
                         />))}

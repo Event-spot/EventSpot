@@ -1,0 +1,45 @@
+@import '../../assets/styles/colors';
+.faq{
+ul {
+    list-style-type: none;
+
+    li {
+        .faqItem {
+            width: 100%;
+            border-radius: 20px;
+            background-color: $secondary;
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background-color 0.2s;
+            font-size: 1.2rem;
+
+            &:hover {
+                background-color: lighten($secondary, 10%);
+            }
+
+            .question {
+                flex: 1;
+            }
+
+            .answer {
+                display: none;
+                margin-top: 10px;
+                padding: 10px;
+                border-radius: 10px;
+                background-color: $light-gray;
+                border: 2px solid $primary;
+            }
+
+            &.expanded {
+                .answer {
+                    display: block;
+                }
+            }
+        }
+    }
+}
+}

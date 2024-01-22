@@ -4,10 +4,13 @@ export const GET_EVENTS= gql`
 query{
   events{
     id,
-    name
+    name,
+    localization,
+    date
     attendees{
       firstname,
       lastname
+      
     }
     
   }
