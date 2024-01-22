@@ -23,7 +23,7 @@ export const EventCreator = () => {
 //         EventBackgroundImg:yup.mixed().nullable()
 
 //     }) 
-    const { register, handleSubmit, formState:{errors} } = useForm({
+    const { register, handleSubmit } = useForm({
         // resolver: yupResolver(schema),
     });
 
@@ -39,7 +39,7 @@ export const EventCreator = () => {
               <div className={styles.up}>
                     <div className={styles.upA}><p>Nazwa wydarzenia:</p><input type="text" required placeholder="Nazwa wydarzenia..." {...register("EventName")}/></div>
                     <div className={styles.upB}><p>Data wydarzenia:</p><input type="date" required min={actualDate} {...register("EventDate")}/></div>
-                    <div className={styles.upC}><p>Godzina wydarzenia:</p><input type="time" required {...register("EventTime")}/></div>
+                    <div className={styles.upC}><p>Godzina wydarzenia:</p><input type="time" required /></div>
                     <div className={styles.upD}><p>Adres wydarzenia:</p><input type="text" required placeholder="Adres wydarzenia..." {...register("EventLocalization")}/>
                     </div>
                 </div>
