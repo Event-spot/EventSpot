@@ -31,7 +31,7 @@ export default function Users() {
     return(
         <div className={styles.main}>
             <div>
-            <Upbar/>
+            <Upbar pageType="uzytkownicy"/>
             </div>
 
             <div className={styles.users}>

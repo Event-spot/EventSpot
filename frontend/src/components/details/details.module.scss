@@ -12,18 +12,9 @@
   width:80%;
   font-weight: bold;
   
- 
-  
-  
-  
- 
-
-  
-  
-  
-  .tabHeaders {
+ .tabHeaders {
     display: flex;
-    margin: 0; // Dodaj zresetowanie marginesu
+    margin: 0;
     
   }
   
@@ -41,14 +32,14 @@
     
     &.active {
       background-color: white;
-      border-bottom: 0; // Dolne obramowanie znikające przy kliknięciu
+      border-bottom: 0;
     }
     
   }
   
   .tabContent {
-    background-color: $white; // Tło białe
-    min-height: 300px; // Minimalna wysokość 300px
+    background-color: $white;
+    min-height: 300px;
     border-bottom:2px solid $black;
     border-left:2px solid $black;
     border-right:2px solid $black;

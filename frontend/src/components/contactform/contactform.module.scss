@@ -1,0 +1,69 @@
+@import '../../assets/styles/colors';
+
+
+
+  .formularz {
+    background-color: $light-gray;
+    
+    border: 2px solid $primary;
+    padding: 20px;
+    margin-left:20%;
+    margin-right:20%;
+ 
+   form{
+      width:100%;
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+
+    .upA,
+    .upB,
+    .upC,
+    .upD {
+      width: 25%;
+     
+    
+
+      label {
+        display: block;
+        margin-bottom: 5px;
+      }
+
+      input {
+        border: 2px solid $primary;
+        font-weight: normal;
+        border-radius: 5px;
+        text-align: center;
+        height: 50px;
+        width: 100%;
+        margin-bottom: 10px;
+      }
+     
+    }
+   .upD{
+      display:flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      button {
+        width: 50%;
+        height: 50px;
+        border-radius: 20px;
+        color: $white;
+        background: $primary;
+        cursor: pointer;
+        border: none;
+        font-size: 1rem;
+        transition: background-color 0.2s;
+  
+        &:hover {
+          background-color: lighten($primary, 10%);
+          border: 2px solid $primary;
+          transition: 0.2s;
+        }
+      }
+   }
+
+   }
+  }
