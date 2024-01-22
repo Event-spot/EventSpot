@@ -1,13 +1,13 @@
 import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToMany, JoinTable, Timestamp} from "typeorm";
-import {UserEntity} from "../../user/entities/user.entity";
+import {UsersEntity} from "../../users/entities/users.entity";
 
-@Entity({name: 'event'})
-export default class EventEntity {
+@Entity({name: 'events'})
+export default class EventsEntity {
 
-    @PrimaryGeneratedColumn()
+    @PrimaryGeneratedColumn({primaryKeyConstraintName: 'PK_events'})
     id: number;
 
-    @Column()
+    @Column({nullable: false})
     name: string;
 
     @Column({type: 'date'})
@@ -26,7 +26,7 @@ export default class EventEntity {
 
     // TODO: Comments relation
 
-    @ManyToMany(() => UserEntity, (user) => user.events, {nullable: true, onDelete: "CASCADE"})
+    @ManyToMany(() => UsersEntity, (user) => user.events, {nullable: true, onDelete: "CASCADE", onUpdate: 'CASCADE'})
     @JoinTable()
-    attendees?: UserEntity[];
+    attendees?: UsersEntity[];
 }

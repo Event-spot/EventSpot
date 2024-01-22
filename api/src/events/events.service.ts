@@ -1,31 +1,31 @@
 import {forwardRef, Inject, Injectable, OnModuleInit} from '@nestjs/common';
 import {InjectRepository} from "@nestjs/typeorm";
-import EventEntity from "./entities/event.entity";
+import EventsEntity from "./entities/events.entity";
 import {Repository} from "typeorm";
 import AddEventArgs from "./dto/addEvent.args";
 import UpdateEventArgs from "./dto/updateEvent.args";
-import {UserService} from "../user/user.service";
-import {UserEntity} from "../user/entities/user.entity";
+import {UsersService} from "../users/users.service";
+import {UsersEntity} from "../users/entities/users.entity";
 import AddAttendeeInput from "./dto/add-attendee-input";
 import {ModuleRef} from "@nestjs/core";
 
 @Injectable()
-export class EventService implements OnModuleInit {
-    private userService: UserService;
-    constructor(@InjectRepository(EventEntity)public readonly eventRepo: Repository<EventEntity>,
+export class EventsService implements OnModuleInit {
+    private userService: UsersService;
+    constructor(@InjectRepository(EventsEntity)public readonly eventRepo: Repository<EventsEntity>,
                private moduleRef: ModuleRef) {}
 
     onModuleInit() {
-        this.userService = this.moduleRef.get(UserService, {strict: false});
+        this.userService = this.moduleRef.get(UsersService, {strict: false});
     }
 
-    async findAllEvents(): Promise<EventEntity[]>{
-        let events: EventEntity[] = await this.eventRepo.find({relations: {attendees: true}});
+    async findAllEvents(): Promise<EventsEntity[]>{
+        let events: EventsEntity[] = await this.eventRepo.find({relations: {attendees: true}});
         return events;
     }
 
-    async findEventById(id: number): Promise<EventEntity> {
-        let event: EventEntity = await this.eventRepo.findOne({where: {id: id}});
+    async findEventById(id: number): Promise<EventsEntity> {
+        let event: EventsEntity = await this.eventRepo.findOne({where: {id: id}});
         return event;
     }
 
@@ -35,7 +35,7 @@ export class EventService implements OnModuleInit {
     }
 
     async addEvent(addEventArgs: AddEventArgs): Promise<string> {
-        let event: EventEntity = new EventEntity();
+        let event: EventsEntity = new EventsEntity();
         event.name = addEventArgs.name;
         event.localization = addEventArgs.localization;
         event.date = addEventArgs.date;
@@ -47,7 +47,7 @@ export class EventService implements OnModuleInit {
     }
 
     async updateEvent(updateEventArgs: UpdateEventArgs): Promise<string> {
-        let event: EventEntity = await this.eventRepo.findOne({where: {id: updateEventArgs.id}})
+        let event: EventsEntity = await this.eventRepo.findOne({where: {id: updateEventArgs.id}})
         event.name = updateEventArgs.name;
         event.localization = updateEventArgs.localization;
         event.date = updateEventArgs.date;
@@ -58,8 +58,8 @@ export class EventService implements OnModuleInit {
     }
 
     async addAttendee(addAttendeeInput: AddAttendeeInput): Promise<string> {
-        let event: EventEntity = await this.eventRepo.findOne({where: {id: addAttendeeInput.id}, relations: {attendees: true}})
-        let user: UserEntity = await this.userService.findUserById(addAttendeeInput.userId);
+        let event: EventsEntity = await this.eventRepo.findOne({where: {id: addAttendeeInput.id}, relations: {attendees: true}})
+        let user: UsersEntity = await this.userService.findUserById(addAttendeeInput.userId);
         event.attendees = [...event.attendees, user]
 
         await this.eventRepo.save(event);
