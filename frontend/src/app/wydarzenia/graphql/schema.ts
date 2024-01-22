@@ -7,7 +7,8 @@ query{
     name
     attendees{
       firstname,
-      lastname
+      lastname,
+      localization
     }
     
   }

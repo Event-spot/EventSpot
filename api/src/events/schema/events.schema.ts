@@ -1,5 +1,5 @@
 import {ObjectType, Field, Int, GraphQLISODateTime} from '@nestjs/graphql';
-import {User} from "../../user/schema/user.schema";
+import {User} from "../../users/schema/users.schema";
 
 @ObjectType()
 export class Event{

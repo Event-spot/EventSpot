@@ -1,14 +1,14 @@
 import {Args, Int, Mutation, Parent, Query, ResolveField, Resolver} from '@nestjs/graphql';
-import {Event} from "./schema/event.schema";
-import {EventService} from "./event.service";
+import {Event} from "./schema/events.schema";
+import {EventsService} from "./events.service";
 import AddEventArgs from "./dto/addEvent.args";
 import UpdateEventArgs from "./dto/updateEvent.args";
-import {User} from "../user/schema/user.schema";
+import {User} from "../users/schema/users.schema";
 import AddAttendeeInput from "./dto/add-attendee-input";
 
 @Resolver(of => Event)
-export class EventResolver {
-    constructor(private readonly eventService: EventService) {
+export class EventsResolver {
+    constructor(private readonly eventService: EventsService) {
     }
 
     @Query(returns => [Event], {name: 'events'})

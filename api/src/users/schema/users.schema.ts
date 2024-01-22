@@ -1,5 +1,5 @@
 import {ObjectType, Field, Int} from '@nestjs/graphql';
-import {Event} from "../../event/schema/event.schema";
+import {Event} from "../../events/schema/events.schema";
 
 @ObjectType()
 export class User {
