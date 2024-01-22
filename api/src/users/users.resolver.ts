@@ -1,26 +1,26 @@
 import {Args, Int, Mutation, Parent, Query, ResolveField, Resolver} from '@nestjs/graphql';
 import {UsersService} from "./users.service";
-import {User} from "./schema/users.schema";
+import {Users} from "./entities/users.entity";
 import {AddUserArgs} from "./dto/addUser.args";
 import {UpdateUserArgs} from "./dto/updateUser.args";
-import {Event} from "../events/schema/events.schema";
+import {Events} from "../events/entities/events.entity";
 
-@Resolver(of => User)
+@Resolver(of => Users)
 export class UsersResolver {
     constructor(private readonly userService: UsersService) {}
 
-    @Query(returns => [User], {name: 'users'})
+    @Query(returns => [Users], {name: 'users'})
     getAllUsers() {
         return this.userService.findAllUsers();
     }
 
-    @Query(returns => User, {name: 'userById'})
+    @Query(returns => Users, {name: 'userById'})
     getUserById(@Args({name: "userId", type: () => Int}) id: number) {
         return this.userService.findUserById(id)
     }
 
-    @ResolveField(returns => [Event], {name: 'events'})
-    getEvents(@Parent() user: User) {
+    @ResolveField(returns => [Events], {name: 'events'})
+    getEvents(@Parent() user: Users) {
         return user.events || [];
     }
 
