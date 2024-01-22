@@ -14,7 +14,6 @@ import Details from '../../../components/details/details';
 type Event = {
   id:number,
  name:string;
- localization:string;
 };
 type Attendee = {
   id:number,
