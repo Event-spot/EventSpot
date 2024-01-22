@@ -80,7 +80,7 @@ export default function Profile({ params: { userID } }: Params) {
           </div>
         </div>
           <div className={styles.insidenext2}>
-          <EventHistory />
+          <EventHistory userId={userID}/>
           </div>
           <div className={styles.followersContainer}>
             <Followers userId={userID}/>
