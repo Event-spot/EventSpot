@@ -20,12 +20,12 @@ export class EventsService implements OnModuleInit {
     }
 
     async findAllEvents(): Promise<Events[]>{
-        let events: Events[] = await this.eventRepo.find({relations: {attendees: true}});
+        let events: Events[] = await this.eventRepo.find({relations: ['attendees', 'comments', 'comments.user']});
         return events;
     }
 
     async findEventById(id: number): Promise<Events> {
-        let event: Events = await this.eventRepo.findOne({where: {id: id}});
+        let event: Events = await this.eventRepo.findOne({where: {id: id}, relations: ['attendees', 'comments', 'comments.user']});
         return event;
     }
 

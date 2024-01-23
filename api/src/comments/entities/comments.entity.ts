@@ -2,6 +2,7 @@ import {Entity, PrimaryGeneratedColumn, Column, CreateDateColumn, ManyToOne} fro
 import {ObjectType, Field, Int} from "@nestjs/graphql";
 import {Users} from "../../users/entities/users.entity";
 import {Events} from "../../events/entities/events.entity";
+import {JoinColumn} from "typeorm/browser";
 
 @Entity('comments')
 @ObjectType('comments')
