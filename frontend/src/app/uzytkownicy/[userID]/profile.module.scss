@@ -1,12 +1,12 @@
 @import '../../../assets/styles/colors';
+
 .main {
   display: flex;
   flex-direction: column;
   justify-content: center;
   padding: 5px;
   margin: 0% 5% 0% 5%;
-  min-height: 100vh;
-
+  height: auto;
 
 
   .up {
@@ -63,7 +63,6 @@
     display: flex;
     align-items: center;
 
-
     p{
       padding: 4px;
       font-size: 22px;
@@ -93,59 +92,105 @@
   }
 
   .next {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+  height: auto;
+  margin: 1rem;
+
+
+  .profileInfo {
+    width: 20%;
     display: flex;
-    flex-direction: row;
-    width: 100%;
-    height: 600px;
-    margin: 1rem;
+    flex-direction: column;
+    padding: 1rem;
+    margin-top: 1rem;
 
-    .profileInfo{
-      width: 20%;
+    .description {
+      padding: 20px;
+      border: 3px solid $secondary;
+      border-radius: 12px;
+      box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, 0.8);
+      background-color: #f3f2f3;
+      height: 100%;
+
+      legend {
+        font-size: 1.3rem;
+        font-weight: 600;
+        color: $black;
+      }
+    }
+    .contact {
+      font-size: 3rem;
       display: flex;
-      flex-direction:column;
+      justify-content: center;
+      align-items: center;
+      column-gap: 10px;
       padding: 1rem;
-      margin-top: 1rem;
-      
-
-      .description {
-        padding: 20px;
-        border: 3px solid $secondary;
-        border-radius: 12px;
-        box-shadow: 0px 8px 10px 0px rgba(0,0,0,0.8);
-        background-color: #f3f2f3;
-        height: 100%;
-
-        legend{
-          font-size: 1.3rem;
-          font-weight: 600;
-          color: $black;
-        }
-      }
-      .contact{
-        font-size: 3rem;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        column-gap: 10px;
-        padding: 1rem;
-        
-      }
     }
-    
+  }
 
-    .insidenext2 {
-      height: 100%;
-      width: 60%;
-      // padding: 2rem;
+  .eventHistory {
+    height: 100%;
+    width: 60%;
+  }
+
+  .followersContainer {
+    height: 100%;
+    width: 20%;
+    padding: 1rem;
+    margin-top: 1rem;
+  }
+
+  @media (max-width: 1450px) {
+    flex-wrap: wrap;
+    .profileInfo{
+      width: 100%;
     }
-
+    .eventHistory,
     .followersContainer {
-      height: 100%;
-      width: 20%;
-      padding: 1rem;
-      margin-top: 1rem;
+      flex:auto;
 
-      
+    }
+  }
+  @media (max-width: 650px) {
+    flex-direction: column;
+    justify-content: center;
+    margin: 0;
+    .profileInfo{
+      width: 100%;
+    }
+    .eventHistory,
+    .followersContainer {
+      width: 100%;
+      align-items: center;
+
+    }
+  }
+  
+  
+}
+  
+  @media (max-width: 800px) {
+    .profileDiv {
+      flex-direction: column;
+    }
+    .profileLeft{
+      padding: 0;
+    }
+  }
+  @media (max-width: 550px) {
+    .profileDiv,
+    .profileLeft {
+      flex-direction: column;
+      padding: 0;
+
+      .followers{
+        padding: 0;
+      }
+      .divButton{
+        padding: 0;
+      }
     }
   }
 }

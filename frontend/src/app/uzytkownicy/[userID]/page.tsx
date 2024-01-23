@@ -46,7 +46,8 @@ export default function Profile({ params: { userID } }: Params) {
           layout="fill"
           objectFit="cover"
         />
-        <div className={styles.overlay}></div>
+        <div className={styles.overlay}>
+        </div>
       </div>
 
       <div className={styles.profileDiv}>
@@ -72,19 +73,20 @@ export default function Profile({ params: { userID } }: Params) {
           <fieldset className={styles.description}>
             <legend>O mnie </legend>
           </fieldset>
-          <div className={styles.contact}>
-            <RiFacebookBoxFill color="#4968ad" />
-            <RiInstagramFill color="#e1306c" />
-            <RiTiktokFill color="rgb(30, 48, 80)" />
-            <RiYoutubeFill color="#eb3223" />
-          </div>
+            <div className={styles.contact}>
+              <RiFacebookBoxFill color="#4968ad" />
+              <RiInstagramFill color="#e1306c" />
+              <RiTiktokFill color="rgb(30, 48, 80)" />
+              <RiYoutubeFill color="#eb3223" />
+            </div>
         </div>
-          <div className={styles.insidenext2}>
-          <EventHistory userId={userID}/>
-          </div>
-          <div className={styles.followersContainer}>
-            <Followers userId={userID}/>
-          </div>
+            <div className={styles.eventHistory}>
+            <EventHistory userId={userID}/>
+            </div>
+            <div className={styles.followersContainer}>
+              <Followers userId={userID}/>
+            </div>
+        
       </div>
     </div>
   );
