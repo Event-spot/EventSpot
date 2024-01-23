@@ -1,5 +1,4 @@
 import { useState } from 'react';
-import timelineElements from "./timelineElements";
 import 'react-vertical-timeline-component/style.min.css';
 import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeline-component';
 import styles from './EventHistory.module.scss';
