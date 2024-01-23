@@ -42,6 +42,25 @@ export class DataMigration1705788177188 implements MigrationInterface {
             (6, 3),
             (6, 4);
             `)
+
+        await queryRunner.query(`INSERT INTO comments (content, "userId", "eventId") VALUES 
+            ('Super spocik, pozdrawiam z rodzinką :)', 1, 1),
+            ('Najlepszy organizator, polecam', 4, 1),
+            ('Sprzedam opla!', 5, 1),
+            ('Kiedy kolejny zlot?', 3, 2),
+            ('Super miejscówa', 2, 2),
+            ('Wie ktoś jak naprawić radio?', 5, 3),
+            ('Siema, spotykamy się godzinkę przed zlotem?', 1, 3),
+            ('Fajne fotki', 3, 2),
+            ('Czy wstęp jest za darmo?', 4, 3),
+            ('Będzie można coś zjeść?', 3, 3),
+            ('I kolejny super spocik', 1, 4),
+            ('Kiedy dodacie zdjęcia z ostatniej imprezy?', 2, 5),
+            ('Jakieś dokładniejsze szczegóły dojazdu?', 5, 5),
+            ('Kto wpuścił tego passata?', 4, 6),
+            ('Ostatnio było super!', 5, 6),
+            ('Umyć Panu szybkę?', 2, 6)
+            ;`)
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
