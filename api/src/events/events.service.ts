@@ -56,13 +56,4 @@ export class EventsService implements OnModuleInit {
         await this.eventRepo.save(event);
         return "Event has been updated";
     }
-
-    async addAttendee(addAttendeeInput: AddAttendeeInput): Promise<string> {
-        let event: Events = await this.eventRepo.findOne({where: {id: addAttendeeInput.id}, relations: {attendees: true}})
-        let user: Users = await this.userService.findUserById(addAttendeeInput.userId);
-        event.attendees = [...event.attendees, user]
-
-        await this.eventRepo.save(event);
-        return "Attendee has been added to Event";
-    }
 }

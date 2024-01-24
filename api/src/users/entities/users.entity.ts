@@ -55,7 +55,7 @@ export class Users {
     @Field({nullable: true})
     youtube?: string;
 
-    @ManyToMany(() => Users, users => users.following, {nullable: true})
+    @ManyToMany(() => Users, users => users.following, {nullable: true, onDelete: "CASCADE"})
     @JoinTable({
         name: 'user_following',
         joinColumn: {
@@ -70,7 +70,7 @@ export class Users {
     @Field(type => [Users], {nullable: true})
     following?: Users[];
 
-    @ManyToMany(() => Events, (event) => event.attendees, {nullable: true})
+    @ManyToMany(() => Events, (event) => event.attendees, {nullable: true, cascade: ['insert']})
     @Field(type => [Events], {nullable: true})
     events?: Events[];
 
