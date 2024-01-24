@@ -29,6 +29,11 @@ type users {
   lastname: String!
   localization: String
   spotsVisited: Int!
+  description: String
+  facebook: String
+  instagram: String
+  tiktok: String
+  youtube: String
   following: [users!]
   events: [events!]!
   comments: [comments!]
@@ -63,6 +68,11 @@ input AddUserArgs {
   firstname: String!
   lastname: String!
   localization: String
+  description: String
+  facebook: String
+  instagram: String
+  tiktok: String
+  youtube: String
 }
 
 input UpdateUserArgs {
@@ -70,6 +80,11 @@ input UpdateUserArgs {
   firstname: String!
   lastname: String!
   localization: String
+  description: String
+  facebook: String
+  instagram: String
+  tiktok: String
+  youtube: String
   spotsVisited: Int!
   following: Int!
   followers: Int!

@@ -18,4 +18,19 @@ export class AddUserArgs {
     @Field({nullable: true})
     localization: string;
 
+    @Field({nullable: true})
+    description: string;
+
+    @Field({nullable: true})
+    facebook: string;
+
+    @Field({nullable: true})
+    instagram: string;
+
+    @Field({nullable: true})
+    tiktok: string;
+
+    @Field({nullable: true})
+    youtube: string;
+
 }

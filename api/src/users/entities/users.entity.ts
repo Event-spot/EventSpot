@@ -35,6 +35,26 @@ export class Users {
     @Field(type => Int)
     spotsVisited: number;
 
+    @Column({nullable: true})
+    @Field({nullable: true})
+    description?: string;
+
+    @Column({nullable: true})
+    @Field({nullable: true})
+    facebook?: string;
+
+    @Column({nullable: true})
+    @Field({nullable: true})
+    instagram?: string;
+
+    @Column({nullable: true})
+    @Field({nullable: true})
+    tiktok?: string;
+
+    @Column({nullable: true})
+    @Field({nullable: true})
+    youtube?: string;
+
     @ManyToMany(() => Users, users => users.following, {nullable: true})
     @JoinTable({
         name: 'user_following',

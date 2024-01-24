@@ -1,7 +1,6 @@
 import styles from './attendee.module.scss';
 import Image from "next/image";
 import Question from '../../assets/images/question.png'; 
-import Link from 'next/link';
 
 type EventAttendeeProps = {
     id: number;

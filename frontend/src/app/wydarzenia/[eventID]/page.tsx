@@ -1,7 +1,5 @@
 'use client'
-
 import { useQuery } from "@apollo/client";
-import { useState } from 'react';
 import Attendee from "../../../components/attendeelist/attendeelist"
 import styles from './event.module.scss';
 import Image from 'next/image';

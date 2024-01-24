@@ -38,6 +38,11 @@ export default function Profile({ params: { userID } }: Params) {
             lastname,
             spotsVisited,
             localization,
+            description,
+            facebook,
+            instagram,
+            tiktok,
+            youtube,
             following{
                 id,
                 firstname,
@@ -102,12 +107,21 @@ export default function Profile({ params: { userID } }: Params) {
         <div className={styles.profileInfo}>
           <fieldset className={styles.description}>
             <legend>O mnie </legend>
+            {user.description}
           </fieldset>
             <div className={styles.contact}>
-              <RiFacebookBoxFill color="#4968ad" />
+              <a href={user.facebook} target="_blank" rel="noopener noreferrer">
+                <RiFacebookBoxFill color="#4968ad" />
+              </a>
+              <a href={user.instagram} target="_blank" rel="noopener noreferrer">
               <RiInstagramFill color="#e1306c" />
+              </a>
+              <a href={user.tiktok} target="_blank" rel="noopener noreferrer">
               <RiTiktokFill color="rgb(30, 48, 80)" />
+              </a>
+              <a href={user.youtube} target="_blank" rel="noopener noreferrer">
               <RiYoutubeFill color="#eb3223" />
+              </a>
             </div>
         </div>
             <div className={styles.eventHistory}>
