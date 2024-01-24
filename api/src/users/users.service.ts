@@ -19,7 +19,7 @@ export class UsersService implements OnModuleInit {
     }
 
     async findAllUsers(): Promise<Users[]>{
-        let users = await this.usersRepo.find({relations: {events: true}});
+        let users = await this.usersRepo.find({relations: {events: true, following: true}});
         return users;
     }
 
@@ -44,8 +44,6 @@ export class UsersService implements OnModuleInit {
         user.firstname = addUserArgs.firstname;
         user.lastname = addUserArgs.lastname;
         user.localization = addUserArgs.localization;
-        user.followers = 0;
-        user.following = 0;
         user.spotsVisited = 0;
         await this.usersRepo.save(user)
 

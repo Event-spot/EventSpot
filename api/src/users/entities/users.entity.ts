@@ -35,13 +35,25 @@ export class Users {
     @Field(type => Int)
     spotsVisited: number;
 
-    @Column()
-    @Field(type => Int)
-    followers: number;
+    @ManyToMany(() => Users, users => users.following, {nullable: true})
+    @JoinTable()
+    @Field(type => [Users], {nullable: true})
+    followers?: Users[];
 
-    @Column()
-    @Field(type => Int)
-    following: number;
+    @ManyToMany(() => Users, users => users.followers, {nullable: true})
+    @JoinTable({
+        name: 'user_following',
+        joinColumn: {
+            name: 'userId',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'followingId',
+            referencedColumnName: 'id'
+        }
+    })
+    @Field(type => [Users], {nullable: true})
+    following?: Users[];
 
     @ManyToMany(() => Events, (event) => event.attendees, {nullable: true})
     @Field(type => [Events], {nullable: true})
