@@ -28,10 +28,6 @@ export class UsersService implements OnModuleInit {
         return user;
     }
 
-    async getEvents(eventId: number): Promise<Events> {
-        return this.eventService.findEventById(eventId);
-    }
-
     async deleteUser(id: number): Promise<string> {
         await this.usersRepo.delete(id)
         return "User has been deleted"
@@ -63,6 +59,19 @@ export class UsersService implements OnModuleInit {
     }
 
     async findFollowers(user: Users): Promise<Users[]> {
-        return await this.usersRepo.find({where: {following: user}})
+        return this.usersRepo.createQueryBuilder('user')
+            .innerJoin('user.following', 'follower')
+            .where('follower.id = :userId', { userId: user.id })
+            .getMany();
     }
+
+    async countFollowings(id: number): Promise<number> {
+        const user = await this.usersRepo.findOne({where: {id}, relations: {following: true}});
+        const followings = user.following;
+        return followings.length;
+    }
+
+    // async countFollowers(id: number): Promise<number> {
+    //
+    // }
 }

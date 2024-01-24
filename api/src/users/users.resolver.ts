@@ -19,11 +19,6 @@ export class UsersResolver {
         return this.userService.findUserById(id)
     }
 
-    @ResolveField(returns => [Events], {name: 'events'})
-    getEvents(@Parent() user: Users) {
-        return user.events || [];
-    }
-
     @Mutation(returns => String, {name: "deleteUser"})
     deleteUserById(@Args({name: 'userId', type: () => Int}) id: number){
         return this.userService.deleteUser(id)
@@ -39,8 +34,13 @@ export class UsersResolver {
         return this.userService.updateUser(updateUserArgs)
     }
 
-    @ResolveField(() => [Users], {name: 'followers'})
+    @ResolveField(returns => [Users], {name: 'followers'})
     followers(@Parent() user: Users) {
-        return this.userService.findFollowers(user);
+        return this.userService.findFollowers(user)
+    }
+
+    @ResolveField(returns => Number, {name: 'followingsCount'})
+    followingsCount(@Parent() user: Users) {
+        return this.userService.countFollowings(user.id);
     }
 }

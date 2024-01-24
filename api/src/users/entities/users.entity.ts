@@ -50,7 +50,7 @@ export class Users {
     @Field(type => [Users], {nullable: true})
     following?: Users[];
 
-    @ManyToMany(() => Events, (event) => event.attendees, {nullable: true})
+    @ManyToMany(() => Events, (event) => event.attendees, {nullable: true, cascade: ['insert']})
     @Field(type => [Events], {nullable: true})
     events?: Events[];
 
