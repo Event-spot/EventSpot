@@ -7,6 +7,8 @@ import {UpdateUserArgs} from "./dto/updateUser.args";
 import {EventsService} from "../events/events.service";
 import {ModuleRef} from "@nestjs/core";
 import {Events} from "../events/entities/events.entity";
+import {UpdateDescriptionInput} from "./dto/update-description-input";
+import {JoinEventInput} from "./dto/join-event-input";
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -71,7 +73,58 @@ export class UsersService implements OnModuleInit {
         return followings.length;
     }
 
-    // async countFollowers(id: number): Promise<number> {
-    //
-    // }
+    async countFollowers(user: Users): Promise<number> {
+        const followers = await this.findFollowers(user);
+        return followers.length;
+
+    }
+
+    async updateDescription(updateDescriptionInput: UpdateDescriptionInput): Promise<string> {
+        const user: Users = await this.usersRepo.findOne({where: {id: updateDescriptionInput.id}});
+
+        user.description = updateDescriptionInput.description;
+
+        await this.usersRepo.save(user);
+
+        return 'Description has been changed';
+    }
+
+    async deleteDescription(id: number): Promise<string> {
+        const user: Users = await this.usersRepo.findOne({where: {id}});
+
+        user.description = null;
+
+        await this.usersRepo.save(user);
+
+        return 'Description has been deleted';
+    }
+
+    async joinEvent(joinEventInput: JoinEventInput): Promise<string> {
+        const user: Users = await this.usersRepo.findOne({where: {id: joinEventInput.userId}, relations: {events: true}});
+        const event: Events = await this.eventService.findEventById(joinEventInput.eventId);
+
+        user.events = [...user.events, event];
+
+        await this.usersRepo.save(user);
+
+        return 'User has been joined to event'
+    }
+
+    async leaveEvent(joinEventInput: JoinEventInput): Promise<string> {
+        const user: Users = await this.usersRepo.findOne({where: {id: joinEventInput.userId}, relations: {events: true}})
+        const eventToLeave: Events = await this.eventService.findEventById(joinEventInput.eventId);
+
+        user.events = user.events.filter(event => event.id != eventToLeave.id);
+
+
+        await this.usersRepo.save(user);
+
+        return 'User has been left event'
+    }
+
+    async countEvents(id: number): Promise<number> {
+        const user: Users = await this.usersRepo.findOne({where: {id}, relations: {events: true}});
+
+        return user.events.length;
+    }
 }

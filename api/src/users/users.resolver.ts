@@ -3,7 +3,8 @@ import {UsersService} from "./users.service";
 import {Users} from "./entities/users.entity";
 import {AddUserArgs} from "./dto/addUser.args";
 import {UpdateUserArgs} from "./dto/updateUser.args";
-import {Events} from "../events/entities/events.entity";
+import {UpdateDescriptionInput} from "./dto/update-description-input";
+import {JoinEventInput} from "./dto/join-event-input";
 
 @Resolver(of => Users)
 export class UsersResolver {
@@ -34,6 +35,26 @@ export class UsersResolver {
         return this.userService.updateUser(updateUserArgs)
     }
 
+    @Mutation(returns => String, {name: 'changeDescription'})
+    changeDescription(@Args('updateDescriptionInput') updateDescriptionInput: UpdateDescriptionInput) {
+        return this.userService.updateDescription(updateDescriptionInput);
+    }
+
+    @Mutation(returns => String, {name: 'deleteDescription'})
+    deleteDescription(@Args('userId') id: number) {
+        return this.userService.deleteDescription(id);
+    }
+
+    @Mutation(returns => String, {name: 'joinEvent'})
+    joinEvent(@Args('joinEventInput') joinEventInput: JoinEventInput) {
+        return this.userService.joinEvent(joinEventInput);
+    }
+
+    @Mutation(returns => String, {name: 'leaveEvent'})
+    leaveEvent(@Args('joinEventInput') joinEventInput: JoinEventInput) {
+        return this.userService.leaveEvent(joinEventInput);
+    }
+
     @ResolveField(returns => [Users], {name: 'followers'})
     followers(@Parent() user: Users) {
         return this.userService.findFollowers(user)
@@ -42,5 +63,15 @@ export class UsersResolver {
     @ResolveField(returns => Number, {name: 'followingsCount'})
     followingsCount(@Parent() user: Users) {
         return this.userService.countFollowings(user.id);
+    }
+
+    @ResolveField(returns => Number, {name: 'followersCount'})
+    followersCount(@Parent() user: Users) {
+        return this.userService.countFollowers(user);
+    }
+
+    @ResolveField(returns => Number, {name: 'eventsCount'})
+    eventsCount(@Parent() user: Users) {
+        return this.userService.countEvents(user.id);
     }
 }

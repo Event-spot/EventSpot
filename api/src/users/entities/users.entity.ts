@@ -29,13 +29,17 @@ export class Users {
 
     @Column({nullable: true})
     @Field({nullable: true})
+    description?: string;
+
+    @Column({nullable: true})
+    @Field({nullable: true})
     localization?: string;
 
     @Column({name: "spots_visited"})
     @Field(type => Int)
     spotsVisited: number;
 
-    @ManyToMany(() => Users, users => users.following, {nullable: true})
+    @ManyToMany(() => Users, users => users.following, {nullable: true, onDelete: "CASCADE"})
     @JoinTable({
         name: 'user_following',
         joinColumn: {
