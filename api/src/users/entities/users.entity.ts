@@ -36,11 +36,6 @@ export class Users {
     spotsVisited: number;
 
     @ManyToMany(() => Users, users => users.following, {nullable: true})
-    @JoinTable()
-    @Field(type => [Users], {nullable: true})
-    followers?: Users[];
-
-    @ManyToMany(() => Users, users => users.followers, {nullable: true})
     @JoinTable({
         name: 'user_following',
         joinColumn: {

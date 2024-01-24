@@ -38,4 +38,9 @@ export class UsersResolver {
     updateUser(@Args("updateUserArgs") updateUserArgs: UpdateUserArgs){
         return this.userService.updateUser(updateUserArgs)
     }
+
+    @ResolveField(() => [Users], {name: 'followers'})
+    followers(@Parent() user: Users) {
+        return this.userService.findFollowers(user);
+    }
 }

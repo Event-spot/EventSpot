@@ -61,4 +61,8 @@ export class UsersService implements OnModuleInit {
 
         return "User has been updated";
     }
+
+    async findFollowers(user: Users): Promise<Users[]> {
+        return await this.usersRepo.find({where: {following: user}})
+    }
 }
