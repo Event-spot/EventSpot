@@ -46,8 +46,8 @@ export default function Users() {
                             nazwisko={osoba.lastname}
                             lokalizacja={osoba.localization}
                             odwiedzoneSpoty={osoba.spotsVisited}
-                            obserwowani={osoba.following}
-                            obserwujacy={osoba.followers}
+                            obserwowani={1}
+                            obserwujacy={1}
                             />
                         ))
                     }

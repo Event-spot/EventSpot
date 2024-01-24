@@ -24,7 +24,7 @@ export class UsersService implements OnModuleInit {
     }
 
     async findUserById(id: number): Promise<Users> {
-        let user = await this.usersRepo.findOne({where: {id: id}});
+        let user = await this.usersRepo.findOne({where: {id: id}, relations: ["events", "following"]});
         return user;
     }
 
@@ -63,6 +63,6 @@ export class UsersService implements OnModuleInit {
     }
 
     async findFollowers(user: Users): Promise<Users[]> {
-        return await this.usersRepo.find({where: {following: user}})
+        return await this.usersRepo.find({where: {following: user}, relations:["events"]})
     }
 }

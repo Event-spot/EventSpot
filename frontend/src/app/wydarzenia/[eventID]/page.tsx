@@ -1,7 +1,6 @@
 'use client'
 
 import { useQuery } from "@apollo/client";
-import { GET_EVENTS } from "../graphql/schema";
 import { useState } from 'react';
 import Attendee from "../../../components/attendeelist/attendeelist"
 import styles from './event.module.scss';
@@ -10,6 +9,7 @@ import eventimage from '../../../assets/images/isb.png';
 import Maps from '../../../components/Maps/maps';
 import Comments from '../../../components/comments/comments';
 import Details from '../../../components/details/details';
+import { gql } from "@apollo/client";
 
 type Event = {
   id:number,
@@ -31,19 +31,28 @@ type Params = {
 };
 
 export default function Event({ params: { eventID } }: Params) {
+const GET_EVENTS= gql`
+query{
+  eventById(eventId: ${eventID}){
+    id,
+    name,
+    localization,
+    date
+    attendees{
+      firstname,
+      lastname
+    }
+  }
+}
+`
   const { loading, error, data } = useQuery(GET_EVENTS);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
 
-  const event = data.events.find((event: Event) => event.id === parseInt(eventID, 10));
+  const event = data.eventById;
 
   if (!event) return <p>Event not found</p>;
-
-
-
-
-
 
   return (
     <div className={styles.main}>
@@ -81,8 +90,7 @@ export default function Event({ params: { eventID } }: Params) {
             Wezmą udział
           </div>
           <div className={styles.participantsTable}>
-          {!loading && data?.events &&
-           event.attendees.map((attendee: Attendee, index: number) => (
+          {event.attendees.map((attendee: Attendee, index: number) => (
           <Attendee
                 key={index}
                 id={attendee.id}

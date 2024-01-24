@@ -4,34 +4,21 @@ import { VerticalTimeline, VerticalTimelineElement } from 'react-vertical-timeli
 import styles from './EventHistory.module.scss';
 import Image from "next/image";
 import eventimage from '../../assets/images/illegalzone.png'; 
-import { useQuery } from '@apollo/client';
-import { GET_EVENTS_TO_USERS} from '../../graphql/schema';
 
-type User = {
-  id: number; 
-};
 type Event = {
   id: number; 
   name:string;
   date:Date;
   localization:string;
+  events:[];
 };
 
 
-export default function EventHistory({ userId }: { userId: any }) {  
+export default function EventHistory(props:{user:Event}) {  
   const [activeTab, setActiveTab] = useState('upcomingEvents');
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
   };
-  const { loading, data, error } = useQuery(GET_EVENTS_TO_USERS, {
-    variables: { userId },
-  });
-
-  if (loading) return <p>Loading...</p>;
-  if (error) return <p>Error: {error.message}</p>;
-
-  const user = data.users.find((user: User) => user.id === parseInt(userId, 10));
-
 
   return (
     <div className={styles.details}>
@@ -54,7 +41,7 @@ export default function EventHistory({ userId }: { userId: any }) {
         {activeTab === 'upcomingEvents' && (
           <div className={styles.tabPanel}>
            <VerticalTimeline>
-           {user.events.map((event: Event, index: number) => (
+           {props.user.events.map((event: Event, index: number) => (
                 <VerticalTimelineElement
                   visible={true}
                   key={index}
