@@ -7,6 +7,7 @@ import Pagination from '../../components/Pagination/Pagination';
 import { useState } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_EVENTS} from './graphql/schema';
+import { GET_SORTED_AND_PAGINATED_EVENTS} from './graphql/schema2';
 
 interface Event {
   id:number;
@@ -15,14 +16,22 @@ interface Event {
  date:string;
 }
 export default function wydarzenia() {
- 
+
   const [currentPage, setCurrentPage] = useState(1);
-  const {loading,error, data} = useQuery(GET_EVENTS);
+  const [sortOption, setSortOption] = useState('');
   const itemsPerPage = 6;
-  const totalNumOfPages = Math.ceil((data?.events.length || 0) / itemsPerPage);
+  const { loading, error, data } = useQuery(sortOption ? GET_SORTED_AND_PAGINATED_EVENTS : GET_EVENTS, {
+    variables: sortOption ? { 
+      sortOption,
+      startIndex: (currentPage - 1) * itemsPerPage,
+      itemsPerPage
+    } : {},
+  });
+  const totalNumOfPages = Math.ceil((data?.totalEventsCount || 0) / itemsPerPage);
+  const currentEventy = data?.events || [];
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = Math.min(startIndex + itemsPerPage, data?.events.length);
-  const currentEventy = data?.events.slice(startIndex, endIndex) || [];
+
 
 
 
@@ -32,7 +41,7 @@ export default function wydarzenia() {
 <div className={styles.main}>
 
   <div>
-    <Upbar pageType="wydarzenia"/>
+    <Upbar pageType="wydarzenia" onSortChange={setSortOption}/>
   </div>
   
 
@@ -61,11 +70,7 @@ export default function wydarzenia() {
                     setCurrentPage={setCurrentPage}
                 />
             </div>
-  
 </div>
-
-
-    
-  );
+);
 };
 

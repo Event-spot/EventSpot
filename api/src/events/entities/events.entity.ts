@@ -39,6 +39,19 @@ export class Events {
     @Field()
     description: string;
 
+    @Column()
+    @Field()
+    general_information: string;
+    
+    @Column()
+    @Field()
+    competitions: string;
+
+    @Column()
+    @Field()
+    localization_details: string;
+
+
     // TODO: Organizer relation
 
     @OneToMany(type => Comments, comment => comment.event, {nullable: true})

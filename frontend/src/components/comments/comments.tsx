@@ -4,24 +4,25 @@ import styles from './comments.module.scss';
 import Question from '../../assets/images/question.png'; 
 import Image from 'next/image';
 
-export default function Comments() {
+type CommentProps ={
+  id:number;
+  content:string;
+  createDate:string;
+  imie:string;
+  nazwisko:string;
+}
 
-  const textareaRef = useRef<HTMLTextAreaElement>(null);
-
-
-
-
-
-  return (
-    <div className={styles.comments}>
-      <div className={styles.write}>
-        <textarea
-          ref={textareaRef}
-          placeholder='Napisz komentarz'
-          
-          
-        />
-      </div>
+const Comment: React.FC<CommentProps>=({
+  id,
+  content,
+  createDate,
+  imie,
+  nazwisko,
+})=>{
+ 
+  return(
+      <div className={styles.comments}>
+    
 
       <div className={styles.user}>
         <div className={styles.userimage}> 
@@ -29,25 +30,13 @@ export default function Comments() {
         </div>
         <div className={styles.usercomment}>
           <div className={styles.nickndate}>
-            <div className={styles.username}>User123</div>
-            <div className={styles.date}>01.01.2024/12:34</div>
+            <div className={styles.username}>{imie} {nazwisko}</div>
+            <div className={styles.date}>{createDate}</div>
           </div>
-          <div className={styles.commentText}></div>
-        </div>
-      </div>
-
-      <div className={styles.user}>
-        <div className={styles.userimage}>
-        <Image className={styles.accountimage} src={Question} alt={'account image'} />
-        </div>
-        <div className={styles.usercomment}>
-          <div className={styles.nickndate}>
-            <div className={styles.username}>User123</div>
-            <div className={styles.date}>01.01.2024/12:34</div>
-          </div>
-          <div className={styles.commentText}></div>
+          <div className={styles.commentText}>{content}</div>
         </div>
       </div>
     </div>
-  );
+  )
 }
+export default Comment;

@@ -7,14 +7,21 @@ import{yupResolver} from '@hookform/resolvers/yup';
 
 interface UpbarProps {
   pageType: 'wydarzenia' | 'uzytkownicy';
+  onSortChange: (sortOption: string) => void;
 }
 
-const Upbar: React.FC<UpbarProps> = ({ pageType }) => {
+const Upbar: React.FC<UpbarProps> = ({ pageType, onSortChange }) => {
   const [rotation, setRotation] = useState(0);
   const [clickCount, setClickCount] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [actualDate, setActualDate] = useState('');
+  const [sortOption, setSortOption] = useState('');
 
+  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const selectedOption = e.target.value;
+    setSortOption(selectedOption);
+    onSortChange(selectedOption); 
+  };
  
 const { register } = useForm({
         
@@ -52,10 +59,11 @@ const rotate = () => {
     if (pageType === 'wydarzenia') {
       return (
         <form className={styles.sortlist}>
-          <select  >
-            <option>Sortowanie domyślne</option>
-            <option value="Sortuj wg. daty" >Sortuj wg. daty</option>
-            <option value="Sortuj wg. lokalizacji">Sortuj wg. lokalizacji </option>
+          <select onChange={handleSortChange}>
+            <option value="">Sortowanie domyślne</option>
+            <option value="date+">Sortuj wg. daty do najbliższej</option>
+            <option value="date-">Sortuj wg. daty do najdalszej</option>
+            <option  value="location">Sortuj alfabetycznie </option>
             
           </select>
         </form>

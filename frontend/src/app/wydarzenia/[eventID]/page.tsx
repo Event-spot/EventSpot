@@ -1,27 +1,39 @@
 'use client'
-
+import React, { useState, useRef } from 'react';
 import { useQuery } from "@apollo/client";
 import { GET_EVENTS } from "../graphql/schema";
-import { useState } from 'react';
 import Attendee from "../../../components/attendeelist/attendeelist"
 import styles from './event.module.scss';
 import Image from 'next/image';
 import eventimage from '../../../assets/images/isb.png';
 import Maps from '../../../components/Maps/maps';
-import Comments from '../../../components/comments/comments';
-import Details from '../../../components/details/details';
+import Comment from '../../../components/comments/comments';
+import Detail from '../../../components/details/details';
 
 type Event = {
-  id:number,
+  id:number;
  name:string;
  localization:string;
 };
-type Attendee = {
-  id:number,
- name:string;
-firstname:string;
-lastname:string;
+type Comment = {
+  user: any;
+  id:number;
+  content:string;
+  createDate:string;
+  firstname: string;
+  lastname:string;
 };
+type Attendee = {
+  id:number;
+  firstname:string;
+  lastname:string;
+};
+type Detail = {
+  general_information:string;
+  competitions:string;
+  localization_details:string;
+}
+
 
 
 type Params = {
@@ -31,6 +43,7 @@ type Params = {
 };
 
 export default function Event({ params: { eventID } }: Params) {
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
   const { loading, error, data } = useQuery(GET_EVENTS);
 
   if (loading) return <p>Loading...</p>;
@@ -40,7 +53,7 @@ export default function Event({ params: { eventID } }: Params) {
 
   if (!event) return <p>Event not found</p>;
 
-
+console.log(event.general_information, event.competitions, event.localization_details);
 
 
 
@@ -97,7 +110,15 @@ export default function Event({ params: { eventID } }: Params) {
 
 
         <div className={styles.insidenext2}>
-          <Details/>
+     
+          <Detail
+         
+          informacje_ogolne={event.general_information}
+          konkursy={event.competitions}
+          szczegoly_dojazdu={event.localization_details}
+            />
+            
+          
 
         </div>
 
@@ -109,7 +130,22 @@ export default function Event({ params: { eventID } }: Params) {
 
       <div className={styles.afternext}>
         <div className={styles.komentarze}>
-            <Comments />
+        <div className={styles.write}>
+        <textarea
+          ref={textareaRef}
+          placeholder='Napisz komentarz'/>
+      </div>
+        {!loading && data?.events &&
+           event.comments.map((comment: Comment, index: number) => (
+          <Comment
+          key={index}
+          id={comment.id}
+          imie={comment.user.firstname}
+          nazwisko={comment.user.lastname}
+          content={comment.content}
+          createDate={comment.createDate}         />
+            ))
+          }
           </div>
       </div>
     </div>

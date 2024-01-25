@@ -18,6 +18,28 @@ export class EventsService implements OnModuleInit {
     onModuleInit() {
         this.userService = this.moduleRef.get(UsersService, {strict: false});
     }
+    async findAllEventsWithSortingAndPagination(sortOption?: string, startIndex?: number, itemsPerPage?: number): Promise<Events[]> {
+        const query = this.eventRepo.createQueryBuilder('event');
+
+        // Sortowanie
+        if (sortOption) {
+            if (sortOption === 'date+') {
+                query.orderBy('event.date', 'DESC');
+            } else if (sortOption === 'date-') {
+                query.orderBy('event.date', 'ASC');
+            } else if (sortOption === 'location') {
+                query.orderBy('event.localization', 'ASC');
+            }
+        }
+
+        // Paginacja
+        if (startIndex !== undefined && itemsPerPage !== undefined) {
+            query.skip(startIndex).take(itemsPerPage);
+        }
+
+        return query.getMany();
+    }
+
 
     async findAllEvents(): Promise<Events[]>{
         let events: Events[] = await this.eventRepo.find({relations: ['attendees', 'comments', 'comments.user']});
@@ -65,4 +87,5 @@ export class EventsService implements OnModuleInit {
         await this.eventRepo.save(event);
         return "Attendee has been added to Event";
     }
+    
 }

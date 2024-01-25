@@ -1,0 +1,121 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type comments {
+  id: Int!
+  content: String!
+  createDate: String!
+  user: users!
+  event: events!
+}
+
+type events {
+  id: Int!
+  name: String!
+  date: String!
+  createDate: String!
+  localization: String!
+  description: String!
+  general_information: String!
+  competitions: String!
+  localization_details: String!
+  comments: [comments!]
+  attendees: [users!]
+}
+
+type users {
+  id: Int!
+  email: String!
+  password: String!
+  firstname: String!
+  lastname: String!
+  localization: String
+  spotsVisited: Int!
+  followers: Int!
+  following: Int!
+  events: [events!]!
+  comments: [comments!]
+}
+
+type Query {
+  users: [users!]!
+  userById(userId: Int!): users!
+  events(sortOption: String, startIndex: Int, itemsPerPage: Int): [events!]!
+  eventById(eventId: Int!): events!
+  comments: [comments!]!
+  commentById(commentId: Int!): comments!
+}
+
+type Mutation {
+  deleteUser(userId: Int!): String!
+  addUser(addUserArgs: AddUserArgs!): String!
+  updateUser(updateUserArgs: UpdateUserArgs!): String!
+  addAttendee(addAttendeeInput: AddAttendeeInput!): String!
+  addEvent(addEventArgs: AddEventArgs!): String!
+  deleteEvent(eventId: Float!): String!
+  updateEvent(updateEventArgs: UpdateEventArgs!): String!
+  deleteComment(commentId: Float!): String!
+  addComment(addCommentInput: AddCommentInput!): String!
+  updateComment(updateCommentInput: UpdateCommentInput!): String!
+}
+
+input AddUserArgs {
+  email: String!
+  password: String!
+  firstname: String!
+  lastname: String!
+  localization: String
+}
+
+input UpdateUserArgs {
+  id: Int!
+  firstname: String!
+  lastname: String!
+  localization: String
+  spotsVisited: Int!
+  following: Int!
+  followers: Int!
+}
+
+input AddAttendeeInput {
+  id: Int!
+  userId: Int!
+}
+
+input AddEventArgs {
+  name: String!
+  localization: String!
+  date: DateTime!
+  description: String!
+  general_information: String!
+  competitions: String!
+  localization_details: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input UpdateEventArgs {
+  id: Int!
+  name: String!
+  localization: String!
+  date: DateTime!
+  description: String!
+  general_information: String!
+  competitions: String!
+  localization_details: String!
+}
+
+input AddCommentInput {
+  content: String!
+  user: Int!
+  event: Int!
+}
+
+input UpdateCommentInput {
+  id: Int!
+  content: String!
+}

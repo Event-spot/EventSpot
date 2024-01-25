@@ -14,4 +14,13 @@ export default class AddEventArgs {
 
     @Field()
     description: string;
+
+    @Field()
+    general_information: string;
+    
+    @Field()
+    competitions: string;
+
+    @Field()
+    localization_details: string;
 }
