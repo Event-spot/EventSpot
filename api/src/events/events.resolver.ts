@@ -21,6 +21,20 @@ export class EventsResolver {
         return this.eventService.findEventById(id);
     }
 
+    @Query(returns => [Events], {name: 'events'})
+    getAllSortedEvents(
+        @Args('sortOption', { type: () => String, nullable: true }) sortOption?: string,
+    @Args('startIndex', { type: () => Int, nullable: true }) startIndex?: number,
+    @Args('itemsPerPage', { type: () => Int, nullable: true }) itemsPerPage?: number
+    ) {
+          return this.eventService.findAllEventsWithSortingAndPagination(sortOption, startIndex, itemsPerPage);
+    }
+
+    @Mutation(returns => String, {name: 'addAttendee'})
+    addAttendee(@Args('addAttendeeInput') addAttendeeInput: AddAttendeeInput) {
+        return this.eventService.addAttendee(addAttendeeInput);
+    }
+
     @Mutation(returns => String, {name: 'addEvent'})
     addEvent(@Args('addEventArgs') addEventArgs: AddEventArgs) {
         return this.eventService.addEvent(addEventArgs);

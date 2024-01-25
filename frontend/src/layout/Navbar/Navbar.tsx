@@ -42,7 +42,7 @@ export default function Navbar() {
       <Menu className={menuIsOpen && styles.menuOpen} />
       <ul className={styles.navigation}>
                 <Link href={'/wydarzenia'}><li className={styles.option}>Wydarzenia</li></Link>
-                <Link href={'/organizatorzy'}><li className={styles.option}>Organizatorzy</li></Link>
+                <Link href={'/createevent'}><li className={styles.option}>Utwórz Wydarzenie</li></Link>
                 <Link href={'/uzytkownicy'}><li className={styles.option}>Użytkownicy</li></Link>
                 <Link href={'/kontakt'}><li className={styles.option}>Kontakt</li></Link>
                 </ul>

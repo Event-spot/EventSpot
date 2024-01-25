@@ -1,8 +1,7 @@
 import { gql } from "@apollo/client";
-
-export const GET_EVENTS= gql`
-query {
-  events {
+export const GET_SORTED_AND_PAGINATED_EVENTS = gql`
+query GetSortedAndPaginatedEvents($sortOption: String, $startIndex: Int, $itemsPerPage: Int) {
+  events(sortOption: $sortOption, startIndex: $startIndex, itemsPerPage: $itemsPerPage) {
     id
     name
     localization
@@ -27,4 +26,4 @@ query {
     }
   }
 }
-`
+`;

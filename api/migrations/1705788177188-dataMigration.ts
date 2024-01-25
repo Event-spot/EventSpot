@@ -15,13 +15,14 @@ export class DataMigration1705788177188 implements MigrationInterface {
         // Inserting Data to Event
 
         await queryRunner.query(`
-            INSERT INTO events (name, date, localization, description) VALUES
-            ('Motoryzacyjne Święto Niepodległości 2k24', '2024-11-11', 'Gliwice', 'test'),
-            ('Zakończenie sezonu z ISB Crew', '2024-08-31', 'Bytom', 'test'),
-            ('Mikołajki z NFSC', '2024-12-06', 'Kraków', 'test'),
-            ('Illegal Zone Edition 1', '2024-07-23', 'Koszalin', 'test'),
-            ('Halloween Night 24', '2024-10-31', 'Warszawa', 'test'),
-            ('Japfest SilverStone', '2024-05-24', 'Radom', 'test')`)
+        INSERT INTO events (name, date, localization, description, general_information, competitions, localization_details) VALUES
+        ('Motoryzacyjne Święto Niepodległości 2k24', '2024-11-11', 'Gliwice', 'test', 'Największe święto motoryzacji w Polsce!', 'Zlot samochodowy, pokazy tuningowe, konkursy, wystawy', 'Stadion miejski, ul. Sportowa 1, Gliwice'),
+        ('Zakończenie sezonu z ISB Crew', '2024-08-31', 'Bytom', 'test', 'Huczne zakończenie sezonu', 'Drag racing, prezentacje samochodów, muzyka na żywo', 'Areny miejskie, ul. Przykładowa 22, Bytom'),
+        ('Mikołajki z NFSC', '2024-12-06', 'Kraków', 'test', 'Spotkanie z fanami samochodów', 'Wybór najładniejszych ozdób na samochodach, jazda świętym Mikołajem', 'Plac Krakowski, ul. Bożonarodzeniowa 3, Kraków'),
+        ('Illegal Zone Edition 1', '2024-07-23', 'Koszalin', 'test', 'Nocne zloty w klimacie underground', 'Turniej illegalnych wyścigów, prezentacje aut tuningowanych', 'Sekretna lokalizacja, Koszalin'),
+        ('Halloween Night 24', '2024-10-31', 'Warszawa', 'test', 'Halloweenowa noc z motoryzacją', 'Parada strasznych samochodów, konkurs na najbardziej kreatywny kostium', 'Aleje Ujazdowskie, Warszawa'),
+        ('Japfest SilverStone', '2024-05-24', 'Radom', 'test', 'Największy zlot japońskich samochodów', 'Pokazy driftingu, prezentacje najnowszych modeli, konkurs na najlepsze auto', 'Lotnisko Radom, ul. Japońska 8, Radom');
+    `)
 
         // Inserting Data to Attendees
 

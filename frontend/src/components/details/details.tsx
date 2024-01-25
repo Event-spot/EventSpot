@@ -1,16 +1,23 @@
-
-import { useState } from 'react';
+import React, { useState } from 'react';
 import styles from './details.module.scss';
 
-export default function Details() {
+type DetailProps = {
+ 
+  informacje_ogolne: string;
+  konkursy: string;
+  szczegoly_dojazdu: string;
+};
 
-  
+const Detail: React.FC<DetailProps> = ({
+ 
+  informacje_ogolne,
+  konkursy,
+  szczegoly_dojazdu,
+}) => {
   const [activeTab, setActiveTab] = useState('informacje');
 
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
-   
-   
   };
 
   return (
@@ -37,21 +44,17 @@ export default function Details() {
       </div>
       <div className={styles.tabContent}>
         {activeTab === 'informacje' && (
-          <div className={styles.tabPanel}>
-           
-          </div>
+          <div className={styles.tabPanel}>{informacje_ogolne}</div>
         )}
         {activeTab === 'konkursy' && (
-          <div className={styles.tabPanel}>
-           
-          </div>
+          <div className={styles.tabPanel}>{konkursy}</div>
         )}
         {activeTab === 'dojazd' && (
-          <div className={styles.tabPanel}>
-           
-          </div>
+          <div className={styles.tabPanel}>{szczegoly_dojazdu}</div>
         )}
       </div>
     </div>
   );
-}
+};
+
+export default Detail;

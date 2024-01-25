@@ -120,6 +120,24 @@
     .komentarze {
       width: 60%;
       margin: auto;
+      align-items: center;
+      display:flex;
+      flex-direction: column;
+      .write {
+        width: 80%;
+        margin-bottom: 10px;
+      }
+    
+      .write textarea {
+        margin-top: 10px;
+        width: 100%;
+        min-height: 100px;
+        border-radius: 20px;
+        resize: none;
+        padding: 10px;
+        box-sizing: border-box;
+        overflow-y: hidden;
+      }
     }
   }  
 }
