@@ -8,8 +8,9 @@ export const GET_USERS= gql`
             lastname,
             spotsVisited,
             localization,
-            followers,
-            following
+            followersCount,
+            followingsCount,
+            eventsCount
         }
     }
 `

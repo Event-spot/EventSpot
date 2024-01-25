@@ -10,9 +10,7 @@ query{
     attendees{
       firstname,
       lastname
-      
     }
-    
   }
 }
 `

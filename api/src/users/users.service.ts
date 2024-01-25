@@ -27,7 +27,7 @@ export class UsersService implements OnModuleInit {
     }
 
     async findUserById(id: number): Promise<Users> {
-        let user = await this.usersRepo.findOne({where: {id: id}});
+        let user = await this.usersRepo.findOne({where: {id: id}, relations: ["events", "following"]});
         return user;
     }
 
@@ -44,6 +44,12 @@ export class UsersService implements OnModuleInit {
         user.lastname = addUserArgs.lastname;
         user.localization = addUserArgs.localization;
         user.spotsVisited = 0;
+        user.description = addUserArgs.description;
+        user.facebook = addUserArgs.facebook;
+        user.instagram = addUserArgs.instagram;
+        user.tiktok = addUserArgs.tiktok;
+        user.youtube = addUserArgs.youtube;
+
         await this.usersRepo.save(user)
 
         return "User has been added";
@@ -56,6 +62,12 @@ export class UsersService implements OnModuleInit {
         user.firstname = updateUserArgs.firstname;
         user.lastname = updateUserArgs.lastname;
         user.localization = updateUserArgs.localization;
+        user.description = updateUserArgs.description;
+        user.facebook = updateUserArgs.facebook;
+        user.instagram = updateUserArgs.instagram;
+        user.tiktok = updateUserArgs.tiktok;
+        user.youtube = updateUserArgs.youtube;
+
         await this.usersRepo.save(user)
 
         return "User has been updated";

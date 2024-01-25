@@ -12,9 +12,9 @@ interface Person {
     firstname: string;
     lastname: string;
     localization: string;
-    spotsVisited: number;
-    followers: number;
-    following: number;
+    eventsCount: number;
+    followersCount: number;
+    followingsCount: number;
 }
 
 export default function Users() {
@@ -45,9 +45,9 @@ export default function Users() {
                             imie={osoba.firstname}
                             nazwisko={osoba.lastname}
                             lokalizacja={osoba.localization}
-                            odwiedzoneSpoty={osoba.spotsVisited}
-                            obserwowani={osoba.following}
-                            obserwujacy={osoba.followers}
+                            odwiedzoneSpoty={osoba.eventsCount}
+                            obserwowani={osoba.followingsCount}
+                            obserwujacy={osoba.followersCount}
                             />
                         ))
                     }

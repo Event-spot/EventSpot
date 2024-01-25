@@ -9,6 +9,7 @@ import {Users} from "../users/entities/users.entity";
 import AddAttendeeInput from "./dto/add-attendee-input";
 import {ModuleRef} from "@nestjs/core";
 
+
 @Injectable()
 export class EventsService implements OnModuleInit {
     private userService: UsersService;
@@ -55,5 +56,24 @@ export class EventsService implements OnModuleInit {
 
         await this.eventRepo.save(event);
         return "Event has been updated";
+    }
+
+    async findFutureEventsForUser(userId: number): Promise<Events[]> {
+        const currentDate = new Date();
+        return this.eventRepo.createQueryBuilder('event')
+            .leftJoinAndSelect('event.attendees', 'attendee')
+            .where('event.date >= :currentDate', { currentDate })
+            .andWhere('attendee.id = :userId', { userId })
+            .getMany();
+    }
+    
+    async findPastEventsForUser(userId: number): Promise<Events[]> {
+        const currentDate = new Date();
+        return this.eventRepo.createQueryBuilder('event')
+            .leftJoinAndSelect('event.attendees', 'attendee')
+            .where('event.date < :currentDate', { currentDate })
+            .andWhere('attendee.id = :userId', { userId })
+            .orderBy('event.date', 'DESC')
+            .getMany();
     }
 }

@@ -1,0 +1,140 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type comments {
+  id: Int!
+  content: String!
+  createDate: String!
+  user: users!
+  event: events!
+}
+
+type events {
+  id: Int!
+  name: String!
+  date: String!
+  createDate: String!
+  localization: String!
+  description: String!
+  comments: [comments!]
+  attendees: [users!]
+}
+
+type users {
+  id: Int!
+  email: String!
+  password: String!
+  firstname: String!
+  lastname: String!
+  localization: String
+  spotsVisited: Int!
+  description: String
+  facebook: String
+  instagram: String
+  tiktok: String
+  youtube: String
+  following: [users!]
+  events: [events!]
+  comments: [comments!]
+  followers: [users!]!
+  followingsCount: Float!
+  followersCount: Float!
+  eventsCount: Float!
+}
+
+type Query {
+  users: [users!]!
+  userById(userId: Int!): users!
+  events: [events!]!
+  eventById(eventId: Int!): events!
+  futureEvents(userId: Int!): [events!]!
+  pastEvents(userId: Int!): [events!]!
+  comments: [comments!]!
+  commentById(commentId: Int!): comments!
+}
+
+type Mutation {
+  deleteUser(userId: Int!): String!
+  addUser(addUserArgs: AddUserArgs!): String!
+  updateUser(updateUserArgs: UpdateUserArgs!): String!
+  changeDescription(updateDescriptionInput: UpdateDescriptionInput!): String!
+  deleteDescription(userId: Float!): String!
+  joinEvent(joinEventInput: JoinEventInput!): String!
+  leaveEvent(joinEventInput: JoinEventInput!): String!
+  addEvent(addEventArgs: AddEventArgs!): String!
+  deleteEvent(eventId: Float!): String!
+  updateEvent(updateEventArgs: UpdateEventArgs!): String!
+  deleteComment(commentId: Float!): String!
+  addComment(addCommentInput: AddCommentInput!): String!
+  updateComment(updateCommentInput: UpdateCommentInput!): String!
+}
+
+input AddUserArgs {
+  email: String!
+  password: String!
+  firstname: String!
+  lastname: String!
+  localization: String
+  description: String
+  facebook: String
+  instagram: String
+  tiktok: String
+  youtube: String
+}
+
+input UpdateUserArgs {
+  id: Int!
+  firstname: String!
+  lastname: String!
+  localization: String
+  description: String
+  facebook: String
+  instagram: String
+  tiktok: String
+  youtube: String
+  spotsVisited: Int!
+  following: Int!
+  followers: Int!
+}
+
+input UpdateDescriptionInput {
+  id: Int!
+  description: String!
+}
+
+input JoinEventInput {
+  userId: Int!
+  eventId: Int!
+}
+
+input AddEventArgs {
+  name: String!
+  localization: String!
+  date: DateTime!
+  description: String!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+input UpdateEventArgs {
+  id: Int!
+  name: String!
+  localization: String!
+  date: DateTime!
+  description: String!
+}
+
+input AddCommentInput {
+  content: String!
+  user: Int!
+  event: Int!
+}
+
+input UpdateCommentInput {
+  id: Int!
+  content: String!
+}
