@@ -31,10 +31,6 @@ export class Users {
     @Field({nullable: true})
     localization?: string;
 
-    @Column({name: "spots_visited"})
-    @Field(type => Int)
-    spotsVisited: number;
-
     @Column({nullable: true})
     @Field({nullable: true})
     description?: string;
@@ -70,7 +66,7 @@ export class Users {
     @Field(type => [Users], {nullable: true})
     following?: Users[];
 
-    @ManyToMany(() => Events, (event) => event.attendees, {nullable: true, cascade: ['insert']})
+    @ManyToMany(() => Events, (event) => event.attendees, {nullable: true,onDelete:"CASCADE",onUpdate:"CASCADE", cascade: ['insert']})
     @Field(type => [Events], {nullable: true})
     events?: Events[];
 

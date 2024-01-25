@@ -6,7 +6,6 @@ export const GET_USERS= gql`
             id,
             firstname,
             lastname,
-            spotsVisited,
             localization,
             followersCount,
             followingsCount,

@@ -43,7 +43,6 @@ export class UsersService implements OnModuleInit {
         user.firstname = addUserArgs.firstname;
         user.lastname = addUserArgs.lastname;
         user.localization = addUserArgs.localization;
-        user.spotsVisited = 0;
         user.description = addUserArgs.description;
         user.facebook = addUserArgs.facebook;
         user.instagram = addUserArgs.instagram;
