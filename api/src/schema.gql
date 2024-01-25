@@ -17,9 +17,9 @@ type events {
   createDate: String!
   localization: String!
   description: String!
-  general_information: String!
-  competitions: String!
-  localization_details: String!
+  general_information: String
+  competitions: String
+  localization_details: String
   comments: [comments!]
   attendees: [users!]
 }
@@ -49,7 +49,7 @@ type users {
 type Query {
   users: [users!]!
   userById(userId: Int!): users!
-  events(sortOption: String, startIndex: Int, itemsPerPage: Int): [events!]!
+  events: [events!]!
   eventById(eventId: Int!): events!
   futureEvents(userId: Int!): [events!]!
   pastEvents(userId: Int!): [events!]!
@@ -123,9 +123,9 @@ input AddEventArgs {
   localization: String!
   date: DateTime!
   description: String!
-  general_information: String!
-  competitions: String!
-  localization_details: String!
+  general_information: String
+  competitions: String
+  localization_details: String
 }
 
 """
@@ -139,9 +139,6 @@ input UpdateEventArgs {
   localization: String!
   date: DateTime!
   description: String!
-  general_information: String!
-  competitions: String!
-  localization_details: String!
 }
 
 input AddCommentInput {

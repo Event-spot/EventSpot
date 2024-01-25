@@ -39,17 +39,17 @@ export class Events {
     @Field()
     description: string;
 
-    @Column()
-    @Field()
-    general_information?: string;
+    @Column({nullable: true})
+    @Field({nullable: true})
+    general_information: string;
     
-    @Column()
-    @Field()
-    competitions?: string;
+    @Column({nullable: true})
+    @Field({nullable: true})
+    competitions: string;
 
-    @Column()
-    @Field()
-    localization_details?: string;
+    @Column({nullable: true})
+    @Field({nullable: true})
+    localization_details: string;
 
 
     // TODO: Organizer relation
