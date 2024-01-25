@@ -5,9 +5,10 @@ import styles from './event.module.scss';
 import Image from 'next/image';
 import eventimage from '../../../assets/images/isb.png';
 import Maps from '../../../components/Maps/maps';
-import Comments from '../../../components/comments/comments';
-import Details from '../../../components/details/details';
+import Comment from '../../../components/comments/comments';
+import Detail from '../../../components/details/details';
 import { gql } from "@apollo/client";
+import { useRef } from "react";
 
 type Event = {
   id:number;
@@ -50,6 +51,9 @@ query{
     name,
     localization,
     date
+    general_information
+    competitions
+    localization_details
     attendees{
       firstname,
       lastname
