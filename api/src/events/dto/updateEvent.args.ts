@@ -19,12 +19,12 @@ export default class UpdateEventArgs {
     description: string;
     
     @Field()
-    general_information: string;
+    general_information?: string;
     
     @Field()
-    competitions: string;
+    competitions?: string;
 
     @Field()
-    localization_details: string;
+    localization_details?: string;
 
 }

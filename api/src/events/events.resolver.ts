@@ -30,11 +30,6 @@ export class EventsResolver {
           return this.eventService.findAllEventsWithSortingAndPagination(sortOption, startIndex, itemsPerPage);
     }
 
-    @Mutation(returns => String, {name: 'addAttendee'})
-    addAttendee(@Args('addAttendeeInput') addAttendeeInput: AddAttendeeInput) {
-        return this.eventService.addAttendee(addAttendeeInput);
-    }
-
     @Mutation(returns => String, {name: 'addEvent'})
     addEvent(@Args('addEventArgs') addEventArgs: AddEventArgs) {
         return this.eventService.addEvent(addEventArgs);

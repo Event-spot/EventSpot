@@ -41,15 +41,15 @@ export class Events {
 
     @Column()
     @Field()
-    general_information: string;
+    general_information?: string;
     
     @Column()
     @Field()
-    competitions: string;
+    competitions?: string;
 
     @Column()
     @Field()
-    localization_details: string;
+    localization_details?: string;
 
 
     // TODO: Organizer relation

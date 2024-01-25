@@ -83,7 +83,7 @@ export default function Profile({ params: { userID } }: Params) {
   const futureEvents = data.futureEvents;
   const pastEvents = data.pastEvents;
   if (!user) return <p>User not found</p>;
-  const followingCount = data?.userById?.following?.length || 0;
+  const followingCount = data?.userById?.followers?.length || 0;
   return (
     <div className={styles.main}>
       <div className={styles.up}>

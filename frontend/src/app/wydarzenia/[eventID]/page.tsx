@@ -58,6 +58,17 @@ query{
       firstname,
       lastname
     }
+    comments {
+      id
+      content
+      createDate
+      user {
+        id
+        firstname
+        lastname
+      }
+    }
+
   }
 }
 `
@@ -67,9 +78,7 @@ query{
   if (error) return <p>Error: {error.message}</p>;
 
   const event = data.eventById;
-
   if (!event) return <p>Event not found</p>;
-
   return (
     <div className={styles.main}>
     
@@ -106,7 +115,7 @@ query{
             Wezmą udział
           </div>
           <div className={styles.participantsTable}>
-          {event.attendees.map((attendee: Attendee, index: number) => (
+          {event.attendees?.map((attendee: Attendee, index: number) => (
           <Attendee
                 key={index}
                 id={attendee.id}
@@ -119,20 +128,14 @@ query{
         </div>
         </div>
 
-
         <div className={styles.insidenext2}>
      
           <Detail
-         
           informacje_ogolne={event.general_information}
           konkursy={event.competitions}
           szczegoly_dojazdu={event.localization_details}
             />
-            
-          
-
         </div>
-
 
         <div className={styles.insidenext3}>
         <Maps/>
@@ -146,8 +149,7 @@ query{
           ref={textareaRef}
           placeholder='Napisz komentarz'/>
       </div>
-        {!loading && data?.events &&
-           event.comments.map((comment: Comment, index: number) => (
+        {event.comments?.map((comment: Comment, index: number) => (
           <Comment
           key={index}
           id={comment.id}

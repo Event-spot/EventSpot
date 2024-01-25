@@ -32,10 +32,18 @@ type users {
   lastname: String!
   localization: String
   spotsVisited: Int!
-  followers: Int!
-  following: Int!
-  events: [events!]!
+  description: String
+  facebook: String
+  instagram: String
+  tiktok: String
+  youtube: String
+  following: [users!]
+  events: [events!]
   comments: [comments!]
+  followers: [users!]!
+  followingsCount: Float!
+  followersCount: Float!
+  eventsCount: Float!
 }
 
 type Query {
@@ -43,6 +51,8 @@ type Query {
   userById(userId: Int!): users!
   events(sortOption: String, startIndex: Int, itemsPerPage: Int): [events!]!
   eventById(eventId: Int!): events!
+  futureEvents(userId: Int!): [events!]!
+  pastEvents(userId: Int!): [events!]!
   comments: [comments!]!
   commentById(commentId: Int!): comments!
 }
@@ -51,7 +61,12 @@ type Mutation {
   deleteUser(userId: Int!): String!
   addUser(addUserArgs: AddUserArgs!): String!
   updateUser(updateUserArgs: UpdateUserArgs!): String!
-  addAttendee(addAttendeeInput: AddAttendeeInput!): String!
+  changeDescription(updateDescriptionInput: UpdateDescriptionInput!): String!
+  deleteDescription(userId: Float!): String!
+  joinEvent(joinEventInput: JoinEventInput!): String!
+  leaveEvent(joinEventInput: JoinEventInput!): String!
+  follow(followInput: FollowInput!): String!
+  unfollow(followInput: FollowInput!): String!
   addEvent(addEventArgs: AddEventArgs!): String!
   deleteEvent(eventId: Float!): String!
   updateEvent(updateEventArgs: UpdateEventArgs!): String!
@@ -66,6 +81,11 @@ input AddUserArgs {
   firstname: String!
   lastname: String!
   localization: String
+  description: String
+  facebook: String
+  instagram: String
+  tiktok: String
+  youtube: String
 }
 
 input UpdateUserArgs {
@@ -73,14 +93,29 @@ input UpdateUserArgs {
   firstname: String!
   lastname: String!
   localization: String
+  description: String
+  facebook: String
+  instagram: String
+  tiktok: String
+  youtube: String
   spotsVisited: Int!
   following: Int!
   followers: Int!
 }
 
-input AddAttendeeInput {
+input UpdateDescriptionInput {
   id: Int!
+  description: String!
+}
+
+input JoinEventInput {
   userId: Int!
+  eventId: Int!
+}
+
+input FollowInput {
+  userId: Int!
+  followingId: Int!
 }
 
 input AddEventArgs {
