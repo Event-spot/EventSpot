@@ -9,6 +9,7 @@ import {ModuleRef} from "@nestjs/core";
 import {Events} from "../events/entities/events.entity";
 import {UpdateDescriptionInput} from "./dto/update-description-input";
 import {JoinEventInput} from "./dto/join-event-input";
+import {FollowInput} from "./dto/follow-input";
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -126,5 +127,44 @@ export class UsersService implements OnModuleInit {
         const user: Users = await this.usersRepo.findOne({where: {id}, relations: {events: true}});
 
         return user.events.length;
+    }
+
+    async follow(followInput: FollowInput): Promise<string> {
+        const user: Users = await this.usersRepo.findOne({
+            where: {id: followInput.userId},
+            relations: {following: true}
+        });
+        const followingUser: Users = await this.usersRepo.findOne({where: {id: followInput.followingId}});
+
+        const follows: boolean = user.following.some(user => user.id === followInput.followingId)
+
+        if(follows) {
+            throw new Error('User is already followed')
+        }
+
+        user.following = [...user.following, followingUser];
+
+
+        await this.usersRepo.save(user);
+
+        return 'User has been followed';
+    }
+
+    async unfollow(followInput: FollowInput): Promise<string> {
+        const user: Users = await this.usersRepo.findOne({where: {id: followInput.userId}, relations: {following: true}});
+        const following: Users = await this.usersRepo.findOne({where: {id: followInput.followingId}});
+
+        const notFollowed = !user.following.some(followed => followed.id === followInput.followingId);
+
+        if(notFollowed){
+            throw new Error('User is not followed');
+        }
+
+        user.following = user.following.filter(followed => followed.id != followInput.followingId);
+
+        await this.usersRepo.save(user);
+
+
+        return 'User has been unfollowed';
     }
 }

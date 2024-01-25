@@ -5,6 +5,7 @@ import {AddUserArgs} from "./dto/addUser.args";
 import {UpdateUserArgs} from "./dto/updateUser.args";
 import {UpdateDescriptionInput} from "./dto/update-description-input";
 import {JoinEventInput} from "./dto/join-event-input";
+import {FollowInput} from "./dto/follow-input";
 
 @Resolver(of => Users)
 export class UsersResolver {
@@ -55,6 +56,16 @@ export class UsersResolver {
         return this.userService.leaveEvent(joinEventInput);
     }
 
+    @Mutation(returns => String, {name: 'follow'})
+    follow(@Args('followInput') followInput: FollowInput) {
+        return this.userService.follow(followInput);
+    }
+
+    @Mutation(returns => String, {name: 'unfollow'})
+    unfollow(@Args('followInput') followInput: FollowInput) {
+        return this.userService.unfollow(followInput);
+    }
+
     @ResolveField(returns => [Users], {name: 'followers'})
     followers(@Parent() user: Users) {
         return this.userService.findFollowers(user)
@@ -74,4 +85,6 @@ export class UsersResolver {
     eventsCount(@Parent() user: Users) {
         return this.userService.countEvents(user.id);
     }
+
+
 }
