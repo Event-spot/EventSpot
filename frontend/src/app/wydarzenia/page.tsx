@@ -36,7 +36,6 @@ export default function wydarzenia() {
 
 
 
-
   return (
 <div className={styles.main}>
 

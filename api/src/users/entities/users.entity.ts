@@ -35,15 +35,42 @@ export class Users {
     @Field(type => Int)
     spotsVisited: number;
 
-    @Column()
-    @Field(type => Int)
-    followers: number;
+    @Column({nullable: true})
+    @Field({nullable: true})
+    description?: string;
 
-    @Column()
-    @Field(type => Int)
-    following: number;
+    @Column({nullable: true})
+    @Field({nullable: true})
+    facebook?: string;
 
-    @ManyToMany(() => Events, (event) => event.attendees, {nullable: true})
+    @Column({nullable: true})
+    @Field({nullable: true})
+    instagram?: string;
+
+    @Column({nullable: true})
+    @Field({nullable: true})
+    tiktok?: string;
+
+    @Column({nullable: true})
+    @Field({nullable: true})
+    youtube?: string;
+
+    @ManyToMany(() => Users, users => users.following, {nullable: true, onDelete: "CASCADE"})
+    @JoinTable({
+        name: 'user_following',
+        joinColumn: {
+            name: 'userId',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'followingId',
+            referencedColumnName: 'id'
+        }
+    })
+    @Field(type => [Users], {nullable: true})
+    following?: Users[];
+
+    @ManyToMany(() => Events, (event) => event.attendees, {nullable: true, cascade: ['insert']})
     @Field(type => [Events], {nullable: true})
     events?: Events[];
 

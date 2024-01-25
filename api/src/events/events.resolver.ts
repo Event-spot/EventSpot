@@ -50,4 +50,13 @@ export class EventsResolver {
         return this.eventService.updateEvent(updateEventArgs);
     }
 
+    @Query(returns => [Events], { name: 'futureEvents' })
+    getFutureEventsForUser(@Args({ name: 'userId', type: () => Int }) userId: number) {
+        return this.eventService.findFutureEventsForUser(userId);
+    }
+
+    @Query(returns => [Events], { name: 'pastEvents' })
+    getPastEventsForUser(@Args({ name: 'userId', type: () => Int }) userId: number) {
+        return this.eventService.findPastEventsForUser(userId);
+    }
 }

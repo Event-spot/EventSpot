@@ -58,7 +58,7 @@ export class Events {
     @Field(type => [Comments], {nullable: true})
     comments?: Comments[];
 
-    @ManyToMany(() => Users, (user) => user.events, {nullable: true, onDelete: "CASCADE", onUpdate: 'CASCADE'})
+    @ManyToMany(() => Users, (user) => user.events, {nullable: true, onDelete: "CASCADE", cascade: ['insert']})
     @JoinTable()
     @Field(type => [Users], {nullable: true} )
     attendees?: Users[];

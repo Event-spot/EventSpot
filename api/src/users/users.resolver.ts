@@ -3,7 +3,9 @@ import {UsersService} from "./users.service";
 import {Users} from "./entities/users.entity";
 import {AddUserArgs} from "./dto/addUser.args";
 import {UpdateUserArgs} from "./dto/updateUser.args";
-import {Events} from "../events/entities/events.entity";
+import {UpdateDescriptionInput} from "./dto/update-description-input";
+import {JoinEventInput} from "./dto/join-event-input";
+import {FollowInput} from "./dto/follow-input";
 
 @Resolver(of => Users)
 export class UsersResolver {
@@ -17,11 +19,6 @@ export class UsersResolver {
     @Query(returns => Users, {name: 'userById'})
     getUserById(@Args({name: "userId", type: () => Int}) id: number) {
         return this.userService.findUserById(id)
-    }
-
-    @ResolveField(returns => [Events], {name: 'events'})
-    getEvents(@Parent() user: Users) {
-        return user.events || [];
     }
 
     @Mutation(returns => String, {name: "deleteUser"})
@@ -38,4 +35,56 @@ export class UsersResolver {
     updateUser(@Args("updateUserArgs") updateUserArgs: UpdateUserArgs){
         return this.userService.updateUser(updateUserArgs)
     }
+
+    @Mutation(returns => String, {name: 'changeDescription'})
+    changeDescription(@Args('updateDescriptionInput') updateDescriptionInput: UpdateDescriptionInput) {
+        return this.userService.updateDescription(updateDescriptionInput);
+    }
+
+    @Mutation(returns => String, {name: 'deleteDescription'})
+    deleteDescription(@Args('userId') id: number) {
+        return this.userService.deleteDescription(id);
+    }
+
+    @Mutation(returns => String, {name: 'joinEvent'})
+    joinEvent(@Args('joinEventInput') joinEventInput: JoinEventInput) {
+        return this.userService.joinEvent(joinEventInput);
+    }
+
+    @Mutation(returns => String, {name: 'leaveEvent'})
+    leaveEvent(@Args('joinEventInput') joinEventInput: JoinEventInput) {
+        return this.userService.leaveEvent(joinEventInput);
+    }
+
+    @Mutation(returns => String, {name: 'follow'})
+    follow(@Args('followInput') followInput: FollowInput) {
+        return this.userService.follow(followInput);
+    }
+
+    @Mutation(returns => String, {name: 'unfollow'})
+    unfollow(@Args('followInput') followInput: FollowInput) {
+        return this.userService.unfollow(followInput);
+    }
+
+    @ResolveField(returns => [Users], {name: 'followers'})
+    followers(@Parent() user: Users) {
+        return this.userService.findFollowers(user)
+    }
+
+    @ResolveField(returns => Number, {name: 'followingsCount'})
+    followingsCount(@Parent() user: Users) {
+        return this.userService.countFollowings(user.id);
+    }
+
+    @ResolveField(returns => Number, {name: 'followersCount'})
+    followersCount(@Parent() user: Users) {
+        return this.userService.countFollowers(user);
+    }
+
+    @ResolveField(returns => Number, {name: 'eventsCount'})
+    eventsCount(@Parent() user: Users) {
+        return this.userService.countEvents(user.id);
+    }
+
+
 }
