@@ -11,10 +11,12 @@ type Event = {
   date:Date;
   localization:string;
   events:[];
+  futureEvents: [];
+  pastEvents:[];
 };
 
 
-export default function EventHistory(props:{user:Event}) {  
+export default function EventHistory(props:{futureEvents:Event[], pastEvents:Event[]}) {  
   const [activeTab, setActiveTab] = useState('upcomingEvents');
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
@@ -41,19 +43,19 @@ export default function EventHistory(props:{user:Event}) {
         {activeTab === 'upcomingEvents' && (
           <div className={styles.tabPanel}>
            <VerticalTimeline>
-           {props.user.events.map((event: Event, index: number) => (
+           {props.futureEvents.map((futureEvents: Event, index: number) => (
                 <VerticalTimelineElement
                   visible={true}
                   key={index}
-                  date={event.date}
+                  date={futureEvents.date}
                   iconStyle={{ background: 'blue', color: '#fff' }}
                   // icon={"a"}
                 >
                   <Image className={styles.eventbanner} src={eventimage} alt={'Event Banner'} />
-                  <h3 className="vertical-timeline-element-title">{event.name}</h3>
+                  <h3 className="vertical-timeline-element-title">{futureEvents.name}</h3>
                   <div className={styles.subtitle}>
-                  <h4 className={styles.h4Subtitle}>{event.localization}</h4>
-                  <a href={`/wydarzenia/${event.id}`}>Pokaż więcej</a>
+                  <h4 className={styles.h4Subtitle}>{futureEvents.localization}</h4>
+                  <a href={`/wydarzenia/${futureEvents.id}`}>Pokaż więcej</a>
                   </div>
 
                 </VerticalTimelineElement>
@@ -63,39 +65,25 @@ export default function EventHistory(props:{user:Event}) {
         )}
         {activeTab === 'eventHistory' && (
           <div className={styles.tabPanel}>
-           
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
-           <p>asdasdasdasd</p>
+                <VerticalTimeline>
+                {props.pastEvents.map((pastEvents: Event, index: number) => (
+                <VerticalTimelineElement
+                  visible={true}
+                  key={index}
+                  date={pastEvents.date}
+                  iconStyle={{ background: 'blue', color: '#fff' }}
+                  // icon={"a"}
+                >
+                  <Image className={styles.eventbanner} src={eventimage} alt={'Event Banner'} />
+                  <h3 className="vertical-timeline-element-title">{pastEvents.name}</h3>
+                  <div className={styles.subtitle}>
+                  <h4 className={styles.h4Subtitle}>{pastEvents.localization}</h4>
+                  <a href={`/wydarzenia/${pastEvents.id}`}>Pokaż więcej</a>
+                  </div>
+
+                </VerticalTimelineElement>
+              ))}
+            </VerticalTimeline>
           </div>
         )}
       </div>

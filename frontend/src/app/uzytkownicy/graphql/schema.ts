@@ -8,12 +8,9 @@ export const GET_USERS= gql`
             lastname,
             spotsVisited,
             localization,
-            following{
-                id,
-                firstname
-            }
-                
-            
+            followersCount,
+            followingsCount,
+            eventsCount
         }
     }
 `

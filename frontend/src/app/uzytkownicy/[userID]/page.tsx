@@ -33,7 +33,7 @@ export default function Profile({ params: { userID } }: Params) {
   const GET_USERS_EVENTS_FOLLOWINGS = gql`
   query  {
     userById(userId: ${userID}) {
-      id,
+            id,
             firstname,
             lastname,
             spotsVisited,
@@ -57,9 +57,21 @@ export default function Profile({ params: { userID } }: Params) {
               id,
               name,
               date,
-              localization
-          }
-        }
+              localization,
+            }
+      }
+      futureEvents(userId: ${userID}) {
+        id,
+        name,
+        date,
+        localization,
+      }
+      pastEvents(userId: ${userID}) {
+        id,
+        name,
+        date,
+        localization
+      }
   }
 `;
   
@@ -68,9 +80,10 @@ export default function Profile({ params: { userID } }: Params) {
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
   const user = data.userById;
+  const futureEvents = data.futureEvents;
+  const pastEvents = data.pastEvents;
   if (!user) return <p>User not found</p>;
   const followingCount = data?.userById?.following?.length || 0;
-
   return (
     <div className={styles.main}>
       <div className={styles.up}>
@@ -125,7 +138,10 @@ export default function Profile({ params: { userID } }: Params) {
             </div>
         </div>
             <div className={styles.eventHistory}>
-            <EventHistory user={user}/>
+            <EventHistory 
+            futureEvents={futureEvents}
+            pastEvents={pastEvents}
+            />
             </div>
             <div className={styles.followersContainer}>
               <Followers user={user}/>

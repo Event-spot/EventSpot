@@ -35,9 +35,12 @@ type users {
   tiktok: String
   youtube: String
   following: [users!]
-  events: [events!]!
+  events: [events!]
   comments: [comments!]
   followers: [users!]!
+  followingsCount: Float!
+  followersCount: Float!
+  eventsCount: Float!
 }
 
 type Query {
@@ -45,6 +48,8 @@ type Query {
   userById(userId: Int!): users!
   events: [events!]!
   eventById(eventId: Int!): events!
+  futureEvents(userId: Int!): [events!]!
+  pastEvents(userId: Int!): [events!]!
   comments: [comments!]!
   commentById(commentId: Int!): comments!
 }
@@ -53,7 +58,10 @@ type Mutation {
   deleteUser(userId: Int!): String!
   addUser(addUserArgs: AddUserArgs!): String!
   updateUser(updateUserArgs: UpdateUserArgs!): String!
-  addAttendee(addAttendeeInput: AddAttendeeInput!): String!
+  changeDescription(updateDescriptionInput: UpdateDescriptionInput!): String!
+  deleteDescription(userId: Float!): String!
+  joinEvent(joinEventInput: JoinEventInput!): String!
+  leaveEvent(joinEventInput: JoinEventInput!): String!
   addEvent(addEventArgs: AddEventArgs!): String!
   deleteEvent(eventId: Float!): String!
   updateEvent(updateEventArgs: UpdateEventArgs!): String!
@@ -90,9 +98,14 @@ input UpdateUserArgs {
   followers: Int!
 }
 
-input AddAttendeeInput {
+input UpdateDescriptionInput {
   id: Int!
+  description: String!
+}
+
+input JoinEventInput {
   userId: Int!
+  eventId: Int!
 }
 
 input AddEventArgs {
