@@ -39,16 +39,16 @@ export class Events {
     @Field()
     description: string;
 
-    @Column()
-    @Field()
+    @Column({nullable: true})
+    @Field({nullable: true})
     general_information: string;
     
-    @Column()
-    @Field()
+    @Column({nullable: true})
+    @Field({nullable: true})
     competitions: string;
 
-    @Column()
-    @Field()
+    @Column({nullable: true})
+    @Field({nullable: true})
     localization_details: string;
 
 

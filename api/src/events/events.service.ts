@@ -5,8 +5,6 @@ import {Repository} from "typeorm";
 import AddEventArgs from "./dto/addEvent.args";
 import UpdateEventArgs from "./dto/updateEvent.args";
 import {UsersService} from "../users/users.service";
-import {Users} from "../users/entities/users.entity";
-import AddAttendeeInput from "./dto/add-attendee-input";
 import {ModuleRef} from "@nestjs/core";
 
 
@@ -19,29 +17,6 @@ export class EventsService implements OnModuleInit {
     onModuleInit() {
         this.userService = this.moduleRef.get(UsersService, {strict: false});
     }
-    async findAllEventsWithSortingAndPagination(sortOption?: string, startIndex?: number, itemsPerPage?: number): Promise<Events[]> {
-        const query = this.eventRepo.createQueryBuilder('event');
-
-        // Sortowanie
-        if (sortOption) {
-            if (sortOption === 'date+') {
-                query.orderBy('event.date', 'DESC');
-            } else if (sortOption === 'date-') {
-                query.orderBy('event.date', 'ASC');
-            } else if (sortOption === 'location') {
-                query.orderBy('event.localization', 'ASC');
-            }
-        }
-
-        // Paginacja
-        if (startIndex !== undefined && itemsPerPage !== undefined) {
-            query.skip(startIndex).take(itemsPerPage);
-        }
-
-        return query.getMany();
-    }
-
-
     async findAllEvents(): Promise<Events[]>{
         let events: Events[] = await this.eventRepo.find({relations: ['attendees', 'comments', 'comments.user']});
         return events;

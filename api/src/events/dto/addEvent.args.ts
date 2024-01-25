@@ -15,12 +15,12 @@ export default class AddEventArgs {
     @Field()
     description: string;
 
-    @Field()
-    general_information: string;
+    @Field({nullable: true})
+    general_information?: string;
     
-    @Field()
-    competitions: string;
+    @Field({nullable: true})
+    competitions?: string;
 
-    @Field()
-    localization_details: string;
+    @Field({nullable: true})
+    localization_details?: string;
 }
