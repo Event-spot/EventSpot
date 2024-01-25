@@ -4,7 +4,7 @@ import Attendee from "../../../components/attendeelist/attendeelist"
 import styles from './event.module.scss';
 import Image from 'next/image';
 import eventimage from '../../../assets/images/isb.png';
-import Maps from '../../../components/Maps/maps';
+import Map from '../../../components/Maps/maps';
 import Comment from '../../../components/comments/comments';
 import Detail from '../../../components/details/details';
 import { gql } from "@apollo/client";
@@ -32,6 +32,10 @@ type Detail = {
   general_information:string;
   competitions:string;
   localization_details:string;
+}
+type Map ={
+  localization:string;
+  date:Date;
 }
 
 
@@ -138,7 +142,10 @@ query{
         </div>
 
         <div className={styles.insidenext3}>
-        <Maps/>
+        <Map
+          data={event.date}
+          lokalizacja={event.localization}        
+        />
         </div>
       </div>
 

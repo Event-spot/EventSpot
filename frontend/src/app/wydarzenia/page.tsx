@@ -1,10 +1,9 @@
 'use client'
 import styles from './events.module.scss';
-
 import Upbar from '../../components/Upbar/Upbar';
 import Event from '../../components/Event/Event';
 import Pagination from '../../components/Pagination/Pagination';
-import { useState } from 'react';
+import { useState, useEffect  } from 'react';
 import { useQuery } from '@apollo/client';
 import { GET_EVENTS} from './graphql/schema';
 import { GET_SORTED_AND_PAGINATED_EVENTS} from './graphql/schema2';
@@ -16,21 +15,64 @@ interface Event {
  date:string;
 }
 export default function wydarzenia() {
+    const [searchQuery, setSearchQuery] = useState('');
+    const [sortOption, setSortOption] = useState('');
+    const [currentEventy, setCurrentEventy] = useState<Event[]>([]);
+    const [currentPage, setCurrentPage] = useState(1);
+    const {loading,error, data} = useQuery(GET_EVENTS);
+    const [filterStartDate, setFilterStartDate] = useState('');
+    const [filterEndDate, setFilterEndDate] = useState('');
+    const [filterLocalization, setFilterLocalization] = useState('');
+    // Ograniczenie liczby osób na stronie
+    const itemsPerPage = 6;
+    const totalNumOfPages = Math.ceil((data?.events.length || 0) / itemsPerPage);
+    const startIndex = (currentPage - 1) * itemsPerPage;
+    const endIndex = Math.min(startIndex + itemsPerPage, data?.events.length);
+    // const currentEventy = data?.events.slice(startIndex, endIndex) || [];
+   
+    
+    
+    useEffect(() => {
 
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortOption, setSortOption] = useState('');
-  const itemsPerPage = 6;
-  const { loading, error, data } = useQuery(sortOption ? GET_SORTED_AND_PAGINATED_EVENTS : GET_EVENTS, {
-    variables: sortOption ? { 
-      sortOption,
-      startIndex: (currentPage - 1) * itemsPerPage,
-      itemsPerPage
-    } : {},
-  });
-  const totalNumOfPages = Math.ceil((data?.totalEventsCount || 0) / itemsPerPage);
-  const currentEventy = data?.events || [];
-  const startIndex = (currentPage - 1) * itemsPerPage;
-  const endIndex = Math.min(startIndex + itemsPerPage, data?.events.length);
+      let sortedEventy = [...(data?.events.slice(startIndex, endIndex) || [])];
+
+      if (filterStartDate && filterEndDate) {
+          sortedEventy = sortedEventy.filter(event => {
+              const eventDate = new Date(event.date);
+              return eventDate >= new Date(filterStartDate) && eventDate <= new Date(filterEndDate);
+          });
+      }
+      if (filterLocalization) {
+        sortedEventy = sortedEventy.filter(event => 
+            event.localization.toLowerCase().includes(filterLocalization.toLowerCase())
+        );
+    }
+    if (searchQuery) {
+      sortedEventy = sortedEventy.filter(event =>
+          event.name.toLowerCase().includes(searchQuery.toLowerCase())
+      );
+  }
+      switch (sortOption) {
+          case 'date-':
+              sortedEventy.sort((a, b) => new Date(a.date).getTime() - new Date(b.date).getTime());
+              break;
+          case 'date+':
+              sortedEventy.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
+              break;
+          case 'location':
+              sortedEventy.sort((a, b) => a.localization.localeCompare(b.localization));
+              break;
+
+
+
+
+
+          default:
+              // Domyślne zachowanie, może być bez sortowania
+              break;
+      }
+      setCurrentEventy(sortedEventy);
+}, [sortOption, data?.events, currentPage, filterStartDate, filterEndDate, filterLocalization, searchQuery]);
 
 
 
@@ -40,7 +82,16 @@ export default function wydarzenia() {
 <div className={styles.main}>
 
   <div>
-    <Upbar pageType="wydarzenia" onSortChange={setSortOption}/>
+  <Upbar 
+    pageType="wydarzenia" 
+    onSearchQueryChange={(query) => setSearchQuery(query)}
+    onLocalizationFilterChange={(newLocalization) => setFilterLocalization(newLocalization)}
+    onSortChange={(selectedSort) => setSortOption(selectedSort)} 
+    onDateFilterChange={(start, end) => {
+        setFilterStartDate(start);
+        setFilterEndDate(end);
+        
+    }}/>
   </div>
   
 
@@ -49,6 +100,7 @@ export default function wydarzenia() {
                 <div className={styles.container}>
                 {!loading && data?.events &&
                     currentEventy.map((event: Event, index: number) => (
+                        // .sort((a:any, b:any) a.eventsCount - b.eventsCount)
                         <Event
                         id={event.id}
                         key={index}
