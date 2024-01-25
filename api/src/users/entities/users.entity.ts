@@ -29,21 +29,32 @@ export class Users {
 
     @Column({nullable: true})
     @Field({nullable: true})
+    description?: string;
+
+    @Column({nullable: true})
+    @Field({nullable: true})
     localization?: string;
 
     @Column({name: "spots_visited"})
     @Field(type => Int)
     spotsVisited: number;
 
-    @Column()
-    @Field(type => Int)
-    followers: number;
+    @ManyToMany(() => Users, users => users.following, {nullable: true, onDelete: "CASCADE"})
+    @JoinTable({
+        name: 'user_following',
+        joinColumn: {
+            name: 'userId',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'followingId',
+            referencedColumnName: 'id'
+        }
+    })
+    @Field(type => [Users], {nullable: true})
+    following?: Users[];
 
-    @Column()
-    @Field(type => Int)
-    following: number;
-
-    @ManyToMany(() => Events, (event) => event.attendees, {nullable: true})
+    @ManyToMany(() => Events, (event) => event.attendees, {nullable: true, cascade: ['insert']})
     @Field(type => [Events], {nullable: true})
     events?: Events[];
 
