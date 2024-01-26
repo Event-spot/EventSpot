@@ -11,6 +11,15 @@ $breakpoint-mobile: 480px;
     padding: 5px;
     margin-top: 5%;
     margin-bottom:5%;
+    .aprove{
+        display:flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        color:green !important;
+        font-weight: bold;
+        font-size: large;
+      }
     
     .topic {
       font-weight: bold;

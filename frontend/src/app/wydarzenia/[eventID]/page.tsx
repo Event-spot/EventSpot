@@ -143,7 +143,7 @@ query{
 
         <div className={styles.insidenext3}>
         <Map
-          data={event.date}
+           data={new Date(event.date)}
           lokalizacja={event.localization}        
         />
         </div>

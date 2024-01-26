@@ -14,7 +14,4 @@ export default class UpdateEventArgs {
 
     @Field()
     date: Date;
-
-    @Field()
-    description: string;
 }

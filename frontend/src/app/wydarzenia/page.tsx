@@ -2,19 +2,26 @@
 import styles from './events.module.scss';
 import Upbar from '../../components/Upbar/Upbar';
 import Event from '../../components/Event/Event';
+import {gql} from "@apollo/client";
 import Pagination from '../../components/Pagination/Pagination';
 import { useState, useEffect  } from 'react';
 import { useQuery } from '@apollo/client';
-import { GET_EVENTS} from './graphql/schema';
-import { GET_SORTED_AND_PAGINATED_EVENTS} from './graphql/schema2';
 
 interface Event {
   id:number;
  name:string;
  localization:string;
- date:string;
+ date:Date;
 }
 export default function wydarzenia() {
+    const GET_EVENTS=gql`query {
+        events {
+          id
+          name
+          localization
+          date
+        }
+    }` 
     const [searchQuery, setSearchQuery] = useState('');
     const [sortOption, setSortOption] = useState('');
     const [currentEventy, setCurrentEventy] = useState<Event[]>([]);
@@ -105,7 +112,7 @@ export default function wydarzenia() {
                         id={event.id}
                         key={index}
                         lokalizacja={event.localization}
-                        data={event.date}
+                        data={new Date(event.date)}
                         nazwa={event.name}
                         
                         />))}
