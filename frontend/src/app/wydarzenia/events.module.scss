@@ -1,5 +1,6 @@
 @import '../../assets/styles/colors';
 
+
 .main {
   display: flex;
   flex-direction: column;
@@ -17,4 +18,26 @@
   }
 
 
+}
+
+
+@media screen and (min-width: 768px) {
+  .main {
+    margin: 0% 10% 0% 10%;
+  }
+
+  .container {
+    justify-content: space-between;
+  }
+}
+@media screen and (max-width: 480px) {
+  .main {
+    padding: 5px;
+    margin: 0% 2% 0% 2%;
+  }
+
+  .container {
+    flex-direction: column;
+    align-items: center;
+  }
 }

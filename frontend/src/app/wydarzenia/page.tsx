@@ -81,7 +81,7 @@ export default function wydarzenia() {
   return (
 <div className={styles.main}>
 
-  <div>
+  <div className={styles.upbar}>
   <Upbar 
     pageType="wydarzenia" 
     onSearchQueryChange={(query) => setSearchQuery(query)}

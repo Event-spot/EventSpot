@@ -1,12 +1,22 @@
+
+
 @import '../../assets/styles/colors';
+
+$breakpoint-tablet: 768px;
+$breakpoint-mobile: 480px;
 .Main {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding: 5px;
     margin-top: 5%;
     margin-bottom:5%;
-    .topic{
-        font-weight:bold;
-        font-size: xx-large;
-        text-align: center;
-        margin-bottom:20px;
+    
+    .topic {
+      font-weight: bold;
+      font-size: xx-large;
+      text-align: center;
+      margin-bottom: 20px;
     }
     .MainForm{
 
@@ -14,12 +24,14 @@
    border-radius:20px;
    border:2px solid $primary;
 
+
+
     .up {
        
         flex-direction: row;
         width: 100%;
         display: flex;
-        justify-content: center;
+        justify-content: space-between;
         text-align: center;
         padding-bottom: 20px;
         background-color: $secondary;
@@ -27,7 +39,7 @@
         border-top-right-radius: 20px;
         font-weight:bold;
         border-bottom:2px solid $primary;
-        height:100px;
+        min-height:100px;
         .upA {
             
             
@@ -38,7 +50,7 @@
             font-weight:normal;
             border-radius:5px;
             text-align: center;
-            height:50px;
+            min-height:50px;
             width:80%;
             
            }
@@ -51,7 +63,7 @@
                 border-radius:5px;
                 font-weight:normal;
                 text-align: center;
-                height:50px;
+                min-height:50px;
                 width:80%;
                }
         }
@@ -63,7 +75,7 @@
                 font-weight:normal;
                 border-radius:5px;
                 text-align: center;
-                height:50px;
+                min-height:50px;
                 width:80%;
                }
         }
@@ -75,7 +87,7 @@
                 font-weight:normal;
                 border-radius:5px;
                 text-align: center;
-                height:50px;
+               min-height:50px;
                 width:80%;
                }
         }
@@ -102,7 +114,7 @@
                 font-weight:normal;
                 border-radius:5px;
                 resize: none;
-                height:200px;
+                min-height:200px;
                 width:80%;
                 
             }
@@ -115,7 +127,7 @@
                 font-weight:normal;
                 border-radius:5px;
                 resize: none;
-                height:200px;
+                min-height:200px;
                 width:80%;
                 
             }
@@ -128,7 +140,7 @@
                 font-weight:normal;
                 border-radius:5px;
                 resize: none;
-                height:200px;
+               min-height:200px;
                 width:80%;
                 
             }
@@ -142,7 +154,7 @@
         text-align: center;
         align-items: center;
         flex-direction: row;
-        height:100px;
+       min-height:100px;
         
         
         background-color: $secondary;
@@ -176,10 +188,13 @@
            
             width:100%;
                 input{
+                        margin-top: 5px;
+                        margin-bottom:5px;
                         width:50%;
-                        height:50px;
+                        min-height:50px;
                         border-radius:20px;
                         color:white;
+                        border:2px solid $primary;
                         background:$primary;
                     
                 }
@@ -197,3 +212,41 @@
     color:$red;
 }
 }
+@media (max-width: $breakpoint-tablet) {
+    .Main .MainForm, .Main .up, .Main .mid, .Main .down {
+      flex-direction: column; // Ustawiamy kierunek kolumnowy
+      align-items: stretch; // Rozciągamy elementy, aby wypełniały kontener
+    }
+    
+    .Main {
+        .up,.mid,.down{
+
+            display: flex;
+            flex-direction: row;
+            flex-wrap: wrap; 
+            justify-content: space-around;
+            align-items: center; 
+          
+            input, textarea {
+                width: 100%; 
+              }
+              
+              p {
+                text-align: left;
+                padding: 0 5%;
+              }
+             
+          
+        }
+        
+    
+    }
+    
+    .Main .topic {
+      font-size: large; // Zmniejszamy rozmiar nagłówka dla urządzeń mobilnych
+    }
+  }
+  
+  @media (max-width: $breakpoint-mobile) {
+  
+  }

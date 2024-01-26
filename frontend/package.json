@@ -11,9 +11,11 @@
   "dependencies": {
     "@apollo/client": "^3.8.0-rc.2",
     "@apollo/experimental-nextjs-app-support": "^0.6.0",
+    "@googlemaps/js-api-loader": "^1.16.2",
     "@hookform/resolvers": "^3.3.4",
     "@mantine/core": "^7.3.2",
     "@mantine/hooks": "^7.3.2",
+    "@types/google.maps": "^3.54.10",
     "dotenv": "^16.4.1",
     "graphql": "^16.8.1",
     "next": "^14.1.0",

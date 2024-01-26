@@ -1,6 +1,7 @@
-// Map.js
-import React from 'react';
+'use client'
+import React, {useEffect} from 'react';
 import styles from './maps.module.scss';
+import {Loader} from '@googlemaps/js-api-loader';
 
 type MapProps ={
   lokalizacja:string;
@@ -12,15 +13,49 @@ const Map: React.FC<MapProps> = ({
 lokalizacja,
 data
 }) => {
-  const getCurrentDateTime = () => {
-    const currentDate = new Date();
-    const day = String(currentDate.getDate()).padStart(2, '0');
-    const month = String(currentDate.getMonth() + 1).padStart(2, '0');
-    const year = currentDate.getFullYear();
-    const hours = String(currentDate.getHours()).padStart(2, '0');
-    const minutes = String(currentDate.getMinutes()).padStart(2, '0');
 
-    return ` ${day}.${month}.${year}, ${hours}:${minutes}`;
+
+
+
+  const mapRef= React.useRef<HTMLDivElement>(null);  
+
+  useEffect(() => {
+    const loader = new Loader({
+      apiKey: process.env.NEXT_PUBLIC_MAPS_API_KEY as string,
+      version: 'weekly',
+    });
+
+    console.log(process.env.NEXT_PUBLIC_MAPS_API_KEY)
+  
+    loader.load().then(() => {
+      const google = window.google; // window.google będzie dostępne po załadowaniu skryptu
+      const geocoder = new google.maps.Geocoder();
+  
+      geocoder.geocode({ address: lokalizacja }, (results, status) => {
+        if (status === 'OK' && results && results.length > 0) {
+          const position = results[0].geometry.location;
+          if (mapRef.current) {
+            const map = new google.maps.Map(mapRef.current, {
+              center: position,
+              zoom: 15,
+            });
+            new google.maps.Marker({
+              map: map,
+              position: position,
+            });
+          }
+        } else {
+          console.error('Geocoding failed: ' + status);
+        }
+      });
+    });
+  }, [lokalizacja]);
+  
+
+  const handleNavigation = () => {
+    const encodedLocation = encodeURIComponent(lokalizacja);
+    const googleMapsUrl = `https://www.google.com/maps/dir/?api=1&destination=${encodedLocation}`;
+    window.open(googleMapsUrl, '_blank');
   };
 
   return (
@@ -44,14 +79,10 @@ data
       <div className={styles.address}>
       <div className={styles.addressname}>{lokalizacja}</div>
       </div>
-      <button className={styles.buttonnav}><p>Nawiguj ></p></button>
-      <div className={styles.mapa}>
-        <iframe
-          src="https://www.google.com/maps/embed?pb=!1m14!1m12!1m3!1d79938.5195540274!2d22.5378304!3d51.236044799999995!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!5e0!3m2!1spl!2spl!4v1705355773795!5m2!1spl!2spl"
-          width="100%"
-          height="100%"
-          loading="lazy"
-        ></iframe>
+      <button className={styles.buttonnav} onClick={handleNavigation}><p>Nawiguj ></p></button>
+      <div className={styles.mapa} ref={mapRef}>
+      
+        
       </div>
     </div>
   );

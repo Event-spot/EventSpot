@@ -163,7 +163,7 @@ query{
           imie={comment.user.firstname}
           nazwisko={comment.user.lastname}
           content={comment.content}
-          createDate={comment.createDate}         />
+          createDate={comment.createDate}/>
             ))
           }
           </div>
