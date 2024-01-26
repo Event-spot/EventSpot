@@ -14,4 +14,13 @@ export default class UpdateEventArgs {
 
     @Field()
     date: Date;
+
+    @Field({nullable: true})
+    general_information?: string;
+    
+    @Field({nullable: true})
+    competitions?: string;
+
+    @Field({nullable: true})
+    localization_details?: string;
 }

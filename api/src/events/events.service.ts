@@ -50,6 +50,9 @@ export class EventsService implements OnModuleInit {
         event.name = updateEventArgs.name;
         event.localization = updateEventArgs.localization;
         event.date = updateEventArgs.date;
+        event.general_information = updateEventArgs.general_information;
+        event.competitions = updateEventArgs.competitions;
+        event.localization_details = updateEventArgs.localization_details;
        
 
         await this.eventRepo.save(event);
