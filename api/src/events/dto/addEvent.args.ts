@@ -12,9 +12,6 @@ export default class AddEventArgs {
     @Field()
     date: Date;
 
-    @Field()
-    description: string;
-
     @Field({nullable: true})
     general_information?: string;
     

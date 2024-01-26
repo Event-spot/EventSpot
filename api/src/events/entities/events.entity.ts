@@ -23,8 +23,8 @@ export class Events {
     @Field()
     name: string;
 
-    @Column({type: 'date'})
-    @Field(type => String)
+    @Column({type: 'timestamptz'})
+    @Field(type => Date)
     date: Date;
 
     @CreateDateColumn({name: 'create_date', type: 'timestamptz'})
@@ -35,11 +35,8 @@ export class Events {
     @Field()
     localization: string;
 
-    @Column()
-    @Field()
-    description: string;
 
-    @Column({nullable: true})
+    @Column({nullable:true})
     @Field({nullable: true})
     general_information: string;
     

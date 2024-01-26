@@ -1,12 +1,27 @@
 'use client'
-import React from 'react';
+import React, {useState} from 'react';
 import styles from './EventCreator.module.scss';
 import { useForm } from 'react-hook-form'; 
 import * as yup from 'yup';
+import { gql, useMutation } from "@apollo/client";
 import{yupResolver} from '@hookform/resolvers/yup';
+
+
+const CREATE_EVENT_MUTATION = gql `
+    
+mutation AddEvent($addEventArgs: AddEventArgs!) {
+    addEvent(addEventArgs: $addEventArgs)
+}
+`;
+
 
 export const EventCreator = () => {
   const actualDate = new Date().toISOString().split("T")[0];
+  const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const combineDateAndTime = (date:any, time:any) => {
+    const dateTime = new Date(date + 'T' + time);
+    return dateTime.toISOString();};
+    
     
 //     const schema = yup.object().shape({
 //         EventName: yup.string().required("Wymagana jest nazwa wydarzenia,"),
@@ -27,19 +42,52 @@ export const EventCreator = () => {
         // resolver: yupResolver(schema),
     });
 
-    const onSubmit = (data: any) => {
-        console.log(data);
-    }
+    
+
+    const [createEvent] = useMutation(CREATE_EVENT_MUTATION);
+    
+    const onSubmit = (data) => {
+        const eventData = {
+            name: data.EventName,
+            date: combineDateAndTime(data.EventDate, data.EventTime),
+            localization: data.EventLocalization,
+            general_information: data.EventGeneralInformation,
+            competitions: data.EventCompetitions,
+            localization_details: data.EventDriveTips,
+            // Uwaga: Obrazy będą wymagały specjalnego traktowania
+        };
+    
+        createEvent({ variables: { addEventArgs: eventData } })
+            .then(response => {
+                // Obsługa odpowiedzi
+            })
+            .catch(error => {
+                console.error("Błąd GraphQL:", error);
+            });
+            setIsFormSubmitted(true);
+            console.log(eventData)  ;
+    };
+      
+
+    
+
+  
+
+
+ 
    
+
     return (
         <div className={styles.Main}>
+
             <p className={styles.topic}>Utwórz Wydarzenie</p>
             {/* <p className={styles.error}>{errors.EventName?.message} {errors.EventDate?.message} {errors.EventTime?.message} {errors.EventLocalization?.message} {errors.EventGeneralInformation?.message}</p> */}
+            {isFormSubmitted && <p className={styles.aprove}>Wydarzenie zostało pomyślnie utworzone!</p>}
         <form id="EventCreator" className={styles.form} onSubmit={handleSubmit(onSubmit)}><div className={styles.MainForm}>
               <div className={styles.up}>
                     <div className={styles.upA}><p>Nazwa wydarzenia:</p><input type="text" required placeholder="Nazwa wydarzenia..." {...register("EventName")}/></div>
                     <div className={styles.upB}><p>Data wydarzenia:</p><input type="date" required min={actualDate} {...register("EventDate")}/></div>
-                    <div className={styles.upC}><p>Godzina wydarzenia:</p><input type="time" required /></div>
+                    <div className={styles.upC}><p>Godzina wydarzenia:</p><input type="time" required {...register("EventTime")} /></div>
                     <div className={styles.upD}><p>Adres wydarzenia:</p><input type="text" required placeholder="Adres wydarzenia..." {...register("EventLocalization")}/>
                     </div>
                 </div>

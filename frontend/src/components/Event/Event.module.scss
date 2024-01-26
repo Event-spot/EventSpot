@@ -2,8 +2,9 @@
 
 .event {
   border-radius: 20px;
-  width: 370px;
-  margin: 30px;
+  width: 100%; // Elastyczna szerokość
+  max-width: 370px; // Maksymalna szerokość
+  margin: 15px; 
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -75,5 +76,20 @@
     }
     }
   
+  }
+}
+@media (max-width: 480px) {
+  .event {
+    margin: 10px; // Jeszcze mniejszy margines
+    // ... inne dostosowania
+  }
+
+  .down1, .down2 {
+    flex-direction: column; // Zmiana układu dla lepszego wyświetlania
+  }
+
+  .localization, .date, .name, .Button {
+    font-size: 10px; // Mniejsza czcionka
+    // ... inne dostosowania
   }
 }

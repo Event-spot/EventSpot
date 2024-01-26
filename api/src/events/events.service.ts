@@ -37,8 +37,9 @@ export class EventsService implements OnModuleInit {
         event.name = addEventArgs.name;
         event.localization = addEventArgs.localization;
         event.date = addEventArgs.date;
-        event.description = addEventArgs.description;
-        event.attendees = [];
+        event.general_information = addEventArgs.general_information;
+        event.competitions = addEventArgs.competitions;
+        event.localization_details = addEventArgs.localization_details;
 
         await this.eventRepo.save(event);
         return "Event has been added";
@@ -49,7 +50,10 @@ export class EventsService implements OnModuleInit {
         event.name = updateEventArgs.name;
         event.localization = updateEventArgs.localization;
         event.date = updateEventArgs.date;
-        event.description = updateEventArgs.description;
+        event.general_information = updateEventArgs.general_information;
+        event.competitions = updateEventArgs.competitions;
+        event.localization_details = updateEventArgs.localization_details;
+       
 
         await this.eventRepo.save(event);
         return "Event has been updated";

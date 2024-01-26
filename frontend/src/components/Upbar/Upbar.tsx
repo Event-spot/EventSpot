@@ -7,28 +7,59 @@ import{yupResolver} from '@hookform/resolvers/yup';
 
 interface UpbarProps {
   pageType: 'wydarzenia' | 'uzytkownicy';
-  onSortChange: (sortOption: string) => void;
+  onSortChange: (value: string) => void;
+  onDateFilterChange?: (startDate: string, endDate: string) => void;
+  onLocalizationFilterChange?: (localization: string) => void;
+  onSearchQueryChange?: (query: string) => void;
 }
-
-const Upbar: React.FC<UpbarProps> = ({ pageType, onSortChange }) => {
+const Upbar: React.FC<UpbarProps> = ({ pageType, onSortChange, onDateFilterChange, onLocalizationFilterChange,  onSearchQueryChange }) =>  {
   const [rotation, setRotation] = useState(0);
   const [clickCount, setClickCount] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
   const [actualDate, setActualDate] = useState('');
-  const [sortOption, setSortOption] = useState('');
 
-  const handleSortChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const selectedOption = e.target.value;
-    setSortOption(selectedOption);
-    onSortChange(selectedOption); 
-  };
+  const handleSearchChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (onSearchQueryChange) {
+        onSearchQueryChange(event.target.value);
+    }
+};
+
  
+const handleStartDateChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  aktualizujMinDate();
+  handleDateChange();
+};
+const handleEndDateChange = () => {
+  handleDateChange();
+};
+
+const handleDateChange = () => {
+  const startInput = document.getElementById('pierwszaData') as HTMLInputElement;
+  const endInput = document.getElementById('drugaData') as HTMLInputElement;
+  const startDate = startInput.value;
+  const endDate = endInput.value;
+
+  if (onDateFilterChange) {
+      onDateFilterChange(startDate, endDate);
+  }
+};
+const handleLocalizationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  if (onLocalizationFilterChange) {
+      onLocalizationFilterChange(event.target.value);
+  }
+};
+const handleuserLocalizationChange = (person: React.ChangeEvent<HTMLInputElement>) => {
+  if (onLocalizationFilterChange) {
+      onLocalizationFilterChange(person.target.value);
+  }
+};
+
 const { register } = useForm({
         
 });
-const onSubmit = (data: any) => {
-    console.log(data);
-}
+const onSubmit = (e: { preventDefault: () => void; }) => {
+  
+};
 
   useEffect(() => {
     setActualDate(new Date().toISOString().split("T")[0]);
@@ -55,11 +86,13 @@ const rotate = () => {
     }
   };
 
+ 
+
   const renderSubPageSortList = () => {
     if (pageType === 'wydarzenia') {
       return (
         <form className={styles.sortlist}>
-          <select onChange={handleSortChange}>
+          <select onChange={(e) => onSortChange(e.target.value)}>
             <option value="">Sortowanie domyślne</option>
             <option value="date+">Sortuj wg. daty do najbliższej</option>
             <option value="date-">Sortuj wg. daty do najdalszej</option>
@@ -71,11 +104,11 @@ const rotate = () => {
     } else if (pageType === 'uzytkownicy') {
       return (
         <form className={styles.sortlist}>
-          <select >
-            <option>Sortowanie domyślne</option>
-            <option>Sortuj wg. odwiedzonych spotów</option>
-            <option>Sortuj wg. obserwujących</option>
-            <option>Sortuj wg. obserwowanych</option>
+          <select  onChange={(e) => onSortChange(e.target.value)}>
+            <option value="">Sortowanie domyślne</option>
+            <option value="odwiedzoneSpoty">Sortuj wg. odwiedzonych spotów</option>
+            <option value="obserwujacy">Sortuj wg. obserwujących</option>
+            <option value="obserwowani">Sortuj wg. obserwowanych</option>
           </select>
         </form>
       );
@@ -88,15 +121,11 @@ const rotate = () => {
         <div className={styles.filtersbar}>
 
           <form onSubmit={(onSubmit)}>
-
-          
-
-
-         <div className={styles.inputs}>
+          <div className={styles.inputs}>
               <div className={styles.inputsdowndate}>
                 <p>Wprowadź daty wydarzenia</p>
-                <input type="date" placeholder="Wpisz datę początkową" id="pierwszaData" min={actualDate} onChange={aktualizujMinDate} />
-                <input type="date" placeholder="Wpisz datę końcową" min={actualDate} id="drugaData" />
+                <input type="date" placeholder="Wpisz datę początkową" id="pierwszaData" min={actualDate} onChange={handleStartDateChange} />
+                <input type="date" placeholder="Wpisz datę końcową" min={actualDate} id="drugaData" onChange={handleEndDateChange}/>
               </div>
               <div className={styles.inputsdownorganise}>
                 <p>Wprowadź nazwę organizatora</p>
@@ -104,11 +133,8 @@ const rotate = () => {
               </div>
               <div className={styles.inputsdownlocalization}>
                 <p>Wprowadź nazwę lokalizacji</p>
-                <input type="text" placeholder="Wpisz nazwę lokalizacji"  {...register("Nazwa_Lokalizacji_Eventy")} />
+                <input type="text" placeholder="Wpisz nazwę lokalizacji"  {...register("Nazwa_Lokalizacji_Eventy")}  onChange={handleLocalizationChange}/>
               </div>
-            </div>
-            <div className={styles.submitbutton}>
-              <input type="submit" value="Zastosuj filtry" />
             </div>
           </form>
         </div>
@@ -119,7 +145,7 @@ const rotate = () => {
           <form onSubmit={(onSubmit)}>
             <div className={styles.inputslocalization}>
               <p>Wprowadź nazwę lokalizacji</p>
-              <input type="text" placeholder="Wpisz nazwę lokalizacji"  {...register("Nazwa_Lokalizacji_Uzytkownicy")} />
+              <input type="text" placeholder="Wpisz nazwę lokalizacji"  {...register("Nazwa_Lokalizacji_Uzytkownicy")} onChange={handleuserLocalizationChange} />
             </div>
           </form>
         </div>
@@ -132,7 +158,7 @@ const rotate = () => {
     <div className={styles.Mainupbar}>
       <div className={styles.upbar}>
         <div className={styles.search}>
-          <input className={styles.searchinput} type="text" placeholder="Szukaj..." />
+          <input className={styles.searchinput} type="text" placeholder="Szukaj..."  onChange={handleSearchChange}  />
           <svg
             className={styles.searchIconSvg}
             xmlns="http://www.w3.org/2000/svg"
