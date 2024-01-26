@@ -30,13 +30,5 @@ export class UpdateUserArgs {
     @Field({nullable: true})
     youtube: string;
 
-    @Field((type) => Int)
-    spotsVisited: number;
-
-    @Field(type => Int)
-    following: number;
-
-    @Field(type => Int)
-    followers: number;
 
 }

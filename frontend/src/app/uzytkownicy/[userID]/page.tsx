@@ -10,7 +10,8 @@ import { RiTiktokFill } from "react-icons/ri";
 import { RiYoutubeFill } from "react-icons/ri";
 import Followers from "../../../components/Followers/Followers";
 import EventHistory from "../../../components/EventHistory/EventHistory";
-import { gql } from "@apollo/client";
+import {useMutation, gql } from "@apollo/client";
+import { useState } from "react";
 
 
 
@@ -36,7 +37,6 @@ export default function Profile({ params: { userID } }: Params) {
             id,
             firstname,
             lastname,
-            spotsVisited,
             localization,
             description,
             facebook,
@@ -74,7 +74,25 @@ export default function Profile({ params: { userID } }: Params) {
       }
   }
 `;
+const UPDATE_USER_MUTATION = gql`
+  mutation UpdateUser($updateUserArgs: UpdateUserArgs!) {
+    updateUser(updateUserArgs: $updateUserArgs) 
+  }
+`;
+  const [isEditing, setIsEditing] = useState(false);
+  const [state, setState] = useState({
+    editedFirstName: '',
+    editedLastName: '',
+    editedDescription: '',
+    editedFacebook: '',
+    editedInstagram: '',
+    editedTiktok: '',
+    editedYoutube: ''
+  });
+  const [updateUser] = useMutation(UPDATE_USER_MUTATION);
   
+  
+
   const { loading, error, data } = useQuery(GET_USERS_EVENTS_FOLLOWINGS);
 
   if (loading) return <p>Loading...</p>;
@@ -84,6 +102,89 @@ export default function Profile({ params: { userID } }: Params) {
   const pastEvents = data.pastEvents;
   if (!user) return <p>User not found</p>;
   const followingCount = data?.userById?.followers?.length || 0;
+
+  //Profile Edit
+  const toggleEditMode = () => {
+    setIsEditing(!isEditing);
+    setState({
+      ...state,
+      editedFirstName: user.firstname,
+      editedLastName: user.lastname,
+      editedDescription: user.description,
+      editedFacebook: user.facebook,
+      editedInstagram: user.instagram,
+      editedTiktok: user.tiktok,
+      editedYoutube: user.youtube
+    });
+  };
+
+  // Handle save changes
+  const handleSave = async () => {
+    try {
+      // Call the mutation function
+      const response = await updateUser({
+        variables: {
+          updateUserArgs: {
+            id: parseInt(userID, 10), // Convert userID to an integer
+            firstname: state.editedFirstName,
+            lastname: state.editedLastName,
+            description: state.editedDescription,
+            facebook: state.editedFacebook,
+            instagram: state.editedInstagram,
+            tiktok: state.editedTiktok,
+            youtube: state.editedYoutube
+          }
+        }
+      });
+  
+      // Check if the mutation was successful and returned the updated user data
+      if (response && response.data && response.data.updateUser) {
+        const updatedUser = response.data.updateUser;
+        
+  
+        // Optionally, if you're maintaining separate states for display and edit, update them too
+        // setEditedFirstName(updatedUser.firstname);
+        // setEditedLastName(updatedUser.lastname);
+        setState({
+          // ...state,
+          editedFirstName:updatedUser.firstname,
+          editedLastName:updatedUser.lastname,
+          editedDescription:updatedUser.description,
+          editedFacebook:updatedUser.facebook,
+          editedInstagram:updatedUser.instagram,
+          editedTiktok:updatedUser.tiktok,
+          editedYoutube:updatedUser.youtube
+        })
+      }
+      
+      window.location.reload();
+
+      // Toggle editing mode off
+      setIsEditing(false);
+    } catch (error) {
+      console.error('Error updating user:', error);
+      // Handle error appropriately
+    }
+  };
+
+  const cancelEdit = () => {
+    // Reset edited values to the original
+    setState({
+      ...state,
+      editedFirstName: user.firstname,
+      editedLastName: user.lastname,
+      editedDescription: user.description,
+      editedFacebook: user.facebook,
+      editedInstagram: user.instagram,
+      editedTiktok: user.tiktok,
+      editedYoutube: user.youtube
+    })
+
+    // Set isEditing to false to exit edit mode
+    setIsEditing(false);
+  };
+
+
   return (
     <div className={styles.main}>
       <div className={styles.up}>
@@ -104,15 +205,37 @@ export default function Profile({ params: { userID } }: Params) {
           <Image priority={true} className={styles.avatar} src={Question} alt={'Person Avatar'}/>
           </div>
           <div className={styles.profileName}>
+            {isEditing ? (
+          <>
+            <input 
+              value={state.editedFirstName} 
+              onChange={(e) => setState({ ...state, editedFirstName: e.target.value })}
+            />
+            <input 
+              value={state.editedLastName} 
+              onChange={(e) => setState({ ...state, editedLastName: e.target.value })}
+            />
+          </>
+        ) : (
+          <>
             <p>{user.firstname}</p>
             <p>{user.lastname}</p>
+          </>
+        )}
           </div>
           <div className={styles.followers}>
             <p>Obserwujących: {followingCount}</p>
           </div>
         </div>
         <div className={styles.divButton}>
-          <button className={styles.button}>+ Obserwuj</button>
+          {isEditing ? (
+          <>
+            <button className={styles.button} onClick={handleSave}>Zapisz zmiany</button>
+            <button className={styles.button} onClick={cancelEdit}>Anuluj</button>
+          </>
+        ) : (
+          <button className={styles.button} onClick={toggleEditMode}>Edytuj Profil</button>
+        )}
         </div>
       </div>
       
@@ -120,21 +243,74 @@ export default function Profile({ params: { userID } }: Params) {
         <div className={styles.profileInfo}>
           <fieldset className={styles.description}>
             <legend>O mnie </legend>
-            {user.description}
+            {isEditing ? (
+              <>
+                <textarea
+                  className={styles.aboutTextArea}
+                  value={state.editedDescription}
+                  onChange={(e) => setState({ ...state, editedDescription: e.target.value })}
+                />
+              </>
+            ) : (
+              <>
+                <p>{user.description}</p>
+              </>
+            )}
           </fieldset>
             <div className={styles.contact}>
-              <a href={user.facebook} target="_blank" rel="noopener noreferrer">
-                <RiFacebookBoxFill color="#4968ad" />
-              </a>
-              <a href={user.instagram} target="_blank" rel="noopener noreferrer">
-              <RiInstagramFill color="#e1306c" />
-              </a>
-              <a href={user.tiktok} target="_blank" rel="noopener noreferrer">
-              <RiTiktokFill color="rgb(30, 48, 80)" />
-              </a>
-              <a href={user.youtube} target="_blank" rel="noopener noreferrer">
-              <RiYoutubeFill color="#eb3223" />
-              </a>
+            {isEditing ? (
+              <>
+                <div className={styles.SocialInputContainer}>
+                  <div className={styles.socialInput}>
+                    <RiFacebookBoxFill color="#4968ad" />
+                    <input
+                      className={styles.socialFacebook}
+                      value={state.editedFacebook}
+                      onChange={(e) => setState({ ...state, editedFacebook: e.target.value })}
+                    />
+                  </div>
+                  <div className={styles.socialInput}>
+                    <RiInstagramFill color="#e1306c" />
+                    <input
+                      className={styles.socialInstagram}
+                      value={state.editedInstagram}
+                      onChange={(e) => setState({ ...state, editedInstagram: e.target.value })}
+                    />
+                  </div>
+                  <div className={styles.socialInput}>
+                    <RiTiktokFill color="rgb(30, 48, 80)" />
+                    <input
+                      className={styles.socialTiktok}
+                      value={state.editedTiktok}
+                      onChange={(e) => setState({ ...state, editedTiktok: e.target.value })}
+                    />
+                  </div>
+                  <div className={styles.socialInput}>
+                    <RiYoutubeFill color="#eb3223" />
+                    <input
+                      className={styles.socialYoutube}
+                      value={state.editedYoutube}
+                      onChange={(e) => setState({ ...state, editedYoutube: e.target.value })}
+                    />
+                  </div>
+                </div>
+              </>
+            ) : (
+              <>
+                <a href={user.facebook} target="_blank" rel="noopener noreferrer">
+                  <RiFacebookBoxFill color="#4968ad" />
+                </a>
+                <a href={user.instagram} target="_blank" rel="noopener noreferrer">
+                  <RiInstagramFill color="#e1306c" />
+                </a>
+                <a href={user.tiktok} target="_blank" rel="noopener noreferrer">
+                  <RiTiktokFill color="rgb(30, 48, 80)" />
+                </a>
+                <a href={user.youtube} target="_blank" rel="noopener noreferrer">
+                  <RiYoutubeFill color="#eb3223" />
+                </a>
+              </>
+            )}
             </div>
         </div>
             <div className={styles.eventHistory}>

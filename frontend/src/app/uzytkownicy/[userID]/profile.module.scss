@@ -119,6 +119,13 @@
         font-weight: 600;
         color: $black;
       }
+      .aboutTextArea{
+        font-weight:normal;
+        border-radius:5px;
+        resize: none;
+        height:100%;
+        width:100%;
+      }
     }
     .contact {
       font-size: 3rem;
@@ -128,6 +135,30 @@
       column-gap: 10px;
       padding: 1rem;
     }
+    .SocialInputContainer{
+      display: flex;
+      flex-direction: column;
+      width: 100%;
+
+      .socialInput{
+        align-items: center;
+        display: flex;
+        justify-content: center;
+        width: 100%;
+
+        .socialFacebook,
+        .socialInstagram,
+        .socialTiktok,
+        .socialYoutube{
+          font-weight: normal;
+          border-radius: 5px;
+          font-size: small;
+          width: 100%;
+
+        }
+      }
+    }
+
   }
 
   .eventHistory {
