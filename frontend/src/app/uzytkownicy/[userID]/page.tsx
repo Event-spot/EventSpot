@@ -281,7 +281,7 @@ const UPDATE_USER_MUTATION = gql`
           {isEditing ? (
           <>
             <button className={styles.button} onClick={handleSave}>Zapisz zmiany</button>
-            <button className={styles.button} onClick={cancelEdit}>Anuluj</button>
+            <button className={styles.buttonCancel} onClick={cancelEdit}>Anuluj</button>
           </>
         ) : (
           <button className={styles.button} onClick={toggleEditMode}>Edytuj Profil</button>
