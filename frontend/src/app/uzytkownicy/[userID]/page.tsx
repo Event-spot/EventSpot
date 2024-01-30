@@ -14,7 +14,6 @@ import {useMutation, gql } from "@apollo/client";
 import { useState } from "react";
 import UploadForm from "@/components/UploadTest/Upload";
 
-// ../../../../public/uploads/
 
 
 type User = {
@@ -135,6 +134,27 @@ const UPDATE_USER_MUTATION = gql`
   // Handle save changes
   const handleSave = async () => {
     try {
+
+      let newAvatarUrl, newBannerUrl;
+
+    if (selectedFile) {
+      const formDataAvatar = new FormData();
+      formDataAvatar.append('file', selectedFile);
+      const uploadResponse = await fetch('/api/upload', { method: 'POST', body: formDataAvatar });
+      if (!uploadResponse.ok) throw new Error(await uploadResponse.text());
+      const uploadResult = await uploadResponse.json();
+      newAvatarUrl = uploadResult.fileUrl; // Załóżmy, że API zwraca URL pliku
+    }
+
+    if (selectedBackground) {
+      const formDataBackground = new FormData();
+      formDataBackground.append('file', selectedBackground);
+      const backgroundResponse = await fetch('/api/upload', { method: 'POST', body: formDataBackground });
+      if (!backgroundResponse.ok) throw new Error(await backgroundResponse.text());
+      const backgroundResult = await backgroundResponse.json();
+      newBannerUrl = backgroundResult.fileUrl;
+    }
+
       // Call the mutation function
       const response = await updateUser({
         variables: {
@@ -146,42 +166,13 @@ const UPDATE_USER_MUTATION = gql`
             facebook: state.editedFacebook,
             instagram: state.editedInstagram,
             tiktok: state.editedTiktok,
-            youtube: state.editedYoutube
+            youtube: state.editedYoutube,
+            avatarImage: newAvatarUrl, 
+            bannerImage: newBannerUrl,
           }
         }
       });
 
-      if (selectedFile) {
-        
-          const formData = new FormData();
-          formData.append('file', selectedFile);
-    
-          const uploadResponse = await fetch('/api/upload', {
-            method: 'POST',
-            body: formData,
-          });
-    
-          if (!uploadResponse.ok) {
-            throw new Error(await uploadResponse.text());
-          }
-    
-          // Sukces przesyłania pliku, tutaj możesz dodać dodatkową logikę
-          // np. aktualizacja stanu/avataru użytkownika
-        } 
-
-        if (selectedBackground) {
-          const formDataBackground = new FormData();
-          formDataBackground.append('file', selectedBackground);
-    
-          const backgroundResponse = await fetch('/api/upload', {
-            method: 'POST',
-            body: formDataBackground,
-          });
-    
-          if (!backgroundResponse.ok) {
-            throw new Error(await backgroundResponse.text());
-          }
-        }
   
       // Check if the mutation was successful and returned the updated user data
       if (response && response.data && response.data.updateUser) {
@@ -199,12 +190,13 @@ const UPDATE_USER_MUTATION = gql`
           editedFacebook:updatedUser.facebook,
           editedInstagram:updatedUser.instagram,
           editedTiktok:updatedUser.tiktok,
-          editedYoutube:updatedUser.youtube
+          editedYoutube:updatedUser.youtube,
+
         })
       }
       
       // revalidatePath('/uzytkownicy/[userID]');
-      // window.location.reload();
+      window.location.reload();
 
       // Toggle editing mode off
       setIsEditing(false);
@@ -230,7 +222,6 @@ const UPDATE_USER_MUTATION = gql`
     // Set isEditing to false to exit edit mode
     setIsEditing(false);
   };
-
 
   return (
     <div className={styles.main}>
@@ -260,7 +251,6 @@ const UPDATE_USER_MUTATION = gql`
               <UploadForm onFileSelect={handleFileSelect} />
             </>
           ) : (
-            // Avatar użytkownika, gdy nie jest w trybie edycji
             <Image priority={true} className={styles.avatar} src={Question} alt={'Person Avatar'}/>
           )}
           </div>
@@ -381,11 +371,7 @@ const UPDATE_USER_MUTATION = gql`
             </div>
             <div className={styles.followersContainer}>
               <Followers user={user}/>
-            </div>
-            {/* <div>
-              <UploadFile></UploadFile>
-            </div> */}
-        
+            </div>        
       </div>
     </div>
   );
