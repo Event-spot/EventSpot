@@ -12,9 +12,9 @@ import Followers from "../../../components/Followers/Followers";
 import EventHistory from "../../../components/EventHistory/EventHistory";
 import {useMutation, gql } from "@apollo/client";
 import { useState } from "react";
-import UploadFile from "@/components/UploadTest/Upload";
+import UploadForm from "@/components/UploadTest/Upload";
 
-
+// ../../../../public/uploads/
 
 
 type User = {
@@ -44,6 +44,8 @@ export default function Profile({ params: { userID } }: Params) {
             instagram,
             tiktok,
             youtube,
+            avatarImage,
+            bannerImage,
             following{
                 id,
                 firstname,
@@ -80,6 +82,8 @@ const UPDATE_USER_MUTATION = gql`
     updateUser(updateUserArgs: $updateUserArgs) 
   }
 `;
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedBackground, setSelectedBackground] = useState<File | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [state, setState] = useState({
     editedFirstName: '',
@@ -104,6 +108,15 @@ const UPDATE_USER_MUTATION = gql`
   if (!user) return <p>User not found</p>;
   const followingCount = data?.userById?.followers?.length || 0;
 
+  const handleFileSelect = (file: File) => {
+    setSelectedFile(file);
+    // opcjonalnie aktualizuj preview
+  };
+  const handleBackgroundSelect = (file: File) => {
+    setSelectedBackground(file);
+    // const fileUrl = URL.createObjectURL(file);
+    // setBackgroundImage(fileUrl);
+  };
   //Profile Edit
   const toggleEditMode = () => {
     setIsEditing(!isEditing);
@@ -137,6 +150,38 @@ const UPDATE_USER_MUTATION = gql`
           }
         }
       });
+
+      if (selectedFile) {
+        
+          const formData = new FormData();
+          formData.append('file', selectedFile);
+    
+          const uploadResponse = await fetch('/api/upload', {
+            method: 'POST',
+            body: formData,
+          });
+    
+          if (!uploadResponse.ok) {
+            throw new Error(await uploadResponse.text());
+          }
+    
+          // Sukces przesyłania pliku, tutaj możesz dodać dodatkową logikę
+          // np. aktualizacja stanu/avataru użytkownika
+        } 
+
+        if (selectedBackground) {
+          const formDataBackground = new FormData();
+          formDataBackground.append('file', selectedBackground);
+    
+          const backgroundResponse = await fetch('/api/upload', {
+            method: 'POST',
+            body: formDataBackground,
+          });
+    
+          if (!backgroundResponse.ok) {
+            throw new Error(await backgroundResponse.text());
+          }
+        }
   
       // Check if the mutation was successful and returned the updated user data
       if (response && response.data && response.data.updateUser) {
@@ -159,7 +204,7 @@ const UPDATE_USER_MUTATION = gql`
       }
       
       // revalidatePath('/uzytkownicy/[userID]');
-      window.location.reload();
+      // window.location.reload();
 
       // Toggle editing mode off
       setIsEditing(false);
@@ -190,21 +235,34 @@ const UPDATE_USER_MUTATION = gql`
   return (
     <div className={styles.main}>
       <div className={styles.up}>
-        <Image
-          className={styles.profileBanner}
-          src={Profile_Background}
-          alt={'Profile Banner'}
-          layout="fill"
-          objectFit="cover"
-        />
-        <div className={styles.overlay}>
+      {isEditing ? (
+        <UploadForm onFileSelect={handleBackgroundSelect} />
+      ) : (
+        <div>
+          <Image
+            className={styles.profileBanner}
+            src={Profile_Background}
+            alt={'Profile Banner'}
+            layout="fill"
+            objectFit="cover"
+          />
+          <div className={styles.overlay}></div>
         </div>
+      )}
+
       </div>
 
       <div className={styles.profileDiv}>
         <div className={styles.profileLeft}>
           <div className={styles.profileSquare}>
-          <Image priority={true} className={styles.avatar} src={Question} alt={'Person Avatar'}/>
+          {isEditing ? (
+            <>
+              <UploadForm onFileSelect={handleFileSelect} />
+            </>
+          ) : (
+            // Avatar użytkownika, gdy nie jest w trybie edycji
+            <Image priority={true} className={styles.avatar} src={Question} alt={'Person Avatar'}/>
+          )}
           </div>
           <div className={styles.profileName}>
             {isEditing ? (
@@ -324,9 +382,9 @@ const UPDATE_USER_MUTATION = gql`
             <div className={styles.followersContainer}>
               <Followers user={user}/>
             </div>
-            <div>
+            {/* <div>
               <UploadFile></UploadFile>
-            </div>
+            </div> */}
         
       </div>
     </div>

@@ -2,18 +2,23 @@
 import { useCallback, useState } from 'react';
 import { useDropzone, Accept } from 'react-dropzone';
 
-export default function UploadForm() {
-  const [file, setFile] = useState<File | null>(null);
+type UploadFormProps = {
+  onFileSelect: (file: File) => void;
+};
+
+export default function UploadForm({ onFileSelect }: UploadFormProps) {
+  // const [file, setFile] = useState<File | null>(null);
   const [previewUrl, setPreviewUrl] = useState<string | null>(null);
 
   const onDrop = useCallback((acceptedFiles: File[]) => {
     const uploadedFile = acceptedFiles[0];
-    setFile(uploadedFile);
+    // setFile(uploadedFile);
 
     // Tworzenie URL podglądu
     const fileUrl = URL.createObjectURL(uploadedFile);
     setPreviewUrl(fileUrl);
-  }, []);
+    onFileSelect(acceptedFiles[0]);
+  }, [onFileSelect]);
 
   const acceptedFileTypes: Accept = {
     'image/jpeg': ['.jpeg', '.jpg'],
@@ -25,44 +30,49 @@ export default function UploadForm() {
     accept: acceptedFileTypes
   });
 
-  const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!file) {
-      alert("Proszę wybrać plik przed wysłaniem.");
-      return;
-    }
+  // const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   if (!file) {
+  //     alert("Proszę wybrać plik przed wysłaniem.");
+  //     return;
+  //   }
 
-    try {
-      const data = new FormData();
-      data.append('file', file);
+  //   try {
+  //     const data = new FormData();
+  //     data.append('file', file);
 
-      const res = await fetch('/api/upload', {
-        method: 'POST',
-        body: data
-      });
+  //     const res = await fetch('/api/upload', {
+  //       method: 'POST',
+  //       body: data
+  //     });
 
-      if (!res.ok) {
-        throw new Error(await res.text());
-      }
+  //     if (!res.ok) {
+  //       throw new Error(await res.text());
+  //     }
 
-      alert("Plik został pomyślnie przesłany.");
-    } catch (e: any) {
-      console.error(e);
-      alert("Wystąpił błąd podczas przesyłania pliku.");
-    }
-  };
+  //     alert("Plik został pomyślnie przesłany.");
+  //   } catch (e: any) {
+  //     console.error(e);
+  //     alert("Wystąpił błąd podczas przesyłania pliku.");
+  //   }
+  // };
 
   return (
-    <form onSubmit={onSubmit}>
-      <div {...getRootProps()} style={{ border: '2px dashed gray', padding: '20px', textAlign: 'center' }}>
+
+    <div {...getRootProps()} style={{ 
+      border: '2px dashed gray', 
+      textAlign: 'center', 
+      height: "100%",
+      display: 'flex',
+      justifyContent: 'center', 
+      alignItems: 'center' }}>
         <input {...getInputProps()} />
         {previewUrl ? (
-          <img src={previewUrl} alt="Podgląd" style={{ maxWidth: '100%', maxHeight: '300px' }} />
+          <img src={previewUrl} alt="Podgląd" style={{ maxWidth: '100%', maxHeight: '250px' }} />
         ) : (
           <p>Przeciągnij pliki tutaj, lub kliknij, aby wybrać pliki</p>
         )}
       </div>
-      <button type="submit">Upload</button>
-    </form>
+
   );
 }
