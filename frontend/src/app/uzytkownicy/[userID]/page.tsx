@@ -12,6 +12,7 @@ import Followers from "../../../components/Followers/Followers";
 import EventHistory from "../../../components/EventHistory/EventHistory";
 import {useMutation, gql } from "@apollo/client";
 import { useState } from "react";
+import UploadFile from "@/components/UploadTest/Upload";
 
 
 
@@ -157,6 +158,7 @@ const UPDATE_USER_MUTATION = gql`
         })
       }
       
+      // revalidatePath('/uzytkownicy/[userID]');
       window.location.reload();
 
       // Toggle editing mode off
@@ -321,6 +323,9 @@ const UPDATE_USER_MUTATION = gql`
             </div>
             <div className={styles.followersContainer}>
               <Followers user={user}/>
+            </div>
+            <div>
+              <UploadFile></UploadFile>
             </div>
         
       </div>
