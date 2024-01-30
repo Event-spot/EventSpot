@@ -66,6 +66,8 @@ export class UsersService implements OnModuleInit {
         user.instagram = updateUserArgs.instagram;
         user.tiktok = updateUserArgs.tiktok;
         user.youtube = updateUserArgs.youtube;
+        user.avatarImage = updateUserArgs.avatarImage;
+        user.bannerImage = updateUserArgs.bannerImage;
 
         await this.usersRepo.save(user)
 

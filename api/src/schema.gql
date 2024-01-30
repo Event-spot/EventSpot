@@ -36,6 +36,8 @@ type users {
   instagram: String
   tiktok: String
   youtube: String
+  avatarImage: String
+  bannerImage: String
   following: [users!]
   events: [events!]
   comments: [comments!]
@@ -97,6 +99,8 @@ input UpdateUserArgs {
   instagram: String
   tiktok: String
   youtube: String
+  avatarImage: String
+  bannerImage: String
 }
 
 input UpdateDescriptionInput {

@@ -51,6 +51,14 @@ export class Users {
     @Field({nullable: true})
     youtube?: string;
 
+    @Column({nullable: true})
+    @Field({nullable: true})
+    avatarImage?: string;
+
+    @Column({nullable: true})
+    @Field({nullable: true})
+    bannerImage?: string;
+
     @ManyToMany(() => Users, users => users.following, {nullable: true, onDelete: "CASCADE"})
     @JoinTable({
         name: 'user_following',
