@@ -83,7 +83,7 @@ const Map: React.FC<MapProps> = ({lokalizacja,data}) => {
       <div className={styles.address}>
       <div className={styles.addressname}>{lokalizacja}</div>
       </div>
-      <button className={styles.buttonnav} onClick={handleNavigation}><p>Nawiguj ></p></button>
+      <button className={styles.buttonnav} onClick={handleNavigation}><p>Nawiguj &gt;</p></button>
       <div className={styles.mapa} ref={mapRef}>
       
         
