@@ -31,7 +31,6 @@ type users {
   firstname: String!
   lastname: String!
   localization: String
-  spotsVisited: Int!
   description: String
   facebook: String
   instagram: String

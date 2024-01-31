@@ -11,13 +11,15 @@ export class Users {
     @Field(type => Int)
     id: number;
 
-    @Column()
+    @Column({
+        unique: true
+    })
     @Field()
     email: string;
 
     @Column()
     @Field()
-    password: string;
+    password?: string;
 
     @Column({name: "first_name"})
     @Field()
@@ -30,10 +32,6 @@ export class Users {
     @Column({nullable: true})
     @Field({nullable: true})
     localization?: string;
-
-    @Column({name: "spots_visited"})
-    @Field(type => Int)
-    spotsVisited: number;
 
     @Column({nullable: true})
     @Field({nullable: true})
