@@ -30,7 +30,8 @@ type Params = {
 };
 
 export default function Profile({ params: { userID } }: Params) {
-
+  const defaultAvatar = Question;
+  const defaultBanner = Profile_Background;
   const GET_USERS_EVENTS_FOLLOWINGS = gql`
   query  {
     userById(userId: ${userID}) {
@@ -134,25 +135,34 @@ const UPDATE_USER_MUTATION = gql`
   // Handle save changes
   const handleSave = async () => {
     try {
+    const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL as string;
 
-      let newAvatarUrl, newBannerUrl;
+    let newAvatarUrl: string | undefined, newBannerUrl: string | undefined;
+
+    const uploadToCloudinary = async (file: File) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', "EventSpot");
+
+      const response = await fetch(cloudinaryUrl, {
+        method: 'POST',
+        body: formData
+      });
+      console.log(cloudinaryUrl);
+      if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+      }
+      return response.json();
+    };
 
     if (selectedFile) {
-      const formDataAvatar = new FormData();
-      formDataAvatar.append('file', selectedFile);
-      const uploadResponse = await fetch('/api/upload', { method: 'POST', body: formDataAvatar });
-      if (!uploadResponse.ok) throw new Error(await uploadResponse.text());
-      const uploadResult = await uploadResponse.json();
-      newAvatarUrl = uploadResult.fileUrl; // Załóżmy, że API zwraca URL pliku
+      const uploadResult = await uploadToCloudinary(selectedFile);
+      newAvatarUrl = uploadResult.secure_url;
     }
 
     if (selectedBackground) {
-      const formDataBackground = new FormData();
-      formDataBackground.append('file', selectedBackground);
-      const backgroundResponse = await fetch('/api/upload', { method: 'POST', body: formDataBackground });
-      if (!backgroundResponse.ok) throw new Error(await backgroundResponse.text());
-      const backgroundResult = await backgroundResponse.json();
-      newBannerUrl = backgroundResult.fileUrl;
+      const backgroundResult = await uploadToCloudinary(selectedBackground);
+      newBannerUrl = backgroundResult.secure_url;
     }
 
       // Call the mutation function
@@ -183,15 +193,14 @@ const UPDATE_USER_MUTATION = gql`
         // setEditedFirstName(updatedUser.firstname);
         // setEditedLastName(updatedUser.lastname);
         setState({
-          // ...state,
+          ...state,
           editedFirstName:updatedUser.firstname,
           editedLastName:updatedUser.lastname,
           editedDescription:updatedUser.description,
           editedFacebook:updatedUser.facebook,
           editedInstagram:updatedUser.instagram,
           editedTiktok:updatedUser.tiktok,
-          editedYoutube:updatedUser.youtube,
-
+          editedYoutube:updatedUser.youtube,          
         })
       }
       
@@ -218,7 +227,6 @@ const UPDATE_USER_MUTATION = gql`
       editedTiktok: user.tiktok,
       editedYoutube: user.youtube
     })
-
     // Set isEditing to false to exit edit mode
     setIsEditing(false);
   };
@@ -232,7 +240,7 @@ const UPDATE_USER_MUTATION = gql`
         <div>
           <Image
             className={styles.profileBanner}
-            src={Profile_Background}
+            src={user.bannerImage || defaultBanner}
             alt={'Profile Banner'}
             layout="fill"
             objectFit="cover"
@@ -251,7 +259,14 @@ const UPDATE_USER_MUTATION = gql`
               <UploadForm onFileSelect={handleFileSelect} />
             </>
           ) : (
-            <Image priority={true} className={styles.avatar} src={Question} alt={'Person Avatar'}/>
+            <Image 
+              priority={true} 
+              className={styles.avatar} 
+              src={user.avatarImage || defaultAvatar} 
+              alt="Person Avatar" 
+              width={100} 
+              height={100} 
+            />
           )}
           </div>
           <div className={styles.profileName}>
@@ -281,7 +296,7 @@ const UPDATE_USER_MUTATION = gql`
           {isEditing ? (
           <>
             <button className={styles.button} onClick={handleSave}>Zapisz zmiany</button>
-            <button className={styles.button} onClick={cancelEdit}>Anuluj</button>
+            <button className={styles.buttonCancel} onClick={cancelEdit}>Anuluj</button>
           </>
         ) : (
           <button className={styles.button} onClick={toggleEditMode}>Edytuj Profil</button>
@@ -303,7 +318,7 @@ const UPDATE_USER_MUTATION = gql`
               </>
             ) : (
               <>
-                <p>{user.description}</p>
+                <p className={styles.paragrafAbout}>{user.description}</p>
               </>
             )}
           </fieldset>

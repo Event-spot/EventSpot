@@ -62,6 +62,9 @@
   .profileName{
     display: flex;
     align-items: center;
+    flex-wrap: wrap;
+    align-items: center;
+    
 
     p{
       padding: 4px;
@@ -75,19 +78,33 @@
   }
   .divButton{
     padding-right: 1rem;
+    display: flex;
+    gap: 1rem;
   }
   .button{
     background-color: $secondary;
     color: $white;
-    font-size: 1.25rem;
+    font-size: 1rem;
     width: 100%;
-    padding: 0.5rem 1rem;
+    padding: 0.4rem 0.7rem;
     border: none;
     cursor: pointer;
     text-align: center;
-    border-radius: 0.5rem;
+    border-radius: 0.3rem;
     &:hover {
       background-color: lighten($secondary, 10%);
+    } 
+  }
+  .buttonCancel{
+    background-color: #C70000;
+    color: white;
+    font-size: 1rem;
+    border:none;
+    border-radius: 0.3rem;
+    padding: 0 0.7rem 0 0.7rem;
+    font-weight: 600;
+    &:hover {
+      background-color: lighten(#C70000, 10%);
     } 
   }
 
@@ -107,7 +124,7 @@
     margin-top: 1rem;
 
     .description {
-      padding: 20px;
+      padding: 10px;
       border: 3px solid $secondary;
       border-radius: 12px;
       box-shadow: 0px 8px 10px 0px rgba(0, 0, 0, 0.8);
@@ -125,6 +142,15 @@
         resize: none;
         height:100%;
         width:100%;
+      }
+      .paragrafAbout {
+        word-wrap: break-word;
+        overflow-wrap: break-word;
+        white-space: normal;
+        hyphens: auto;
+        text-wrap: balance;
+        height: 380px; 
+        overflow-y: auto; 
       }
     }
     .contact {

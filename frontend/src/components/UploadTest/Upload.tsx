@@ -27,35 +27,10 @@ export default function UploadForm({ onFileSelect }: UploadFormProps) {
 
   const { getRootProps, getInputProps } = useDropzone({
     onDrop,
-    accept: acceptedFileTypes
+    accept: acceptedFileTypes,
+    maxSize: 1024 * 1000
   });
 
-  // const onSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-  //   e.preventDefault();
-  //   if (!file) {
-  //     alert("Proszę wybrać plik przed wysłaniem.");
-  //     return;
-  //   }
-
-  //   try {
-  //     const data = new FormData();
-  //     data.append('file', file);
-
-  //     const res = await fetch('/api/upload', {
-  //       method: 'POST',
-  //       body: data
-  //     });
-
-  //     if (!res.ok) {
-  //       throw new Error(await res.text());
-  //     }
-
-  //     alert("Plik został pomyślnie przesłany.");
-  //   } catch (e: any) {
-  //     console.error(e);
-  //     alert("Wystąpił błąd podczas przesyłania pliku.");
-  //   }
-  // };
 
   return (
 
