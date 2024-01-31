@@ -30,14 +30,14 @@
     border-bottom:2px solid $secondary;
     
     &.active {
-      background-color: #f3f2f3;
+      background-color: $background;
       border-bottom: 0;
     }
     
   }
   
   .tabContent {
-    background-color: #f3f2f3;
+    background-color: $background;
     height:440px;
     overflow-y: auto;
     min-width:100%;
@@ -63,7 +63,7 @@
   }
   
   .tabPanel {
-    background-color: #f3f2f3;
+    background-color: $background;
     display: flex;
     flex-direction: column;
     justify-content: center;

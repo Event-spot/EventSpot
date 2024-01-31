@@ -13,16 +13,20 @@ type comments {
 type events {
   id: Int!
   name: String!
-  date: String!
+  date: DateTime!
   createDate: String!
   localization: String!
-  description: String!
   general_information: String
   competitions: String
   localization_details: String
   comments: [comments!]
   attendees: [users!]
 }
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
 
 type users {
   id: Int!
@@ -36,6 +40,8 @@ type users {
   instagram: String
   tiktok: String
   youtube: String
+  avatarImage: String
+  bannerImage: String
   following: [users!]
   events: [events!]
   comments: [comments!]
@@ -97,9 +103,8 @@ input UpdateUserArgs {
   instagram: String
   tiktok: String
   youtube: String
-  spotsVisited: Int!
-  following: Int!
-  followers: Int!
+  avatarImage: String
+  bannerImage: String
 }
 
 input UpdateDescriptionInput {
@@ -121,23 +126,19 @@ input AddEventArgs {
   name: String!
   localization: String!
   date: DateTime!
-  description: String!
   general_information: String
   competitions: String
   localization_details: String
 }
-
-"""
-A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
-"""
-scalar DateTime
 
 input UpdateEventArgs {
   id: Int!
   name: String!
   localization: String!
   date: DateTime!
-  description: String!
+  general_information: String
+  competitions: String
+  localization_details: String
 }
 
 input AddCommentInput {

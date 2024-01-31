@@ -8,7 +8,7 @@ type EventProps = {
   id: number;
   nazwa: string;
   lokalizacja:string;
-  data:string;
+  data:Date;
   
 };
 const Event: React.FC<EventProps> = ({ nazwa, id, lokalizacja, data}) => {
@@ -25,7 +25,17 @@ const Event: React.FC<EventProps> = ({ nazwa, id, lokalizacja, data}) => {
       <div className={styles.down}>
           <div className={styles.down1}>
             <div className={styles.localization}><p>{lokalizacja}</p></div>
-            <div className={styles.date}><p>{data}</p></div>
+            <div className={styles.date}>
+<p>
+  {data.getFullYear()}-{(data.getMonth() + 1).toString().padStart(2, '0')}-{data
+    .getDate()
+    .toString()
+    .padStart(2, '0')}/{data.getHours().toString().padStart(2, '0')}:{data
+    .getMinutes()
+    .toString()
+    .padStart(2, '0')}
+</p>
+          </div>
           </div>
           <div className={styles.down2}>
             <div className={styles.name}><p>{truncatedName}</p></div>
