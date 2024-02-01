@@ -5,6 +5,7 @@ import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { gql, useMutation } from "@apollo/client";
 import{yupResolver} from '@hookform/resolvers/yup';
+import UploadForm from '../UploadTest/Upload';
 
 
 const CREATE_EVENT_MUTATION = gql `
@@ -18,6 +19,7 @@ mutation AddEvent($addEventArgs: AddEventArgs!) {
 export const EventCreator = () => {
   const actualDate = new Date().toISOString().split("T")[0];
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
+  const [selectedBackground, setSelectedBackground] = useState<File | null>(null);
   const combineDateAndTime = (date:any, time:any) => {
     const dateTime = new Date(date + 'T' + time);
     return dateTime.toISOString();};
@@ -38,6 +40,14 @@ export const EventCreator = () => {
 //         EventBackgroundImg:yup.mixed().nullable()
 
 //     }) 
+
+
+    const handleBackgroundSelect = (file: File) => {
+        setSelectedBackground(file);
+        // const fileUrl = URL.createObjectURL(file);
+        // setBackgroundImage(fileUrl);
+      };
+
     const { register, handleSubmit } = useForm({
         // resolver: yupResolver(schema),
     });
@@ -46,7 +56,32 @@ export const EventCreator = () => {
 
     const [createEvent] = useMutation(CREATE_EVENT_MUTATION);
     
-    const onSubmit = (data) => {
+    const onSubmit = async (data:any) => {
+
+        const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL as string;
+
+        let newAvatarUrl: string | undefined, newBannerUrl: string | undefined;
+    
+        const uploadToCloudinary = async (file: File) => {
+          const formData = new FormData();
+          formData.append('file', file);
+          formData.append('upload_preset', "EventSpot");
+    
+          const response = await fetch(cloudinaryUrl, {
+            method: 'POST',
+            body: formData
+          });
+          if (!response.ok) {
+            throw new Error('Network response was not ok ' + response.statusText);
+          }
+          return response.json();
+        };
+     
+        if (selectedBackground) {
+          const backgroundResult = await uploadToCloudinary(selectedBackground);
+          newBannerUrl = backgroundResult.secure_url;
+        }
+
         const eventData = {
             name: data.EventName,
             date: combineDateAndTime(data.EventDate, data.EventTime),
@@ -54,9 +89,10 @@ export const EventCreator = () => {
             general_information: data.EventGeneralInformation,
             competitions: data.EventCompetitions,
             localization_details: data.EventDriveTips,
+            bannerImage: newBannerUrl,
             // Uwaga: Obrazy będą wymagały specjalnego traktowania
         };
-    
+
         createEvent({ variables: { addEventArgs: eventData } })
             .then(response => {
                 // Obsługa odpowiedzi
@@ -69,7 +105,7 @@ export const EventCreator = () => {
     };
       
 
-    
+
 
   
 
@@ -98,12 +134,13 @@ export const EventCreator = () => {
                 </div>
                 <div className={styles.down}>
                     <div className={styles.downA}>
-                        <p>Dodaj zdjęcie avataru</p>
-                    <input type="file" id="avatar"  accept="image/png, image/jpeg" {...register("EventAvatarImg")}/>
+                        <p>Dodaj zdjęcie tła</p>
+                        <UploadForm  onFileSelect={handleBackgroundSelect} />
                     </div>
                     <div className={styles.downB}>
-                        <p>Dodaj zdjęcie tła</p>
-                        <input type="file" id="background"  accept="image/png, image/jpeg"{...register("EventBackgroundImg")} />
+                        {/* <p>Dodaj zdjęcie avataru</p> */}
+                        {/* <UploadForm onFileSelect={handleAvatarSelect}/> */}
+                        {/* <input type="file" id="background"  accept="image/png, image/jpeg"{...register("EventBackgroundImg")} /> */}
                     </div >
                     <div className={styles.Submit}>
                     <input type="submit" />

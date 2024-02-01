@@ -148,7 +148,6 @@ const UPDATE_USER_MUTATION = gql`
         method: 'POST',
         body: formData
       });
-      console.log(cloudinaryUrl);
       if (!response.ok) {
         throw new Error('Network response was not ok ' + response.statusText);
       }

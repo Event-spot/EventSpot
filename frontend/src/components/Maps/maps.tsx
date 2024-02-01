@@ -21,7 +21,6 @@ const Map: React.FC<MapProps> = ({lokalizacja,data}) => {
       version: 'weekly',
     });
 
-    console.log(process.env.NEXT_PUBLIC_MAPS_API_KEY)
   
     loader.load().then(() => {
       const google = window.google; // window.google będzie dostępne po załadowaniu skryptu

@@ -9,19 +9,26 @@ type EventProps = {
   nazwa: string;
   lokalizacja:string;
   data:Date;
+  bannerImage: string;
   
 };
-const Event: React.FC<EventProps> = ({ nazwa, id, lokalizacja, data}) => {
+const Event: React.FC<EventProps> = ({ nazwa, id, lokalizacja, data, bannerImage}) => {
   
 
   const truncatedName = nazwa.length > 27 ? `${nazwa.slice(0, 27)}...` : nazwa;
+  const defaultBanner = eventimage;
 
   return (
     <div className={styles.event}>
-      
-        <Image className={styles.eventbanner} src={eventimage} alt={'Event Banner'} />
-      
-
+      <div>
+      <Image
+          className={styles.eventbanner}
+          src={bannerImage || defaultBanner}
+          alt={'Event Banner'}
+          width={500}
+          height={500}
+        />
+      </div>
       <div className={styles.down}>
           <div className={styles.down1}>
             <div className={styles.localization}><p>{lokalizacja}</p></div>

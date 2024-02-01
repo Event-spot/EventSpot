@@ -4,11 +4,13 @@ import Attendee from "../../../components/attendeelist/attendeelist"
 import styles from './event.module.scss';
 import Image from 'next/image';
 import eventimage from '../../../assets/images/isb.png';
+import Question from '../../../assets/images/question.png'
 import Map from '../../../components/Maps/maps';
 import Comment from '../../../components/comments/comments';
 import Detail from '../../../components/details/details';
 import { gql } from "@apollo/client";
 import { useRef } from "react";
+import Link from "next/link";
 
 type Event = {
   id:number;
@@ -48,16 +50,25 @@ type Params = {
 
 export default function Event({ params: { eventID } }: Params) {
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+  const defaultBanner = eventimage;
+  const defaultAvatar = Question;
 const GET_EVENTS= gql`
 query{
   eventById(eventId: ${eventID}){
     id,
     name,
     localization,
-    date
-    general_information
-    competitions
-    localization_details
+    date,
+    general_information,
+    competitions,
+    localization_details,
+    bannerImage,
+    organizer {
+      id
+      avatarImage
+      firstname
+      lastname
+    }
     attendees{
       firstname,
       lastname
@@ -90,7 +101,7 @@ query{
       <div className={styles.up}>
         <Image
           className={styles.eventbanner}
-          src={eventimage}
+          src={event.bannerImage || defaultBanner}
           alt={'Event Banner'}
           layout="fill"
           objectFit="cover"
@@ -101,11 +112,31 @@ query{
       <div className={styles.eventDiv}>
         <div className={styles.eventLeft}>
           <div className={styles.eventSquare}>
-         
+            <Link href={`../uzytkownicy/${event.organizer.id}`}>
+                <Image 
+                  priority={true} 
+                  className={styles.avatar} 
+                  src={event.organizer.avatarImage || defaultAvatar} 
+                  alt="Person Avatar" 
+                  width={100} 
+                  height={100} 
+                />
+            </Link>
           </div>
           <div className={styles.eventName}>
-          <p>{event.name}</p>
+            <p>{event.organizer.firstname}</p>
+            <p>{event.organizer.lastname}</p>
           </div>
+        </div>
+
+        <div className={styles.eventName}>
+        <p>{event.name}</p>
+
+        </div>
+        <div>
+        <div className={styles.divButton}>
+          <button className={styles.button}>Edytuj Profil</button>
+        </div>
         </div>
        
       </div>

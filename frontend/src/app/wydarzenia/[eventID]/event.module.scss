@@ -23,8 +23,9 @@ $breakpoint-mobile: 480px;
   }
   .eventDiv{
     display: flex;
-    justify-content: left;
+    justify-content: space-between;
     margin-left:10%;
+    align-items: center;
   }
 
   .eventLeft{
@@ -46,11 +47,46 @@ $breakpoint-mobile: 480px;
 
   .eventName{
     display: flex;
+    align-items: center;
     p{
       padding: 4px;
       font-size: 20px;
       font-weight: bold;
     }
+  }
+
+  .divButton{
+    padding-right: 1rem;
+    display: flex;
+    gap: 1rem;
+  }
+  
+  .button{
+    background-color: $secondary;
+    color: $white;
+    font-size: 1rem;
+    width: 100%;
+    padding: 0.4rem 0.7rem;
+    border: none;
+    cursor: pointer;
+    text-align: center;
+    border-radius: 0.3rem;
+    &:hover {
+      background-color: lighten($secondary, 10%);
+    } 
+  }
+  .buttonCancel{
+    background-color: #C70000;
+    color: white;
+    font-size: 1rem;
+    border:none;
+    border-radius: 0.3rem;
+    padding: 0 0.7rem 0 0.7rem;
+    cursor: pointer;
+    font-weight: 600;
+    &:hover {
+      background-color: lighten(#C70000, 10%);
+    } 
   }
 
   .next {

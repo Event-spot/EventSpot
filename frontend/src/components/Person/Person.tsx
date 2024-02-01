@@ -11,6 +11,7 @@ type PersonProps = {
   odwiedzoneSpoty: number;
   obserwowani: number;
   obserwujacy: number;
+  avatarImage: string;
 };
 
 const Person: React.FC<PersonProps> = ({
@@ -21,11 +22,22 @@ const Person: React.FC<PersonProps> = ({
   odwiedzoneSpoty,
   obserwowani,
   obserwujacy,
+  avatarImage
 }) => {
+  const defaultAvatar = Question;
+
   return (
     <div className={styles.person}>
       <div>
-      <Image priority={true} className={styles.avatar} src={Question} alt={'Person Avatar'}/>  
+      {/* <Image priority={true} className={styles.avatar} src={Question} alt={'Person Avatar'}/>   */}
+        <Image 
+          priority={true}
+          className={styles.avatar} 
+          src={avatarImage || defaultAvatar} 
+          alt="Person Avatar" 
+          width={100} 
+          height={100} 
+        />
       </div>
       <div className={styles.name}>
         <p>{imie} {nazwisko}</p>
