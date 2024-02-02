@@ -98,7 +98,7 @@ const UPDATE_USER_MUTATION = gql`
   
   
 
-  const { loading, error, data } = useQuery(GET_USERS_EVENTS_FOLLOWINGS);
+  const { loading, error, data, refetch } = useQuery(GET_USERS_EVENTS_FOLLOWINGS);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -108,16 +108,13 @@ const UPDATE_USER_MUTATION = gql`
   if (!user) return <p>User not found</p>;
   const followingCount = data?.userById?.followers?.length || 0;
 
+  //Profile Edit
   const handleFileSelect = (file: File) => {
     setSelectedFile(file);
-    // opcjonalnie aktualizuj preview
   };
   const handleBackgroundSelect = (file: File) => {
     setSelectedBackground(file);
-    // const fileUrl = URL.createObjectURL(file);
-    // setBackgroundImage(fileUrl);
   };
-  //Profile Edit
   const toggleEditMode = () => {
     setIsEditing(!isEditing);
     setState({
@@ -164,11 +161,10 @@ const UPDATE_USER_MUTATION = gql`
       newBannerUrl = backgroundResult.secure_url;
     }
 
-      // Call the mutation function
       const response = await updateUser({
         variables: {
           updateUserArgs: {
-            id: parseInt(userID, 10), // Convert userID to an integer
+            id: parseInt(userID, 10),
             firstname: state.editedFirstName,
             lastname: state.editedLastName,
             description: state.editedDescription,
@@ -182,51 +178,14 @@ const UPDATE_USER_MUTATION = gql`
         }
       });
 
-  
-      // Check if the mutation was successful and returned the updated user data
-      if (response && response.data && response.data.updateUser) {
-        const updatedUser = response.data.updateUser;
-        
-  
-        // Optionally, if you're maintaining separate states for display and edit, update them too
-        // setEditedFirstName(updatedUser.firstname);
-        // setEditedLastName(updatedUser.lastname);
-        setState({
-          ...state,
-          editedFirstName:updatedUser.firstname,
-          editedLastName:updatedUser.lastname,
-          editedDescription:updatedUser.description,
-          editedFacebook:updatedUser.facebook,
-          editedInstagram:updatedUser.instagram,
-          editedTiktok:updatedUser.tiktok,
-          editedYoutube:updatedUser.youtube,          
-        })
-      }
-      
-      // revalidatePath('/uzytkownicy/[userID]');
-      window.location.reload();
-
-      // Toggle editing mode off
       setIsEditing(false);
+      await refetch();
     } catch (error) {
       console.error('Error updating user:', error);
-      // Handle error appropriately
     }
   };
 
   const cancelEdit = () => {
-    // Reset edited values to the original
-    setState({
-      ...state,
-      editedFirstName: user.firstname,
-      editedLastName: user.lastname,
-      editedDescription: user.description,
-      editedFacebook: user.facebook,
-      editedInstagram: user.instagram,
-      editedTiktok: user.tiktok,
-      editedYoutube: user.youtube
-    })
-    // Set isEditing to false to exit edit mode
     setIsEditing(false);
   };
 

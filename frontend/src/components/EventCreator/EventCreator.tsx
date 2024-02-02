@@ -17,12 +17,16 @@ mutation AddEvent($addEventArgs: AddEventArgs!) {
 
 
 export const EventCreator = () => {
-  const actualDate = new Date().toISOString().split("T")[0];
+//   const actualDate = new Date().toISOString().split("T")[0];
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
   const [selectedBackground, setSelectedBackground] = useState<File | null>(null);
-  const combineDateAndTime = (date:any, time:any) => {
-    const dateTime = new Date(date + 'T' + time);
-    return dateTime.toISOString();};
+  const getMinDateTime = () => {
+    const now = new Date();
+    return now.toISOString().slice(0, 16);
+  };
+//   const combineDateAndTime = (date:any, time:any) => {
+//     const dateTime = new Date(date + 'T' + time);
+//     return dateTime.toISOString();};
     
     
 //     const schema = yup.object().shape({
@@ -84,7 +88,8 @@ export const EventCreator = () => {
 
         const eventData = {
             name: data.EventName,
-            date: combineDateAndTime(data.EventDate, data.EventTime),
+            // date: combineDateAndTime(data.EventDate, data.EventTime),
+            date: data.EventDate,
             localization: data.EventLocalization,
             general_information: data.EventGeneralInformation,
             competitions: data.EventCompetitions,
@@ -122,8 +127,8 @@ export const EventCreator = () => {
         <form id="EventCreator" className={styles.form} onSubmit={handleSubmit(onSubmit)}><div className={styles.MainForm}>
               <div className={styles.up}>
                     <div className={styles.upA}><p>Nazwa wydarzenia:</p><input type="text" required placeholder="Nazwa wydarzenia..." {...register("EventName")}/></div>
-                    <div className={styles.upB}><p>Data wydarzenia:</p><input type="date" required min={actualDate} {...register("EventDate")}/></div>
-                    <div className={styles.upC}><p>Godzina wydarzenia:</p><input type="time" required {...register("EventTime")} /></div>
+                    <div className={styles.upB}><p>Data wydarzenia:</p><input type="datetime-local" required min={getMinDateTime()} {...register("EventDate")}/></div>
+                    {/* <div className={styles.upC}><p>Godzina wydarzenia:</p><input type="time" required {...register("EventTime")} /></div> */}
                     <div className={styles.upD}><p>Adres wydarzenia:</p><input type="text" required placeholder="Adres wydarzenia..." {...register("EventLocalization")}/>
                     </div>
                 </div>
