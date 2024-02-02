@@ -12,6 +12,7 @@ interface Event {
  name:string;
  localization:string;
  date:Date;
+ bannerImage: string;
 }
 export default function wydarzenia() {
     const GET_EVENTS=gql`query {
@@ -20,6 +21,7 @@ export default function wydarzenia() {
           name
           localization
           date
+          bannerImage
         }
     }` 
     const [searchQuery, setSearchQuery] = useState('');
@@ -114,7 +116,7 @@ export default function wydarzenia() {
                         lokalizacja={event.localization}
                         data={new Date(event.date)}
                         nazwa={event.name}
-                        
+                        bannerImage={event.bannerImage}
                         />))}
                     </div>
     

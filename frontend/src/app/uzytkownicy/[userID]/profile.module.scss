@@ -102,6 +102,7 @@
     border:none;
     border-radius: 0.3rem;
     padding: 0 0.7rem 0 0.7rem;
+    cursor: pointer;
     font-weight: 600;
     &:hover {
       background-color: lighten(#C70000, 10%);

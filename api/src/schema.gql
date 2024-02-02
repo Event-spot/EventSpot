@@ -19,8 +19,10 @@ type events {
   general_information: String
   competitions: String
   localization_details: String
+  bannerImage: String
   comments: [comments!]
   attendees: [users!]
+  organizer: users!
 }
 
 """
@@ -45,6 +47,7 @@ type users {
   following: [users!]
   events: [events!]
   comments: [comments!]
+  organizedEvents: [events!]
   followers: [users!]!
   followingsCount: Float!
   followersCount: Float!
@@ -129,6 +132,7 @@ input AddEventArgs {
   general_information: String
   competitions: String
   localization_details: String
+  bannerImage: String
 }
 
 input UpdateEventArgs {
@@ -139,6 +143,7 @@ input UpdateEventArgs {
   general_information: String
   competitions: String
   localization_details: String
+  bannerImage: String
 }
 
 input AddCommentInput {

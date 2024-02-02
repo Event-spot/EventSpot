@@ -15,6 +15,7 @@ interface Person {
     eventsCount: number;
     followersCount: number;
     followingsCount: number;
+    avatarImage: string;
 }
 
 export default function Users() {
@@ -86,6 +87,7 @@ export default function Users() {
                             odwiedzoneSpoty={osoba.eventsCount}
                             obserwowani={osoba.followingsCount}
                             obserwujacy={osoba.followersCount}
+                            avatarImage={osoba.avatarImage}
                             />
                         ))
                     }

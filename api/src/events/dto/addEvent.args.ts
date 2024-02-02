@@ -20,4 +20,7 @@ export default class AddEventArgs {
 
     @Field({nullable: true})
     localization_details?: string;
+
+    @Field({nullable: true})
+    bannerImage?: string;
 }

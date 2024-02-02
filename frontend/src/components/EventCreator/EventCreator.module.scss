@@ -163,7 +163,8 @@ $breakpoint-mobile: 480px;
         text-align: center;
         align-items: center;
         flex-direction: row;
-       min-height:100px;
+        height: auto;
+        min-height:150px;
         
         
         background-color: $secondary;
@@ -173,14 +174,9 @@ $breakpoint-mobile: 480px;
         font-weight:bold;
         .downA{
             width:100%;
-            input{
-                border:2px solid $primary;
-                font-weight: normal;
-                background-color: $white;
-                border-radius:5px;
-                width:80%;
-
-            }
+            height: 100px;
+            padding: 0 0 10px 10px;
+            max-height: 100px;
         }
         .downB{
             width:100%;
@@ -244,7 +240,7 @@ $breakpoint-mobile: 480px;
                 text-align: left;
                 padding: 0 5%;
               }
-             
+
           
         }
         

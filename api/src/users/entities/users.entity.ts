@@ -80,5 +80,9 @@ export class Users {
 
     @OneToMany(type => Comments, comment => comment.user, {nullable: true})
     @Field(type => [Comments], {nullable: true})
-    comments?: Comments[]
+    comments?: Comments[];
+
+    @OneToMany(() => Events, event => event.organizer, {nullable: true, cascade: ['insert']})
+    @Field(type => [Events], {nullable: true})
+    organizedEvents?: Events[];
 }

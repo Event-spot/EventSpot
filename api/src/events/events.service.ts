@@ -18,12 +18,12 @@ export class EventsService implements OnModuleInit {
         this.userService = this.moduleRef.get(UsersService, {strict: false});
     }
     async findAllEvents(): Promise<Events[]>{
-        let events: Events[] = await this.eventRepo.find({relations: ['attendees', 'comments', 'comments.user']});
+        let events: Events[] = await this.eventRepo.find({relations: ['attendees', 'comments', 'comments.user', 'organizer']});
         return events;
     }
 
     async findEventById(id: number): Promise<Events> {
-        let event: Events = await this.eventRepo.findOne({where: {id: id}, relations: ['attendees', 'comments', 'comments.user']});
+        let event: Events = await this.eventRepo.findOne({where: {id: id}, relations: ['attendees', 'comments', 'comments.user', 'organizer']});
         return event;
     }
 
@@ -40,6 +40,7 @@ export class EventsService implements OnModuleInit {
         event.general_information = addEventArgs.general_information;
         event.competitions = addEventArgs.competitions;
         event.localization_details = addEventArgs.localization_details;
+        event.bannerImage = addEventArgs.bannerImage;
 
         await this.eventRepo.save(event);
         return "Event has been added";
@@ -53,6 +54,7 @@ export class EventsService implements OnModuleInit {
         event.general_information = updateEventArgs.general_information;
         event.competitions = updateEventArgs.competitions;
         event.localization_details = updateEventArgs.localization_details;
+        event.bannerImage = updateEventArgs.bannerImage;
        
 
         await this.eventRepo.save(event);
