@@ -65,6 +65,7 @@ export class EventsService implements OnModuleInit {
         const currentDate = new Date();
         return this.eventRepo.createQueryBuilder('event')
             .leftJoinAndSelect('event.attendees', 'attendee')
+            .leftJoinAndSelect('event.organizer', 'organizer')
             .where('event.date >= :currentDate', { currentDate })
             .andWhere('attendee.id = :userId', { userId })
             .getMany();
@@ -74,6 +75,7 @@ export class EventsService implements OnModuleInit {
         const currentDate = new Date();
         return this.eventRepo.createQueryBuilder('event')
             .leftJoinAndSelect('event.attendees', 'attendee')
+            .leftJoinAndSelect('event.organizer', 'organizer')
             .where('event.date < :currentDate', { currentDate })
             .andWhere('attendee.id = :userId', { userId })
             .orderBy('event.date', 'DESC')
