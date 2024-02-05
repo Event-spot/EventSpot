@@ -17,7 +17,7 @@ interface IUser {
 const AuthContext: Context<IAuthContext | null> = createContext<IAuthContext | {}>({});
 
 export const AuthProvider = ({children}: React.PropsWithChildren) => {
-    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
+    const [currentUser, setCurrentUser] = useState<IUser | null>();
 
     return (
         <AuthContext.Provider value={{currentUser, setCurrentUser}}>
