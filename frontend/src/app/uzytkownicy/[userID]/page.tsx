@@ -68,12 +68,22 @@ export default function Profile({ params: { userID } }: Params) {
         name,
         date,
         localization,
+        bannerImage,
+        organizer {
+          id,
+          avatarImage
+        }
       }
       pastEvents(userId: ${userID}) {
         id,
         name,
         date,
-        localization
+        localization,
+        bannerImage,
+        organizer {
+          id,
+          avatarImage
+        }
       }
   }
 `;
@@ -85,6 +95,8 @@ const UPDATE_USER_MUTATION = gql`
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedBackground, setSelectedBackground] = useState<File | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const isAuthorized = false;
+  const isFollowing = false;
   const [state, setState] = useState({
     editedFirstName: '',
     editedLastName: '',
@@ -92,7 +104,8 @@ const UPDATE_USER_MUTATION = gql`
     editedFacebook: '',
     editedInstagram: '',
     editedTiktok: '',
-    editedYoutube: ''
+    editedYoutube: '',
+    editedLocalization: ''
   });
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
   
@@ -125,7 +138,8 @@ const UPDATE_USER_MUTATION = gql`
       editedFacebook: user.facebook,
       editedInstagram: user.instagram,
       editedTiktok: user.tiktok,
-      editedYoutube: user.youtube
+      editedYoutube: user.youtube,
+      editedLocalization: user.localization
     });
   };
 
@@ -174,6 +188,7 @@ const UPDATE_USER_MUTATION = gql`
             youtube: state.editedYoutube,
             avatarImage: newAvatarUrl, 
             bannerImage: newBannerUrl,
+            localization: state.editedLocalization
           }
         }
       });
@@ -188,6 +203,14 @@ const UPDATE_USER_MUTATION = gql`
   const cancelEdit = () => {
     setIsEditing(false);
   };
+
+  const handleFollow = () => {
+
+  }
+
+  const handleUnfollow = () => {
+    
+  }
 
   return (
     <div className={styles.main}>
@@ -229,35 +252,56 @@ const UPDATE_USER_MUTATION = gql`
           </div>
           <div className={styles.profileName}>
             {isEditing ? (
-          <>
-            <input 
-              value={state.editedFirstName} 
-              onChange={(e) => setState({ ...state, editedFirstName: e.target.value })}
-            />
-            <input 
-              value={state.editedLastName} 
-              onChange={(e) => setState({ ...state, editedLastName: e.target.value })}
-            />
-          </>
-        ) : (
-          <>
-            <p>{user.firstname}</p>
-            <p>{user.lastname}</p>
-          </>
-        )}
+              <>
+                <div> 
+                  <input 
+                    value={state.editedFirstName} 
+                    onChange={(e) => setState({ ...state, editedFirstName: e.target.value })}
+                  />
+                  <input 
+                    value={state.editedLastName} 
+                    onChange={(e) => setState({ ...state, editedLastName: e.target.value })}
+                  />
+                </div>
+                <div> 
+                  <input 
+                    value={state.editedLocalization} // Załóżmy, że dodasz to pole do stanu
+                    onChange={(e) => setState({ ...state, editedLocalization: e.target.value })}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className={styles.names}> 
+                  <p>{user.firstname}</p>
+                  <p>{user.lastname}</p>
+                </div>
+                <div className={styles.localization}> 
+                  <p>{user.localization}</p>
+                </div>
+              </>
+            )}
           </div>
           <div className={styles.followers}>
             <p>Obserwujących: {followingCount}</p>
           </div>
         </div>
         <div className={styles.divButton}>
-          {isEditing ? (
-          <>
-            <button className={styles.button} onClick={handleSave}>Zapisz zmiany</button>
-            <button className={styles.buttonCancel} onClick={cancelEdit}>Anuluj</button>
-          </>
+        {isAuthorized ? (
+          isEditing ? (
+            <>
+              <button className={styles.button} onClick={handleSave}>Zapisz zmiany</button>
+              <button className={styles.buttonCancel} onClick={cancelEdit}>Anuluj</button>
+            </>
+          ) : (
+            <button className={styles.button} onClick={toggleEditMode}>Edytuj Profil</button>
+          )
         ) : (
-          <button className={styles.button} onClick={toggleEditMode}>Edytuj Profil</button>
+          isFollowing ? (
+            <button className={styles.buttonCancel} onClick={handleUnfollow}>Przestań obserwować</button>
+          ) : (
+            <button className={styles.button} onClick={handleFollow}>Obserwuj</button>
+          )
         )}
         </div>
       </div>

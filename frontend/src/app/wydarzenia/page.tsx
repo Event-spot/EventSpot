@@ -13,6 +13,7 @@ interface Event {
  localization:string;
  date:Date;
  bannerImage: string;
+ organizer: string;
 }
 export default function wydarzenia() {
     const GET_EVENTS=gql`query {
@@ -22,6 +23,10 @@ export default function wydarzenia() {
           localization
           date
           bannerImage
+          organizer{
+            firstname
+            lastname
+          }
         }
     }` 
     const [searchQuery, setSearchQuery] = useState('');
@@ -32,6 +37,8 @@ export default function wydarzenia() {
     const [filterStartDate, setFilterStartDate] = useState('');
     const [filterEndDate, setFilterEndDate] = useState('');
     const [filterLocalization, setFilterLocalization] = useState('');
+    const [filterOrganizer, setFilterOrganizer] = useState('');
+    
     // Ograniczenie liczby osób na stronie
     const itemsPerPage = 6;
     const totalNumOfPages = Math.ceil((data?.events.length || 0) / itemsPerPage);
@@ -51,11 +58,19 @@ export default function wydarzenia() {
               return eventDate >= new Date(filterStartDate) && eventDate <= new Date(filterEndDate);
           });
       }
-      if (filterLocalization) {
-        sortedEventy = sortedEventy.filter(event => 
-            event.localization.toLowerCase().includes(filterLocalization.toLowerCase())
-        );
-    }
+        if (filterLocalization) {
+            sortedEventy = sortedEventy.filter(event => 
+                event.localization.toLowerCase().includes(filterLocalization.toLowerCase())
+            );
+        }
+        if (filterOrganizer) {
+            sortedEventy = sortedEventy.filter(event => {
+                const organizerFullName = `${event.organizer.firstname} ${event.organizer.lastname}`.toLowerCase();
+                return organizerFullName.includes(filterOrganizer.toLowerCase());
+            });
+        }
+
+
     if (searchQuery) {
       sortedEventy = sortedEventy.filter(event =>
           event.name.toLowerCase().includes(searchQuery.toLowerCase())
@@ -81,7 +96,7 @@ export default function wydarzenia() {
               break;
       }
       setCurrentEventy(sortedEventy);
-}, [sortOption, data?.events, currentPage, filterStartDate, filterEndDate, filterLocalization, searchQuery]);
+}, [sortOption, data?.events, currentPage, filterStartDate, filterEndDate, filterLocalization,filterOrganizer, searchQuery]);
 
 
 
@@ -95,6 +110,7 @@ export default function wydarzenia() {
     pageType="wydarzenia" 
     onSearchQueryChange={(query) => setSearchQuery(query)}
     onLocalizationFilterChange={(newLocalization) => setFilterLocalization(newLocalization)}
+    onOrganizerFilterChange={(newOrganizer) => setFilterOrganizer(newOrganizer)}
     onSortChange={(selectedSort) => setSortOption(selectedSort)} 
     onDateFilterChange={(start, end) => {
         setFilterStartDate(start);
@@ -109,7 +125,6 @@ export default function wydarzenia() {
                 <div className={styles.container}>
                 {!loading && data?.events &&
                     currentEventy.map((event: Event, index: number) => (
-                        // .sort((a:any, b:any) a.eventsCount - b.eventsCount)
                         <Event
                         id={event.id}
                         key={index}

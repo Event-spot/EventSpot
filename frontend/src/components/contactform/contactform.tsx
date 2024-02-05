@@ -10,6 +10,7 @@ const ContactForm = () => {
     PhoneNumber: yup.string().matches(/^\d{9}$/, "Numer telefonu musi składać się z 9 cyfr").required("To pole jest wymagane"),
     Email: yup.string().email("Podaj poprawny adres e-mail").required("To pole jest wymagane"),
     Topic: yup.string().required("To pole jest wymagane"),
+    Details: yup.string().required("To pole jest wymagane"),
   });
 
   const { register, handleSubmit, formState: { errors }, reset } = useForm({
@@ -65,8 +66,12 @@ const ContactForm = () => {
           />
           {errors.Topic && <p>{errors.Topic.message}</p>}
         </div>
-
         <div className={styles.upD}>
+         <label htmlFor="opis">Wprowadź swój opis:</label>
+          <textarea id="opis"{...register("Details")}/>
+          {errors.Details && <p>{errors.Details.message}</p>}
+        </div>
+        <div className={styles.upE}>
           <button type="submit">Wyślij</button>
         </div>
       </form>

@@ -23,6 +23,7 @@ type events {
   comments: [comments!]
   attendees: [users!]
   organizer: users!
+  attendeesCount: Float!
 }
 
 """
