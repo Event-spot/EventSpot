@@ -4,8 +4,10 @@ import './globals.scss'
 import {MantineProvider} from '@mantine/core';
 import Navbar from "@/layout/Navbar/Navbar";
 import Footer from "@/layout/Footer/Footer";
-import { loadErrorMessages, loadDevMessages } from "@apollo/client/dev";
-import { ApolloWrapper } from "@/lib/ApolloWrapper";
+import {loadErrorMessages, loadDevMessages} from "@apollo/client/dev";
+import {ApolloWrapper} from "@/lib/ApolloWrapper";
+import {AuthProvider} from "@/context/AuthContext";
+import AuthorizationCheck from "@/utils/AuthorizationCheck";
 
 loadDevMessages();
 loadErrorMessages();
@@ -23,11 +25,15 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
         <html lang="en">
         <body className={inter.className}>
         <ApolloWrapper>
-        <MantineProvider>
-            <Navbar/>
-            {children}
-            <Footer/>
-        </MantineProvider>
+            <AuthProvider>
+                <MantineProvider>
+                    <AuthorizationCheck>
+                        <Navbar/>
+                        {children}
+                        <Footer/>
+                    </AuthorizationCheck>
+                </MantineProvider>
+            </AuthProvider>
         </ApolloWrapper>
         </body>
         </html>

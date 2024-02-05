@@ -18,7 +18,7 @@ export class AuthService {
 
         const matched = await comparePasswords(password, user.password);
 
-        if(user && matched) {
+        if (user && matched) {
             const {password, ...result} = user;
             return result;
         }
@@ -27,10 +27,30 @@ export class AuthService {
 
     async login(user: any) {
         const foundedUser: Users = await this.usersService.findUserByEmail(user.email);
+        const {password, ...result} = foundedUser;
         const payload = {email: foundedUser.email, sub: foundedUser.id, firstname: foundedUser.firstname};
 
         return {
-            access_token: this.jwtService.sign(payload)
+            access_token: this.jwtService.sign(payload),
+            user: {
+                id: result.id,
+                firstName: result.firstname,
+                lastName: result.lastname,
+                avatarImage: result.avatarImage
+            },
+        }
+    }
+
+    async verifyUser(user: any) {
+        const foundedUser = await this.usersService.findUserById(user.userId);
+        const {password, ...result} = foundedUser;
+        return {
+            user: {
+                id: result.id,
+                firstName: result.firstname,
+                lastName: result.lastname,
+                avatarImage: result.avatarImage,
+            }
         }
     }
 }
