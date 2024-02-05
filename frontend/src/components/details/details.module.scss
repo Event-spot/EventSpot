@@ -52,5 +52,16 @@
   .tabPanel {
     background-color:$background;
     padding:10px;
+    border-radius: 8px;
+
+    .aboutTextArea{
+      font-weight:normal;
+      border-radius:5px;
+      resize: none;
+      min-height: 270px;
+      height:100%;
+      width:100%;
+      
+    }
   }
 }

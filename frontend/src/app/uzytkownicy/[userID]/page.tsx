@@ -12,7 +12,7 @@ import Followers from "../../../components/Followers/Followers";
 import EventHistory from "../../../components/EventHistory/EventHistory";
 import {useMutation, gql } from "@apollo/client";
 import { useState } from "react";
-
+import UploadForm from "@/components/UploadTest/Upload";
 
 
 
@@ -30,7 +30,8 @@ type Params = {
 };
 
 export default function Profile({ params: { userID } }: Params) {
-
+  const defaultAvatar = Question;
+  const defaultBanner = Profile_Background;
   const GET_USERS_EVENTS_FOLLOWINGS = gql`
   query  {
     userById(userId: ${userID}) {
@@ -43,6 +44,8 @@ export default function Profile({ params: { userID } }: Params) {
             instagram,
             tiktok,
             youtube,
+            avatarImage,
+            bannerImage,
             following{
                 id,
                 firstname,
@@ -65,12 +68,22 @@ export default function Profile({ params: { userID } }: Params) {
         name,
         date,
         localization,
+        bannerImage,
+        organizer {
+          id,
+          avatarImage
+        }
       }
       pastEvents(userId: ${userID}) {
         id,
         name,
         date,
-        localization
+        localization,
+        bannerImage,
+        organizer {
+          id,
+          avatarImage
+        }
       }
   }
 `;
@@ -79,7 +92,11 @@ const UPDATE_USER_MUTATION = gql`
     updateUser(updateUserArgs: $updateUserArgs) 
   }
 `;
+  const [selectedFile, setSelectedFile] = useState<File | null>(null);
+  const [selectedBackground, setSelectedBackground] = useState<File | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const isAuthorized = false;
+  const isFollowing = false;
   const [state, setState] = useState({
     editedFirstName: '',
     editedLastName: '',
@@ -87,13 +104,14 @@ const UPDATE_USER_MUTATION = gql`
     editedFacebook: '',
     editedInstagram: '',
     editedTiktok: '',
-    editedYoutube: ''
+    editedYoutube: '',
+    editedLocalization: ''
   });
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
   
   
 
-  const { loading, error, data } = useQuery(GET_USERS_EVENTS_FOLLOWINGS);
+  const { loading, error, data, refetch } = useQuery(GET_USERS_EVENTS_FOLLOWINGS);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -104,6 +122,12 @@ const UPDATE_USER_MUTATION = gql`
   const followingCount = data?.userById?.followers?.length || 0;
 
   //Profile Edit
+  const handleFileSelect = (file: File) => {
+    setSelectedFile(file);
+  };
+  const handleBackgroundSelect = (file: File) => {
+    setSelectedBackground(file);
+  };
   const toggleEditMode = () => {
     setIsEditing(!isEditing);
     setState({
@@ -114,127 +138,170 @@ const UPDATE_USER_MUTATION = gql`
       editedFacebook: user.facebook,
       editedInstagram: user.instagram,
       editedTiktok: user.tiktok,
-      editedYoutube: user.youtube
+      editedYoutube: user.youtube,
+      editedLocalization: user.localization
     });
   };
 
   // Handle save changes
   const handleSave = async () => {
     try {
-      // Call the mutation function
+    const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL as string;
+
+    let newAvatarUrl: string | undefined, newBannerUrl: string | undefined;
+
+    const uploadToCloudinary = async (file: File) => {
+      const formData = new FormData();
+      formData.append('file', file);
+      formData.append('upload_preset', "EventSpot");
+
+      const response = await fetch(cloudinaryUrl, {
+        method: 'POST',
+        body: formData
+      });
+      if (!response.ok) {
+        throw new Error('Network response was not ok ' + response.statusText);
+      }
+      return response.json();
+    };
+
+    if (selectedFile) {
+      const uploadResult = await uploadToCloudinary(selectedFile);
+      newAvatarUrl = uploadResult.secure_url;
+    }
+
+    if (selectedBackground) {
+      const backgroundResult = await uploadToCloudinary(selectedBackground);
+      newBannerUrl = backgroundResult.secure_url;
+    }
+
       const response = await updateUser({
         variables: {
           updateUserArgs: {
-            id: parseInt(userID, 10), // Convert userID to an integer
+            id: parseInt(userID, 10),
             firstname: state.editedFirstName,
             lastname: state.editedLastName,
             description: state.editedDescription,
             facebook: state.editedFacebook,
             instagram: state.editedInstagram,
             tiktok: state.editedTiktok,
-            youtube: state.editedYoutube
+            youtube: state.editedYoutube,
+            avatarImage: newAvatarUrl, 
+            bannerImage: newBannerUrl,
+            localization: state.editedLocalization
           }
         }
       });
-  
-      // Check if the mutation was successful and returned the updated user data
-      if (response && response.data && response.data.updateUser) {
-        const updatedUser = response.data.updateUser;
-        
-  
-        // Optionally, if you're maintaining separate states for display and edit, update them too
-        // setEditedFirstName(updatedUser.firstname);
-        // setEditedLastName(updatedUser.lastname);
-        setState({
-          // ...state,
-          editedFirstName:updatedUser.firstname,
-          editedLastName:updatedUser.lastname,
-          editedDescription:updatedUser.description,
-          editedFacebook:updatedUser.facebook,
-          editedInstagram:updatedUser.instagram,
-          editedTiktok:updatedUser.tiktok,
-          editedYoutube:updatedUser.youtube
-        })
-      }
-      
-      window.location.reload();
 
-      // Toggle editing mode off
       setIsEditing(false);
+      await refetch();
     } catch (error) {
       console.error('Error updating user:', error);
-      // Handle error appropriately
     }
   };
 
   const cancelEdit = () => {
-    // Reset edited values to the original
-    setState({
-      ...state,
-      editedFirstName: user.firstname,
-      editedLastName: user.lastname,
-      editedDescription: user.description,
-      editedFacebook: user.facebook,
-      editedInstagram: user.instagram,
-      editedTiktok: user.tiktok,
-      editedYoutube: user.youtube
-    })
-
-    // Set isEditing to false to exit edit mode
     setIsEditing(false);
   };
 
+  const handleFollow = () => {
+
+  }
+
+  const handleUnfollow = () => {
+    
+  }
 
   return (
     <div className={styles.main}>
       <div className={styles.up}>
-        <Image
-          className={styles.profileBanner}
-          src={Profile_Background}
-          alt={'Profile Banner'}
-          layout="fill"
-          objectFit="cover"
-        />
-        <div className={styles.overlay}>
+      {isEditing ? (
+        <UploadForm onFileSelect={handleBackgroundSelect} />
+      ) : (
+        <div>
+          <Image
+            className={styles.profileBanner}
+            src={user.bannerImage || defaultBanner}
+            alt={'Profile Banner'}
+            layout="fill"
+            objectFit="cover"
+          />
+          <div className={styles.overlay}></div>
         </div>
+      )}
+
       </div>
 
       <div className={styles.profileDiv}>
         <div className={styles.profileLeft}>
           <div className={styles.profileSquare}>
-          <Image priority={true} className={styles.avatar} src={Question} alt={'Person Avatar'}/>
+          {isEditing ? (
+            <>
+              <UploadForm onFileSelect={handleFileSelect} />
+            </>
+          ) : (
+            <Image 
+              priority={true} 
+              className={styles.avatar} 
+              src={user.avatarImage || defaultAvatar} 
+              alt="Person Avatar" 
+              width={100} 
+              height={100} 
+            />
+          )}
           </div>
           <div className={styles.profileName}>
             {isEditing ? (
-          <>
-            <input 
-              value={state.editedFirstName} 
-              onChange={(e) => setState({ ...state, editedFirstName: e.target.value })}
-            />
-            <input 
-              value={state.editedLastName} 
-              onChange={(e) => setState({ ...state, editedLastName: e.target.value })}
-            />
-          </>
-        ) : (
-          <>
-            <p>{user.firstname}</p>
-            <p>{user.lastname}</p>
-          </>
-        )}
+              <>
+                <div> 
+                  <input 
+                    value={state.editedFirstName} 
+                    onChange={(e) => setState({ ...state, editedFirstName: e.target.value })}
+                  />
+                  <input 
+                    value={state.editedLastName} 
+                    onChange={(e) => setState({ ...state, editedLastName: e.target.value })}
+                  />
+                </div>
+                <div> 
+                  <input 
+                    value={state.editedLocalization} // Załóżmy, że dodasz to pole do stanu
+                    onChange={(e) => setState({ ...state, editedLocalization: e.target.value })}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className={styles.names}> 
+                  <p>{user.firstname}</p>
+                  <p>{user.lastname}</p>
+                </div>
+                <div className={styles.localization}> 
+                  <p>{user.localization}</p>
+                </div>
+              </>
+            )}
           </div>
           <div className={styles.followers}>
             <p>Obserwujących: {followingCount}</p>
           </div>
         </div>
         <div className={styles.divButton}>
-          {isEditing ? (
-          <>
-            <button className={styles.button} onClick={handleSave}>Zapisz zmiany</button>
-            <button className={styles.button} onClick={cancelEdit}>Anuluj</button>
-          </>
+        {isAuthorized ? (
+          isEditing ? (
+            <>
+              <button className={styles.button} onClick={handleSave}>Zapisz zmiany</button>
+              <button className={styles.buttonCancel} onClick={cancelEdit}>Anuluj</button>
+            </>
+          ) : (
+            <button className={styles.button} onClick={toggleEditMode}>Edytuj Profil</button>
+          )
         ) : (
-          <button className={styles.button} onClick={toggleEditMode}>Edytuj Profil</button>
+          isFollowing ? (
+            <button className={styles.buttonCancel} onClick={handleUnfollow}>Przestań obserwować</button>
+          ) : (
+            <button className={styles.button} onClick={handleFollow}>Obserwuj</button>
+          )
         )}
         </div>
       </div>
@@ -253,7 +320,7 @@ const UPDATE_USER_MUTATION = gql`
               </>
             ) : (
               <>
-                <p>{user.description}</p>
+                <p className={styles.paragrafAbout}>{user.description}</p>
               </>
             )}
           </fieldset>
@@ -321,8 +388,7 @@ const UPDATE_USER_MUTATION = gql`
             </div>
             <div className={styles.followersContainer}>
               <Followers user={user}/>
-            </div>
-        
+            </div>        
       </div>
     </div>
   );

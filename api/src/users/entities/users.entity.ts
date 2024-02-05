@@ -11,13 +11,15 @@ export class Users {
     @Field(type => Int)
     id: number;
 
-    @Column()
+    @Column({
+        unique: true
+    })
     @Field()
     email: string;
 
     @Column()
     @Field()
-    password: string;
+    password?: string;
 
     @Column({name: "first_name"})
     @Field()
@@ -51,6 +53,14 @@ export class Users {
     @Field({nullable: true})
     youtube?: string;
 
+    @Column({nullable: true})
+    @Field({nullable: true})
+    avatarImage?: string;
+
+    @Column({nullable: true})
+    @Field({nullable: true})
+    bannerImage?: string;
+
     @ManyToMany(() => Users, users => users.following, {nullable: true, onDelete: "CASCADE"})
     @JoinTable({
         name: 'user_following',
@@ -72,5 +82,9 @@ export class Users {
 
     @OneToMany(type => Comments, comment => comment.user, {nullable: true})
     @Field(type => [Comments], {nullable: true})
-    comments?: Comments[]
+    comments?: Comments[];
+
+    @OneToMany(() => Events, event => event.organizer, {nullable: true, cascade: ['insert']})
+    @Field(type => [Events], {nullable: true})
+    organizedEvents?: Events[];
 }

@@ -30,5 +30,9 @@ export class UpdateUserArgs {
     @Field({nullable: true})
     youtube: string;
 
+    @Field({nullable: true})
+    avatarImage: string;
 
+    @Field({nullable: true})
+    bannerImage: string;
 }

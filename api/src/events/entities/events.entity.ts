@@ -5,7 +5,8 @@ import {
     CreateDateColumn,
     ManyToMany,
     JoinTable,
-    OneToMany
+    OneToMany,
+    ManyToOne
 } from "typeorm";
 import { Users } from '../../users/entities/users.entity';
 import {ObjectType, Field, Int} from "@nestjs/graphql";
@@ -48,6 +49,10 @@ export class Events {
     @Field({nullable: true})
     localization_details: string;
 
+    @Column({nullable: true})
+    @Field({nullable: true})
+    bannerImage: string;
+
 
     // TODO: Organizer relation
 
@@ -59,4 +64,9 @@ export class Events {
     @JoinTable()
     @Field(type => [Users], {nullable: true} )
     attendees?: Users[];
+    
+    @ManyToOne(() => Users, user => user.organizedEvents, {nullable: true, onDelete: "CASCADE"})
+    @Field(type => Users)
+    organizer?: Users;
+    //TODO: Organizer nullable: false
 }

@@ -9,7 +9,8 @@ export const GET_USERS= gql`
             localization,
             followersCount,
             followingsCount,
-            eventsCount
+            eventsCount,
+            avatarImage
         }
     }
 `

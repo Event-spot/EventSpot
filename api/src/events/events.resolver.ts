@@ -42,4 +42,9 @@ export class EventsResolver {
     getPastEventsForUser(@Args({ name: 'userId', type: () => Int }) userId: number) {
         return this.eventService.findPastEventsForUser(userId);
     }
+
+    @ResolveField(returns => Number, {name: 'attendeesCount'})
+    eventsCount(@Parent() event: Events) {
+        return this.eventService.countAttendees(event.id);
+    }
 }

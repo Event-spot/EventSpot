@@ -1,4 +1,4 @@
-import {forwardRef, Inject, Injectable, OnModuleInit} from '@nestjs/common';
+import {Injectable, OnModuleInit} from '@nestjs/common';
 import {Users} from "./entities/users.entity";
 import {Repository} from "typeorm";
 import {InjectRepository} from "@nestjs/typeorm";
@@ -10,6 +10,7 @@ import {Events} from "../events/entities/events.entity";
 import {UpdateDescriptionInput} from "./dto/update-description-input";
 import {JoinEventInput} from "./dto/join-event-input";
 import {FollowInput} from "./dto/follow-input";
+import {encodePassword} from "../utils/bcrypt";
 
 @Injectable()
 export class UsersService implements OnModuleInit {
@@ -22,14 +23,17 @@ export class UsersService implements OnModuleInit {
     }
 
     async findAllUsers(): Promise<Users[]>{
-        let users = await this.usersRepo.find({relations: {events: true, following: true}});
-        return users;
+        return await this.usersRepo.find({relations: {events: true, following: true}});
     }
 
     async findUserById(id: number): Promise<Users> {
-        let user = await this.usersRepo.findOne({where: {id: id}, relations: ["events", "following"]});
-        return user;
+        return await this.usersRepo.findOne({where: {id: id}, relations: ["events", "following"]});
     }
+
+    async findUserByEmail(email: string): Promise<Users | undefined> {
+        return await this.usersRepo.findOne({where: {email}});
+    }
+
 
     async deleteUser(id: number): Promise<string> {
         await this.usersRepo.delete(id)
@@ -39,7 +43,7 @@ export class UsersService implements OnModuleInit {
     async addUser(addUserArgs: AddUserArgs): Promise<string>{
         let user: Users = new Users();
         user.email = addUserArgs.email;
-        user.password = addUserArgs.password;
+        user.password = await encodePassword(addUserArgs.password);
         user.firstname = addUserArgs.firstname;
         user.lastname = addUserArgs.lastname;
         user.localization = addUserArgs.localization;
@@ -66,6 +70,8 @@ export class UsersService implements OnModuleInit {
         user.instagram = updateUserArgs.instagram;
         user.tiktok = updateUserArgs.tiktok;
         user.youtube = updateUserArgs.youtube;
+        user.avatarImage = updateUserArgs.avatarImage;
+        user.bannerImage = updateUserArgs.bannerImage;
 
         await this.usersRepo.save(user)
 
