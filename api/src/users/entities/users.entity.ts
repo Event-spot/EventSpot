@@ -11,13 +11,15 @@ export class Users {
     @Field(type => Int)
     id: number;
 
-    @Column()
+    @Column({
+        unique: true
+    })
     @Field()
     email: string;
 
     @Column()
     @Field()
-    password: string;
+    password?: string;
 
     @Column({name: "first_name"})
     @Field()

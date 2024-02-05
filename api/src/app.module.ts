@@ -10,6 +10,7 @@ import {TypeOrmModule} from "@nestjs/typeorm";
 import {typeormConfigAsync} from "./config/typeorm.config";
 import {EventsModule} from "./events/events.module";
 import CommentsModule from "./comments/comments.module";
+import {AuthModule} from "./auth/auth.module";
 
 @Module({
     imports: [
@@ -17,15 +18,16 @@ import CommentsModule from "./comments/comments.module";
         GraphQLModule.forRoot<ApolloDriverConfig>({
             driver: ApolloDriver,
             autoSchemaFile: join(process.cwd(), 'src/schema.gql'),
-            playground: true
+            playground: true,
+            context: ({ req }) => ({ req }),
         }),
         TypeOrmModule.forRootAsync(typeormConfigAsync),
         UsersModule,
         EventsModule,
-        CommentsModule
+        CommentsModule,
+        AuthModule
     ],
     controllers: [AppController],
     providers: [AppService],
 })
-export class AppModule {
-}
+export class AppModule{}

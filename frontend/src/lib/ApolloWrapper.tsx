@@ -11,6 +11,7 @@ import {
     NextSSRApolloClient,
     SSRMultipartLink,
 } from "@apollo/experimental-nextjs-app-support/ssr";
+import React from "react";
 
 function makeClient() {
     const httpLink = new HttpLink({
