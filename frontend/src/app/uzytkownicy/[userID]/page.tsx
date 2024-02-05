@@ -95,6 +95,8 @@ const UPDATE_USER_MUTATION = gql`
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedBackground, setSelectedBackground] = useState<File | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const isAuthorized = false;
+  const isFollowing = false;
   const [state, setState] = useState({
     editedFirstName: '',
     editedLastName: '',
@@ -202,6 +204,14 @@ const UPDATE_USER_MUTATION = gql`
     setIsEditing(false);
   };
 
+  const handleFollow = () => {
+
+  }
+
+  const handleUnfollow = () => {
+    
+  }
+
   return (
     <div className={styles.main}>
       <div className={styles.up}>
@@ -277,13 +287,21 @@ const UPDATE_USER_MUTATION = gql`
           </div>
         </div>
         <div className={styles.divButton}>
-          {isEditing ? (
-          <>
-            <button className={styles.button} onClick={handleSave}>Zapisz zmiany</button>
-            <button className={styles.buttonCancel} onClick={cancelEdit}>Anuluj</button>
-          </>
+        {isAuthorized ? (
+          isEditing ? (
+            <>
+              <button className={styles.button} onClick={handleSave}>Zapisz zmiany</button>
+              <button className={styles.buttonCancel} onClick={cancelEdit}>Anuluj</button>
+            </>
+          ) : (
+            <button className={styles.button} onClick={toggleEditMode}>Edytuj Profil</button>
+          )
         ) : (
-          <button className={styles.button} onClick={toggleEditMode}>Edytuj Profil</button>
+          isFollowing ? (
+            <button className={styles.buttonCancel} onClick={handleUnfollow}>Przestań obserwować</button>
+          ) : (
+            <button className={styles.button} onClick={handleFollow}>Obserwuj</button>
+          )
         )}
         </div>
       </div>

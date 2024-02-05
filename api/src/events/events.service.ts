@@ -81,5 +81,16 @@ export class EventsService implements OnModuleInit {
             .orderBy('event.date', 'DESC')
             .getMany();
     }
+
+    async countAttendees(id: number): Promise<number> {
+        const event = await this.eventRepo.findOne({
+            where: { id},
+            relations: { attendees: true },
+        });
+        if (!event || !event.attendees) {
+            return 0;
+        }
+        return event.attendees.length;
+    }
     
 }

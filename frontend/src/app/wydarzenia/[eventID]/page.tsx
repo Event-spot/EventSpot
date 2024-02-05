@@ -30,6 +30,7 @@ type Attendee = {
   id:number;
   firstname:string;
   lastname:string;
+  avatarImage: string;
 };
 type Detail = {
   general_information:string;
@@ -64,6 +65,7 @@ query{
     competitions,
     localization_details,
     bannerImage,
+    attendeesCount,
     organizer {
       id
       avatarImage
@@ -71,8 +73,10 @@ query{
       lastname
     }
     attendees{
+      id,
       firstname,
-      lastname
+      lastname,
+      avatarImage
     }
     comments {
       id
@@ -97,6 +101,8 @@ const UPDATE_EVENT_MUTATION = gql`
   const { loading, error, data, refetch } = useQuery(GET_EVENTS);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedBackground, setSelectedBackground] = useState<File | null>(null);
+  const isAuthorized = false;
+  const isFollowing = false;
   const [eventDetails, setEventDetails] = useState({
     editedName: '',
     editedLocalization: '',
@@ -199,6 +205,13 @@ const UPDATE_EVENT_MUTATION = gql`
     setIsEditing(false);
   };
 
+  const handleFollow = () => {
+
+  }
+
+  const handleUnfollow = () => {
+    
+  }
   return (
     <div className={styles.main}>
     
@@ -257,14 +270,22 @@ const UPDATE_EVENT_MUTATION = gql`
         </div>
         <div>
         <div className={styles.divButton}>
-          {isEditing ? (
+          {isAuthorized ? (
+          isEditing ? (
             <>
               <button className={styles.button} onClick={handleSave}>Zapisz zmiany</button>
               <button className={styles.buttonCancel} onClick={cancelEdit}>Anuluj</button>
             </>
           ) : (
-            <button className={styles.button} onClick={toggleEditMode}>Edytuj Profil</button>
-          )}
+            <button className={styles.button} onClick={toggleEditMode}>Edytuj Event</button>
+          )
+        ) : (
+          isFollowing ? (
+            <button className={styles.buttonCancel} onClick={handleUnfollow}>Opuść</button>
+          ) : (
+            <button className={styles.button} onClick={handleFollow}>Dołącz</button>
+          )
+        )}
         </div>
         </div>
        
@@ -276,7 +297,7 @@ const UPDATE_EVENT_MUTATION = gql`
         
         <div className={styles.participantscomp}>
           <div className={styles.participantsHeader}>
-            Wezmą udział
+            Wezmą udział: {event.attendeesCount}
           </div>
           <div className={styles.participantsTable}>
           {event.attendees?.map((attendee: Attendee, index: number) => (
@@ -285,6 +306,7 @@ const UPDATE_EVENT_MUTATION = gql`
                 id={attendee.id}
                 imie={attendee.firstname}
                 nazwisko={attendee.lastname}
+                avatarImage={attendee.avatarImage}
               />
             ))
           }

@@ -70,10 +70,10 @@ export default function EventHistory(props:{futureEvents:Event[], pastEvents:Eve
                 >
                   <Image 
                     className={styles.eventbanner} 
-                    src={futureEvents.bannerImage} 
+                    src={futureEvents.bannerImage || eventimage} 
                     alt={'Event Banner'}
                     width={500}
-                    height={500}
+                    height={500}                  
                   />
                   <h3 className="vertical-timeline-element-title">{futureEvents.name}</h3>
                   <div className={styles.subtitle}>
@@ -107,7 +107,13 @@ export default function EventHistory(props:{futureEvents:Event[], pastEvents:Eve
                   />
                   </Link>}
                 >
-                  <Image className={styles.eventbanner} src={eventimage} alt={'Event Banner'} />
+                  <Image 
+                    className={styles.eventbanner} 
+                    src={pastEvents.bannerImage || eventimage} 
+                    alt={'Event Banner'}
+                    width={500}
+                    height={500}                  
+                  />
                   <h3 className="vertical-timeline-element-title">{pastEvents.name}</h3>
                   <div className={styles.subtitle}>
                   <h4 className={styles.h4Subtitle}>{pastEvents.localization}</h4>

@@ -39,7 +39,7 @@ export default function Navbar() {
     <div className={`${styles.container} ${isSticky ? styles.sticky : ''}`}>
       <Link href='/'><span className={styles.logo}>EventSpot</span></Link>
       <Hamburger onClick={ShowMenu} />
-      <Menu className={menuIsOpen && styles.menuOpen} />
+      <Menu className={menuIsOpen ? styles.menuOpen : ''} onClose={CloseMenu} />
       <ul className={styles.navigation}>
                 <Link href={'/wydarzenia'}><li className={styles.option}>Wydarzenia</li></Link>
                 <Link href={'/createevent'}><li className={styles.option}>Utwórz Wydarzenie</li></Link>

@@ -1,18 +1,20 @@
 @import '../../assets/styles/colors';
 .main {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 10px;
+  margin: 0% 5% 0% 5%;
+  height: 100%;
+  
+
+ .container {
     display: flex;
-    flex-direction: column;
-    // justify-content: center;
-    margin: 0% 5% 0% 5%;
-    padding: 10px;
-    min-height: auto;
-    
-    .container {
-      display: flex;
-      flex-direction: row;
-      justify-content: center;
-      flex-wrap: wrap;
-      
-      
-    }
+    margin: auto;
+    flex-direction: row;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+
+
 }
