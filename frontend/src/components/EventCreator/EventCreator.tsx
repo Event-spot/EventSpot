@@ -46,7 +46,7 @@ export const EventCreator = () => {
 
     const [createEvent] = useMutation(CREATE_EVENT_MUTATION);
     
-    const onSubmit = (data) => {
+    const onSubmit = (data: any) => {
         const eventData = {
             name: data.EventName,
             date: combineDateAndTime(data.EventDate, data.EventTime),
