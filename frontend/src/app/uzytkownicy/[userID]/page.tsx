@@ -62,11 +62,13 @@ export default function Profile({ params: { userID } }: Params) {
                 id,
                 firstname,
                 lastname,
+                avatarImage,
             }
             followers{
               id,
               firstname,
               lastname,
+              avatarImage,
             }
             events {
               id,
@@ -134,15 +136,14 @@ const FOLLOW_USER_MUTATION = gql`
   const [unFollowUser] = useMutation(UN_FOLLOW_USER_MUTATION);
   const { loading, error, data, refetch } = useQuery(GET_USERS_EVENTS_FOLLOWINGS);
   const [isCurrentlyFollowing, setIsCurrentlyFollowing] = useState(false);
-  const [followers, setFollowers] = useState<Follower[]>([]);
-  const [following, setFollowing] = useState<Followersy[]>([]);
+  // const [followers, setFollowers] = useState<Follower[]>([]);
+  // const [following, setFollowing] = useState<Followersy[]>([]);
   const [followersCount, setFollowersCount] = useState(0);
-
 
   useEffect(() => {
     if (data && data.userById) {
-      setFollowers(data.userById.followers || []);
-      setFollowing(data.userById.following || []);
+      // setFollowers(data.userById.followers || []);
+      // setFollowing(data.userById.following || []);
       setFollowersCount(data.userById.followers.length || 0);
       const isFollowing = data.userById.followers.some((follower: any) => follower.id === currentUser?.id);
       setIsCurrentlyFollowing(isFollowing);
@@ -243,39 +244,33 @@ const FOLLOW_USER_MUTATION = gql`
   };
 
   const handleFollow = async () => {
-    if (currentUser) {
+    if (!currentUser) {
+      Notifications.show({ title: 'Zaloguj się', message: 'Musisz być zalogowany, aby obserwować użytkownika.', color: 'red' });
+      return;
+    }
+    try {
       if (isCurrentlyFollowing) {
         await unFollowUser({
           variables: {
             userId: currentUser.id,
-            followingId: user.id, 
-          },
+            followingId: parseInt(userID, 10),
+          }
         });
-        refetch();
-        setIsCurrentlyFollowing(false);
-        const newFollowersList = followers.filter(follower => follower.id !== currentUser.id);
-        setFollowers(newFollowersList);
-        setFollowersCount(newFollowersList.length);
+        Notifications.show({ title: 'Sukces', message: 'Przestałeś obserwować użytkownika.', color: 'green' });
       } else {
         await followUser({
           variables: {
             userId: currentUser.id,
-            followingId: user.id,
+            followingId: parseInt(userID, 10),
           },
         });
-        refetch();
-        setIsCurrentlyFollowing(true);
-        const newFollower: Follower = { id: currentUser.id, firstname: currentUser.firstName, lastname: currentUser.lastName };
-        const newFollowersList = [...followers, newFollower];
-        setFollowers(newFollowersList);
-        setFollowersCount(newFollowersList.length);
+        Notifications.show({ title: 'Sukces', message: 'Zacząłeś obserwować użytkownika.', color: 'green' });
       }
-    } else {
-      Notifications.show({
-        color: 'red',
-        title: 'Zaloguj się',
-        message: 'Zaloguj się, aby obserwować',
-      });
+      setIsCurrentlyFollowing(!isCurrentlyFollowing);
+      refetch(); 
+    } catch (error) {
+      console.error('Error updating follow status:', error);
+      Notifications.show({ title: 'Błąd', message: 'Nie udało się zaktualizować statusu obserwacji.', color: 'red' });
     }
   };
   
@@ -457,8 +452,8 @@ const FOLLOW_USER_MUTATION = gql`
             </div>
             <div className={styles.followersContainer}>
               <Followers 
-              following={following}
-              followers={followers}
+              following={user.following}
+              followers={user.followers}
               />
             </div>        
       </div>

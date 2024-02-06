@@ -6,6 +6,10 @@ import Image from "next/image";
 import eventimage from '../../assets/images/illegalzone.png'; 
 import Link from 'next/link';
 
+const formatDate = (dateString: string) => {
+  const options: Intl.DateTimeFormatOptions = { year: 'numeric', month: 'long', day: 'numeric' };
+  return new Date(dateString).toLocaleDateString('pl-PL', options);
+};
 type Organizer = {
   id: number;
   avatarImage: string;
@@ -13,7 +17,7 @@ type Organizer = {
 type Event = {
   id: number; 
   name:string;
-  date:Date;
+  date: string;
   localization:string;
   bannerImage:string;
   events:[];
@@ -54,7 +58,7 @@ export default function EventHistory(props:{futureEvents:Event[], pastEvents:Eve
                 <VerticalTimelineElement
                   visible={true}
                   key={index}
-                  date={futureEvents.date}
+                  date={formatDate(futureEvents.date)}
                   icon={<Link href={`../uzytkownicy/${futureEvents.organizer.id}`}>
                   <img 
                     src={futureEvents.organizer.avatarImage} 
@@ -93,7 +97,7 @@ export default function EventHistory(props:{futureEvents:Event[], pastEvents:Eve
                 <VerticalTimelineElement
                   visible={true}
                   key={index}
-                  date={pastEvents.date}
+                  date={formatDate(pastEvents.date)}
                   icon={<Link href={`../uzytkownicy/${pastEvents.organizer.id}`}>
                   <img 
                     src={pastEvents.organizer.avatarImage} 

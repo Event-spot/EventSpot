@@ -14,6 +14,7 @@ import Link from "next/link";
 import UploadForm from "@/components/UploadTest/Upload";
 import { useAuth } from "@/context/AuthContext";
 import { Notifications } from '@mantine/notifications';
+import { Button } from '@mantine/core';
 
 type Event = {
   id:number;
@@ -24,7 +25,7 @@ type Comment = {
   user: any;
   id:number;
   content:string;
-  createDate:string;
+  createDate: string;
   firstname: string;
   lastname:string;
 };
@@ -88,6 +89,7 @@ query{
         id
         firstname
         lastname
+        avatarImage
       }
     }
 
@@ -110,6 +112,11 @@ const JOIN_EVENT_MUTATION = gql`
     leaveEvent(eventId: $eventId, userId: $userId)
   }
   `;
+  const ADD_COMMENT_MUTATION = gql`
+  mutation addComment($userId: Int!, $eventId: Int!, $content: String!){
+    addComment(addCommentInput:{user:$userId, event: $eventId, content: $content})
+  }
+  `;
   const { loading, error, data, refetch } = useQuery(GET_EVENTS);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedBackground, setSelectedBackground] = useState<File | null>(null);
@@ -127,6 +134,7 @@ const JOIN_EVENT_MUTATION = gql`
   const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
   const [joinEvent] = useMutation(JOIN_EVENT_MUTATION);
   const [leaveEvent] = useMutation(LEAVE_EVENT_MUTATION);
+  const [addComment ] = useMutation(ADD_COMMENT_MUTATION);
 
   useEffect(() => {
     if (data && data.eventById && currentUser) {
@@ -208,9 +216,6 @@ const JOIN_EVENT_MUTATION = gql`
           },
         },
       });
-      
-      // Handle success response
-      // console.log(response);
       setIsEditing(false);
       await refetch();
     } catch (error) {
@@ -260,6 +265,32 @@ const JOIN_EVENT_MUTATION = gql`
     } catch (error) {
       console.error('Error leaving event:', error);
       Notifications.show({ title: 'Błąd', message: 'Nie udało się opuścić wydarzenia.', color: 'red' });
+    }
+  };
+
+  const handleSubmitComment = async () => {
+    const comment = textareaRef.current?.value;
+    if (comment && currentUser) {
+      try {
+        await addComment({
+          variables: {
+            eventId: event.id,
+            userId: currentUser.id,
+            content: comment,
+          },
+        });
+        
+        refetch();
+        
+        if (textareaRef.current) {
+          textareaRef.current.value = '';
+        }
+        
+        Notifications.show({ title: 'Sukces', message: 'Komentarz został dodany.', color: 'green' });
+      } catch (error) {
+        console.error('Error submitting comment:', error);
+        Notifications.show({ title: 'Błąd', message: 'Nie udało się dodać komentarza.', color: 'red' });
+      }
     }
   };
   return (
@@ -383,25 +414,32 @@ const JOIN_EVENT_MUTATION = gql`
         </div>
       </div>
 
-      <div className={styles.afternext}>
-        <div className={styles.komentarze}>
-        <div className={styles.write}>
-        <textarea
-          ref={textareaRef}
-          placeholder='Napisz komentarz'/>
-      </div>
-        {event.comments?.map((comment: Comment, index: number) => (
-          <Comment
-          key={index}
-          id={comment.id}
-          imie={comment.user.firstname}
-          nazwisko={comment.user.lastname}
-          content={comment.content}
-          createDate={comment.createDate}/>
-            ))
-          }
+        <div className={styles.afternext}>
+          <div className={styles.komentarze}>
+            {currentUser && (
+              <div className={styles.write}>
+                <textarea
+                  ref={textareaRef}
+                  placeholder='Napisz komentarz'
+                />
+                <Button fullWidth onClick={handleSubmitComment} color="#8A5FC0" radius="xl">Wyślij</Button>
+              </div>
+            )}
+            {event.comments?.map((comment: Comment, index: number) => (
+              <Comment
+                key={index}
+                id={comment.id}
+                userId={comment.user.id}
+                imie={comment.user.firstname}
+                nazwisko={comment.user.lastname}
+                content={comment.content}
+                createDate={comment.createDate}
+                avatarImage={comment.user.avatarImage}
+              />
+                ))
+              }
           </div>
-      </div>
+        </div>
     </div>
   );
 }
