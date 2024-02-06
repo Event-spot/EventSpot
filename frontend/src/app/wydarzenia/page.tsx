@@ -98,10 +98,6 @@ export default function wydarzenia() {
       setCurrentEventy(sortedEventy);
 }, [sortOption, data?.events, currentPage, filterStartDate, filterEndDate, filterLocalization,filterOrganizer, searchQuery]);
 
-
-
-
-
   return (
 <div className={styles.main}>
 

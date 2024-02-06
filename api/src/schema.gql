@@ -72,8 +72,8 @@ type Mutation {
   updateUser(updateUserArgs: UpdateUserArgs!): String!
   changeDescription(updateDescriptionInput: UpdateDescriptionInput!): String!
   deleteDescription(userId: Float!): String!
-  joinEvent(joinEventInput: JoinEventInput!): String!
-  leaveEvent(joinEventInput: JoinEventInput!): String!
+  joinEvent(eventId: Int!, userId: Int!): String!
+  leaveEvent(eventId: Int!, userId: Int!): String!
   follow(followInput: FollowInput!): String!
   unfollow(followInput: FollowInput!): String!
   addEvent(addEventArgs: AddEventArgs!): String!
@@ -114,11 +114,6 @@ input UpdateUserArgs {
 input UpdateDescriptionInput {
   id: Int!
   description: String!
-}
-
-input JoinEventInput {
-  userId: Int!
-  eventId: Int!
 }
 
 input FollowInput {

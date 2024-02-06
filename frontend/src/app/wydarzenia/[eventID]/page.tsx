@@ -12,6 +12,8 @@ import { useMutation, gql } from "@apollo/client";
 import { useRef, useState, useEffect } from "react";
 import Link from "next/link";
 import UploadForm from "@/components/UploadTest/Upload";
+import { useAuth } from "@/context/AuthContext";
+import { Notifications } from '@mantine/notifications';
 
 type Event = {
   id:number;
@@ -98,11 +100,19 @@ const UPDATE_EVENT_MUTATION = gql`
     updateEvent(updateEventArgs: $updateEventArgs)
   }
 `;
+const JOIN_EVENT_MUTATION = gql`
+  mutation joinEvent($eventId: Int!, $userId: Int!){
+    joinEvent(eventId: $eventId, userId: $userId)
+  }
+  `;
+  const LEAVE_EVENT_MUTATION = gql`
+  mutation leaveEvent($eventId: Int!, $userId: Int!){
+    leaveEvent(eventId: $eventId, userId: $userId)
+  }
+  `;
   const { loading, error, data, refetch } = useQuery(GET_EVENTS);
   const [isEditing, setIsEditing] = useState(false);
   const [selectedBackground, setSelectedBackground] = useState<File | null>(null);
-  const isAuthorized = false;
-  const isFollowing = false;
   const [eventDetails, setEventDetails] = useState({
     editedName: '',
     editedLocalization: '',
@@ -111,8 +121,20 @@ const UPDATE_EVENT_MUTATION = gql`
     editedCompetitions: '',
     editedLocalization_details: ''
   });
-
+  const { currentUser } = useAuth();
+  const [isOrganizer, setIsOrganizer] = useState(false);
+  const [isAlreadyIn, setIsAlreadyIn] = useState(false);
   const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
+  const [joinEvent] = useMutation(JOIN_EVENT_MUTATION);
+  const [leaveEvent] = useMutation(LEAVE_EVENT_MUTATION);
+
+  useEffect(() => {
+    if (data && data.eventById && currentUser) {
+      setIsOrganizer(data.eventById.organizer.id === currentUser.id);
+      const isParticipant = data.eventById.attendees.some((attendee: any)=> attendee.id === currentUser.id);
+      setIsAlreadyIn(isParticipant);
+    }
+  }, [data, currentUser]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -127,12 +149,6 @@ const UPDATE_EVENT_MUTATION = gql`
     }));
   };
 
-  // const handleMapChange = (name: string, value: string) => {
-  //   setEventDetails(prevDetails => ({
-  //     ...prevDetails,
-  //     [name]: value,
-  //   }));
-  // };
 
   const handleBackgroundSelect = (file: File) => {
     setSelectedBackground(file);
@@ -205,13 +221,47 @@ const UPDATE_EVENT_MUTATION = gql`
     setIsEditing(false);
   };
 
-  const handleFollow = () => {
+  const handleJoin = async () => {
+    if (!currentUser) {
+      Notifications.show({ title: 'Zaloguj się', message: 'Musisz być zalogowany, aby dołączyć do wydarzenia.', color: 'red' });
+      return;
+    }
+  
+    try {
+      await joinEvent({
+        variables: {
+          eventId: parseInt(eventID, 10),
+          userId: currentUser.id, 
+        }
+      });
+      Notifications.show({ title: 'Sukces', message: 'Dołączyłeś do wydarzenia.', color: 'green' });
+      refetch(); 
+    } catch (error) {
+      console.error('Error joining event:', error);
+      Notifications.show({ title: 'Błąd', message: 'Nie udało się dołączyć do wydarzenia.', color: 'red' });
+    }
+  };
 
-  }
-
-  const handleUnfollow = () => {
-    
-  }
+  const handleLeave = async () => {
+    if (!currentUser) {
+      Notifications.show({ title: 'Zaloguj się', message: 'Musisz być zalogowany, aby opuścić wydarzenie.', color: 'red' });
+      return;
+    }
+  
+    try {
+      await leaveEvent({
+        variables: {
+          eventId: parseInt(eventID, 10),
+          userId: currentUser.id, 
+        }
+      });
+      Notifications.show({ title: 'Sukces', message: 'Opuściłeś wydarzenie.', color: 'green' });
+      refetch(); 
+    } catch (error) {
+      console.error('Error leaving event:', error);
+      Notifications.show({ title: 'Błąd', message: 'Nie udało się opuścić wydarzenia.', color: 'red' });
+    }
+  };
   return (
     <div className={styles.main}>
     
@@ -270,7 +320,7 @@ const UPDATE_EVENT_MUTATION = gql`
         </div>
         <div>
         <div className={styles.divButton}>
-          {isAuthorized ? (
+        {isOrganizer ? (
           isEditing ? (
             <>
               <button className={styles.button} onClick={handleSave}>Zapisz zmiany</button>
@@ -279,12 +329,10 @@ const UPDATE_EVENT_MUTATION = gql`
           ) : (
             <button className={styles.button} onClick={toggleEditMode}>Edytuj Event</button>
           )
+        ) : isAlreadyIn ? (
+          <button className={styles.buttonCancel} onClick={handleLeave}>Opuść</button>
         ) : (
-          isFollowing ? (
-            <button className={styles.buttonCancel} onClick={handleUnfollow}>Opuść</button>
-          ) : (
-            <button className={styles.button} onClick={handleFollow}>Dołącz</button>
-          )
+          <button className={styles.button} onClick={handleJoin}>Dołącz</button>
         )}
         </div>
         </div>

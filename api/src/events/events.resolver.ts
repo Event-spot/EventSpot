@@ -47,4 +47,20 @@ export class EventsResolver {
     eventsCount(@Parent() event: Events) {
         return this.eventService.countAttendees(event.id);
     }
+
+    @Mutation(returns => String, { name: 'joinEvent' })
+    joinEvent(
+        @Args('eventId', { type: () => Int }) eventId: number,
+        @Args('userId', { type: () => Int }) userId: number,
+    ): Promise<string> {
+        return this.eventService.joinEvent(userId, eventId);
+    }
+
+    @Mutation(returns => String, { name: 'leaveEvent' })
+    leaveEvent(
+        @Args('eventId', { type: () => Int }) eventId: number,
+        @Args('userId', { type: () => Int }) userId: number,
+    ): Promise<string> {
+        return this.eventService.leaveEvent(userId, eventId);
+    }
 }

@@ -1,16 +1,19 @@
 import { useState } from 'react';
 import styles from './Followers.module.scss';
 
-type User = {
-  id: number; 
+interface User {
+  id: number;
   firstname: string;
   lastname: string;
-  following:User[];
+}
+
+type Props = {
   followers: User[];
+  following: User[];
 };
 
-export default function Followers(props:{user:User}) {
-const {id,following,followers }= props.user;
+export default function Followers({ followers, following }: Props) {
+// const {id,following,followers }= props.user;
 
   const [activeTab, setActiveTab] = useState('obserwujacy');
 
@@ -38,14 +41,14 @@ const {id,following,followers }= props.user;
       <div className={styles.tabContent}>
         {activeTab === 'obserwujacy' && (
           <div className={styles.tabPanel}>
-         {props.user.followers.map((followers:User, index: number)=>(
+         {followers.map((followers, index: number)=>(
              <p key={index}>{followers.firstname} {followers.lastname}</p>
            ))}
           </div>
         )}
         {activeTab === 'obserwowani' && (
           <div className={styles.tabPanel}>
-           {props.user.following.map((following:User, index: number)=>(
+           {following.map((following, index: number)=>(
              <p key={index}>{following.firstname} {following.lastname}</p>
            ))}
           </div>
