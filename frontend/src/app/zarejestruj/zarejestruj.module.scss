@@ -1,17 +1,23 @@
 @import "../../assets/styles/colors";
 
-.dropdown {
-  height: 400px;
-  z-index: 999;
-  background-color: $white;
-  box-shadow: 1px 1px 10px $black;
+.container {
+  width: 100%;
   display: flex;
   flex-direction: column;
-  justify-content: space-around;
   align-items: center;
 }
 
+.form {
+  width: 50%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-top: 50px;
+  padding-bottom: 50px;
+}
+
 .wrapper {
+  margin-top: 20px;
   width: 100%;
   display: flex;
   justify-content: center;
@@ -50,48 +56,15 @@
 }
 
 .button {
+  margin-top: 50px;
   background-color: $secondary;
-  width: 60%;
+  width: 200px;
 
   &:hover {
     background-color: lighten($secondary, 10%);
   }
 }
 
-.loginButton {
-  background-color: $secondary;
-
-  &:hover {
-    background-color: lighten($secondary, 10%);
-  }
-}
-
-.text {
-  color: $secondary;
-  width: 100%;
-  cursor: pointer;
-  text-align: center;
-}
-
-.loginForm {
-  height: 100%;
-  width: 100%;
-  display: flex;
-  flex-direction: column;
-  justify-content: space-around;
-  align-items: center;
-}
-
-.errorMsg {
+.error{
   color: red;
-  font-size: 14px;
-  font-weight: bold;
-}
-
-.registerLink {
-  text-decoration: none;
-  width: 60%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
 }
