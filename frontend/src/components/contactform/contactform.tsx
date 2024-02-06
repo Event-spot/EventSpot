@@ -4,7 +4,13 @@ import styles from './contactform.module.scss';
 import { useForm } from 'react-hook-form';
 import * as yup from 'yup';
 import { yupResolver } from '@hookform/resolvers/yup';
+import {useMutation, gql } from "@apollo/client";
 
+const ADD_CONTACT_MUTATION = gql`
+mutation addContact($title: String!, $email: String!, $number: Int!, $message: String!){
+  addContact(addContactArgs:{title:$title, email:$email, number:$number, message:$message})
+}
+`;
 const ContactForm = () => {
   const schema = yup.object().shape({
     PhoneNumber: yup.string().matches(/^\d{9}$/, "Numer telefonu musi składać się z 9 cyfr").required("To pole jest wymagane"),
@@ -18,14 +24,26 @@ const ContactForm = () => {
   });
 
   const [isFormSubmitted, setIsFormSubmitted] = useState(false);
-
+  const [addContact] = useMutation(ADD_CONTACT_MUTATION);
   const eventRef = useRef<React.BaseSyntheticEvent>();
 
   const onSubmit = (data: any) => {
-    console.log(data);
-    setIsFormSubmitted(true);
-    reset(); // Resetuje wartości pól formularza
-    // Tutaj możesz korzystać z eventRef.current
+    // Konwersja numeru telefonu na typ Int
+    const number = parseInt(data.PhoneNumber, 10);
+    // Wywołanie mutacji z Apollo Client
+    addContact({
+      variables: {
+        title: data.Topic,
+        email: data.Email,
+        number: number,
+        message: data.Details,
+      },
+    }).then(() => {
+      setIsFormSubmitted(true); // Zaktualizuj stan, aby pokazać potwierdzenie
+      reset(); // Resetowanie formularza
+    }).catch((error) => {
+      console.error("Błąd przy wysyłaniu formularza:", error);
+    });
   };
 
   return (

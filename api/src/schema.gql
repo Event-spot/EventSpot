@@ -55,6 +55,14 @@ type users {
   eventsCount: Float!
 }
 
+type contact {
+  id: Int!
+  title: String!
+  email: String!
+  number: Int!
+  message: String!
+}
+
 type Query {
   users: [users!]!
   userById(userId: Int!): users!
@@ -64,6 +72,7 @@ type Query {
   pastEvents(userId: Int!): [events!]!
   comments: [comments!]!
   commentById(commentId: Int!): comments!
+  contact: [contact!]!
 }
 
 type Mutation {
@@ -82,6 +91,7 @@ type Mutation {
   deleteComment(commentId: Float!): String!
   addComment(addCommentInput: AddCommentInput!): String!
   updateComment(updateCommentInput: UpdateCommentInput!): String!
+  addContact(addContactArgs: AddContactArgs!): String!
 }
 
 input AddUserArgs {
@@ -151,4 +161,11 @@ input AddCommentInput {
 input UpdateCommentInput {
   id: Int!
   content: String!
+}
+
+input AddContactArgs {
+  title: String!
+  email: String!
+  number: Int!
+  message: String!
 }

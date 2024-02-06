@@ -60,8 +60,9 @@ export default function Navbar() {
             </ul>
             <ul className={styles.profileSection}>
                 {currentUser ? <LoggedUser/> : <LoginPopover isOpened={opened} open={open} close={close}/>}
-                <Overlay className={menuIsOpen ? styles.overlayShow : ''} onClick={CloseMenu} />
             </ul>
+            <Overlay className={menuIsOpen ? styles.overlayShow : ''} onClick={CloseMenu} />
+
         </div>
     );
 }
