@@ -74,10 +74,6 @@ const Map: React.FC<MapProps> = ({lokalizacja, data, isEditing, handleDetailChan
   return (
   
     <div className={styles.maps}>
-      
-      <div className={styles.button}>
-      <button className={styles.roundedButton}>Wezmę udział</button>
-      </div>
       <div className={styles.date}>
       {isEditing ? (
           <>

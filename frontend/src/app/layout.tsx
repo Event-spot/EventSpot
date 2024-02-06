@@ -8,6 +8,8 @@ import {loadErrorMessages, loadDevMessages} from "@apollo/client/dev";
 import {ApolloWrapper} from "@/lib/ApolloWrapper";
 import {AuthProvider} from "@/context/AuthContext";
 import AuthorizationCheck from "@/utils/AuthorizationCheck";
+import { Notifications } from '@mantine/notifications';
+import '@mantine/notifications/styles.css';
 
 loadDevMessages();
 loadErrorMessages();
@@ -27,6 +29,7 @@ export default function RootLayout({children}: { children: React.ReactNode }) {
         <ApolloWrapper>
             <AuthProvider>
                 <MantineProvider>
+                <Notifications />
                     <AuthorizationCheck>
                         <Navbar/>
                         {children}

@@ -1,11 +1,5 @@
 'use client'
-import React, {Context, createContext, useState} from "react";
-
-
-interface IAuthContext {
-    currentUser: IUser | null;
-    setCurrentUser: React.Dispatch<React.SetStateAction<IUser | null>>;
-}
+import React, { createContext, useState, ReactNode, Dispatch, SetStateAction } from "react";
 
 interface IUser {
     id: number;
@@ -14,16 +8,31 @@ interface IUser {
     avatarImage: string;
 }
 
-const AuthContext: Context<IAuthContext | null> = createContext<IAuthContext | {}>({});
-
-export const AuthProvider = ({children}: React.PropsWithChildren) => {
-    const [currentUser, setCurrentUser] = useState<IUser | null>();
-
-    return (
-        <AuthContext.Provider value={{currentUser, setCurrentUser}}>
-            {children}
-        </AuthContext.Provider>
-    )
+interface IAuthContext {
+    currentUser: IUser | null;
+    setCurrentUser: Dispatch<SetStateAction<IUser | null>>;
 }
 
-export const useAuth = () => React.useContext(AuthContext);
+const AuthContext = createContext<IAuthContext | null>(null);
+
+interface AuthProviderProps {
+    children: ReactNode;
+}
+
+export const AuthProvider = ({ children }: AuthProviderProps) => {
+    const [currentUser, setCurrentUser] = useState<IUser | null>(null);
+
+    return (
+        <AuthContext.Provider value={{ currentUser, setCurrentUser }}>
+            {children}
+        </AuthContext.Provider>
+    );
+};
+
+export const useAuth = () => {
+    const context = React.useContext(AuthContext);
+    if (context === null) {
+        throw new Error("useAuth must be used within an AuthProvider");
+    }
+    return context;
+};

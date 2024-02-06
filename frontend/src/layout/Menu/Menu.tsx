@@ -13,7 +13,7 @@ export default function Menu({ className, onClose }: MenuProps) {
             <li className={styles.option} onClick={onClose}><Link href='/createevent'>Utwórz Wydarzenie</Link></li>
             <li className={styles.option} onClick={onClose}><Link href='/uzytkownicy'>Użytkownicy</Link></li>
             <li className={styles.option} onClick={onClose}><Link href='/kontakt'>Kontakt</Link></li>
-            <li className={styles.option}>Zaloguj się</li>
+            <li className={styles.option} onClick={onClose}><Link href='/login'>Zaloguj się</Link></li>
         </ul>
     )
 }

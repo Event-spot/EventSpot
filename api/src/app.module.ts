@@ -11,6 +11,7 @@ import {typeormConfigAsync} from "./config/typeorm.config";
 import {EventsModule} from "./events/events.module";
 import CommentsModule from "./comments/comments.module";
 import {AuthModule} from "./auth/auth.module";
+import { ContactModule } from './contact/contact.module';
 
 @Module({
     imports: [
@@ -25,7 +26,8 @@ import {AuthModule} from "./auth/auth.module";
         UsersModule,
         EventsModule,
         CommentsModule,
-        AuthModule
+        AuthModule,
+        ContactModule
     ],
     controllers: [AppController],
     providers: [AppService],

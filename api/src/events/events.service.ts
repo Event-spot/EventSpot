@@ -92,5 +92,39 @@ export class EventsService implements OnModuleInit {
         }
         return event.attendees.length;
     }
+
+    async joinEvent(userId: number, eventId: number): Promise<string> {
+        const event = await this.eventRepo.findOne({ 
+            where: { id: eventId }, 
+            relations: ['attendees'] 
+        });
+        const user = await this.userService.findUserById(userId);
+
+        if (event.attendees.some(attendee => attendee.id === userId)) {
+            throw new Error('User already joined the event');
+        }
+
+        event.attendees.push(user);
+        await this.eventRepo.save(event);
+
+        return 'User has joined the event';
+    }
+
+    async leaveEvent(userId: number, eventId: number): Promise<string> {
+        const event = await this.eventRepo.findOne({ 
+            where: { id: eventId }, 
+            relations: ['attendees'] 
+        });
+
+        const index = event.attendees.findIndex(attendee => attendee.id === userId);
+        if (index === -1) {
+            throw new Error('User is not a participant of this event');
+        }
+
+        event.attendees.splice(index, 1);
+        await this.eventRepo.save(event);
+
+        return 'User has left the event';
+    }
     
 }

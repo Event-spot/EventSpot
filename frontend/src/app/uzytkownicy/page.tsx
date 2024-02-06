@@ -79,7 +79,7 @@ export default function Users() {
                             key={index}
                             imie={osoba.firstname}
                             nazwisko={osoba.lastname}
-                            lokalizacja={osoba.localization}
+                            lokalizacja={osoba.localization || "Miejscowość"}
                             odwiedzoneSpoty={osoba.eventsCount}
                             obserwowani={osoba.followingsCount}
                             obserwujacy={osoba.followersCount}
