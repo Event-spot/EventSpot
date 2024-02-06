@@ -17,6 +17,7 @@
     "@hookform/resolvers": "^3.3.4",
     "@mantine/core": "^7.3.2",
     "@mantine/hooks": "^7.3.2",
+    "@mantine/notifications": "^7.5.1",
     "@nextui-org/react": "^2.2.9",
     "@types/google.maps": "^3.54.10",
     "axios": "^1.6.7",

@@ -11,8 +11,9 @@ interface UpbarProps {
   onDateFilterChange?: (startDate: string, endDate: string) => void;
   onLocalizationFilterChange?: (localization: string) => void;
   onSearchQueryChange?: (query: string) => void;
+  onOrganizerFilterChange?: (organizer: string) => void;
 }
-const Upbar: React.FC<UpbarProps> = ({ pageType, onSortChange, onDateFilterChange, onLocalizationFilterChange,  onSearchQueryChange }) =>  {
+const Upbar: React.FC<UpbarProps> = ({ pageType, onSortChange, onDateFilterChange, onLocalizationFilterChange,onOrganizerFilterChange,  onSearchQueryChange }) =>  {
   const [rotation, setRotation] = useState(0);
   const [clickCount, setClickCount] = useState(0);
   const [isExpanded, setIsExpanded] = useState(false);
@@ -46,6 +47,12 @@ const handleDateChange = () => {
 const handleLocalizationChange = (event: React.ChangeEvent<HTMLInputElement>) => {
   if (onLocalizationFilterChange) {
       onLocalizationFilterChange(event.target.value);
+  }
+};
+
+const handleOrganizatorChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  if (onOrganizerFilterChange) {
+    onOrganizerFilterChange(event.target.value);
   }
 };
 const handleuserLocalizationChange = (person: React.ChangeEvent<HTMLInputElement>) => {
@@ -96,7 +103,7 @@ const rotate = () => {
             <option value="">Sortowanie domyślne</option>
             <option value="date+">Sortuj wg. daty do najbliższej</option>
             <option value="date-">Sortuj wg. daty do najdalszej</option>
-            <option  value="location">Sortuj alfabetycznie </option>
+            <option  value="location">Sortuj po lokalizacji </option>
             
           </select>
         </form>
@@ -129,7 +136,7 @@ const rotate = () => {
               </div>
               <div className={styles.inputsdownorganise}>
                 <p>Wprowadź nazwę organizatora</p>
-                <input type="text" placeholder="Wpisz nazwę organizatora" {...register("Nazwa_Organizatora_Eventy")} />
+                <input type="text" placeholder="Wpisz nazwę organizatora" {...register("Nazwa_Organizatora_Eventy")} onChange={handleOrganizatorChange} />
               </div>
               <div className={styles.inputsdownlocalization}>
                 <p>Wprowadź nazwę lokalizacji</p>

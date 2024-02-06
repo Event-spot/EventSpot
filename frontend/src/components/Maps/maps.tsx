@@ -1,51 +1,68 @@
 'use client'
-import React, {useEffect} from 'react';
+import React, { useState, useEffect, useRef} from 'react';
 import styles from './maps.module.scss';
 import {Loader} from '@googlemaps/js-api-loader';
 
 type MapProps ={
   lokalizacja:string;
   data:Date;
+  isEditing: boolean;
+  handleDetailChange: (name: string, value: string) => void;
 }
 
-const Map: React.FC<MapProps> = ({lokalizacja,data}) => {
-
-
-
-
-  const mapRef= React.useRef<HTMLDivElement>(null);  
+const Map: React.FC<MapProps> = ({lokalizacja, data, isEditing, handleDetailChange}) => {
+  const [editedLocalization, setEditedLocalization] = useState(lokalizacja);
+  const [editedDate, setEditedDate] = useState(data.toISOString().slice(0, 16));
+  const mapRef = useRef<HTMLDivElement>(null);
+  const getMinDateTime = () => {
+    const now = new Date();
+    return now.toISOString().slice(0, 16);
+  };
 
   useEffect(() => {
-    const loader = new Loader({
-      apiKey: process.env.NEXT_PUBLIC_MAPS_API_KEY as string,
-      version: 'weekly',
-    });
-
-    console.log(process.env.NEXT_PUBLIC_MAPS_API_KEY)
-  
-    loader.load().then(() => {
-      const google = window.google; // window.google będzie dostępne po załadowaniu skryptu
-      const geocoder = new google.maps.Geocoder();
-  
-      geocoder.geocode({ address: lokalizacja }, (results, status) => {
-        if (status === 'OK' && results && results.length > 0) {
-          const position = results[0].geometry.location;
-          if (mapRef.current) {
-            const map = new google.maps.Map(mapRef.current, {
-              center: position,
-              zoom: 15,
-            });
-            new google.maps.Marker({
-              map: map,
-              position: position,
-            });
-          }
-        } else {
-          console.error('Geocoding failed: ' + status);
-        }
+    if (!isEditing) {
+      const loader = new Loader({
+        apiKey: process.env.NEXT_PUBLIC_MAPS_API_KEY as string,
+        version: 'weekly',
       });
-    });
-  }, [lokalizacja]);
+  
+      loader.load().then(() => {
+        const google = window.google;
+        const geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ address: editedLocalization }, (results, status) => {
+          if (status === 'OK' && results != null && results.length > 0) {
+            const position = results[0].geometry.location;
+            if (mapRef.current) {
+              // Assign the map instance to a variable
+              const map = new google.maps.Map(mapRef.current, {
+                center: position,
+                zoom: 15,
+              });
+              // Use the map variable when creating the marker
+              new google.maps.Marker({
+                position,
+                map: map, // Correctly pass the map instance here
+              });
+            }
+          } else {
+            console.error(`Geocoding failed: ${status}`);
+          }
+        });
+      });
+    }
+  }, [editedLocalization, isEditing]);
+  
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
+    const { name, value } = e.target;
+    if (name === "editedLocalization") {
+      setEditedLocalization(value);
+    } else if (name === "editedDate") {
+      setEditedDate(value);
+    }
+    // Assuming the parent component can handle these updates appropriately.
+    handleDetailChange(name, value);
+  };
   
 
   const handleNavigation = () => {
@@ -57,32 +74,35 @@ const Map: React.FC<MapProps> = ({lokalizacja,data}) => {
   return (
   
     <div className={styles.maps}>
-      
-      <div className={styles.button}>
-      <button className={styles.roundedButton}>Wezmę udział</button>
-      </div>
       <div className={styles.date}>
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          height="16"
-          width="14"
-          viewBox="0 0 448 512"
-        >
-          <path d="M128 0c17.7 0 32 14.3 32 32V64H288V32c0-17.7 14.3-32 32-32s32 14.3 32 32V64h48c26.5 0 48 21.5 48 48v48H0V112C0 85.5 21.5 64 48 64H96V32c0-17.7 14.3-32 32-32zM0 192H448V464c0 26.5-21.5 48-48 48H48c-26.5 0-48-21.5-48-48V192zm64 80v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm128 0v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H208c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V272c0-8.8-7.2-16-16-16H336zM64 400v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H80c-8.8 0-16 7.2-16 16zm144-16c-8.8 0-16 7.2-16 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H208zm112 16v32c0 8.8 7.2 16 16 16h32c8.8 0 16-7.2 16-16V400c0-8.8-7.2-16-16-16H336c-8.8 0-16 7.2-16 16z" />
-        </svg>
-<p>
-  {data.getFullYear()}-{(data.getMonth() + 1).toString().padStart(2, '0')}-{data
-    .getDate()
-    .toString()
-    .padStart(2, '0')}/{data.getHours().toString().padStart(2, '0')}:{data
-    .getMinutes()
-    .toString()
-    .padStart(2, '0')}
-</p>
+      {isEditing ? (
+          <>
+            <input 
+              type="datetime-local"
+              name="editedDate"
+              value={editedDate}
+              required min={getMinDateTime()}
+              onChange={handleChange}
+            />
+            <input 
+              type="text"
+              name="editedLocalization"
+              value={editedLocalization}
+              onChange={handleChange}
+            />
+          </>
+        ) : (
+          <>
+            <p>{`${data.getFullYear()}-${(data.getMonth() + 1).toString().padStart(2, '0')}-${data.getDate().toString().padStart(2, '0')} ${data.getHours().toString().padStart(2, '0')}:${data.getMinutes().toString().padStart(2, '0')}`}</p>
+            <div className={styles.address}>
+              <div className={styles.addressName}>{lokalizacja}</div>
+            </div>
+          </>
+        )}
       </div>
-      <div className={styles.address}>
+      {/* <div className={styles.address}>
       <div className={styles.addressname}>{lokalizacja}</div>
-      </div>
+      </div> */}
       <button className={styles.buttonnav} onClick={handleNavigation}><p>Nawiguj &gt;</p></button>
       <div className={styles.mapa} ref={mapRef}>
       

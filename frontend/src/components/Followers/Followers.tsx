@@ -1,16 +1,23 @@
 import { useState } from 'react';
 import styles from './Followers.module.scss';
+import Link from 'next/link';
+import Image from 'next/image';
+import Question from '../../assets/images/question.png'; 
 
-type User = {
-  id: number; 
+interface User {
+  id: number;
   firstname: string;
   lastname: string;
-  following:User[];
+  avatarImage: string;
+}
+
+type Props = {
   followers: User[];
+  following: User[];
 };
 
-export default function Followers(props:{user:User}) {
-const {id,following,followers }= props.user;
+export default function Followers({ followers, following }: Props) {
+// const {id,following,followers }= props.user;
 
   const [activeTab, setActiveTab] = useState('obserwujacy');
 
@@ -38,16 +45,42 @@ const {id,following,followers }= props.user;
       <div className={styles.tabContent}>
         {activeTab === 'obserwujacy' && (
           <div className={styles.tabPanel}>
-         {props.user.followers.map((followers:User, index: number)=>(
-             <p key={index}>{followers.firstname} {followers.lastname}</p>
-           ))}
+         {followers.map((follower, index) => (
+            <div key={index} className={styles.followerItem}>
+              <Link href={`../uzytkownicy/${follower.id}`}>
+                
+                  <Image 
+                    className={styles.accountimage} 
+                    src={follower.avatarImage || Question}  
+                    alt={'Avatar Image'} 
+                    width={25}
+                    height={25}
+                  />
+                  <p>{follower.firstname} {follower.lastname}</p>
+                
+              </Link>
+            </div>
+          ))}
           </div>
         )}
         {activeTab === 'obserwowani' && (
           <div className={styles.tabPanel}>
-           {props.user.following.map((following:User, index: number)=>(
-             <p key={index}>{following.firstname} {following.lastname}</p>
-           ))}
+           {following.map((following, index) => (
+            <div key={index} className={styles.followerItem}>
+              <Link href={`../uzytkownicy/${following.id}`}>
+                
+                  <Image 
+                    className={styles.accountimage} 
+                    src={following.avatarImage || Question}  
+                    alt={'Avatar Image'} 
+                    width={25}
+                    height={25}
+                  />
+                  <p>{following.firstname} {following.lastname}</p>
+                
+              </Link>
+            </div>
+          ))}
           </div>
         )}
       </div>

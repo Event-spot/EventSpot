@@ -42,7 +42,8 @@ export default function Navbar() {
         <div className={`${styles.container} ${isSticky ? styles.sticky : ''}`}>
             <Link href='/'><span className={styles.logo}>EventSpot</span></Link>
             <Hamburger onClick={ShowMenu}/>
-            <Menu className={menuIsOpen && styles.menuOpen}/>
+            <Menu className={menuIsOpen ? styles.menuOpen : ''} onClose={CloseMenu} />
+
             <ul className={styles.navigation}>
                 <Link href={'/wydarzenia'}>
                     <li className={styles.option}>Wydarzenia</li>
@@ -59,8 +60,9 @@ export default function Navbar() {
             </ul>
             <ul className={styles.profileSection}>
                 {currentUser ? <LoggedUser/> : <LoginPopover isOpened={opened} open={open} close={close}/>}
-                <Overlay className={menuIsOpen && styles.overlayShow} onClick={CloseMenu}/>
             </ul>
+            <Overlay className={menuIsOpen ? styles.overlayShow : ''} onClick={CloseMenu} />
+
         </div>
     );
 }

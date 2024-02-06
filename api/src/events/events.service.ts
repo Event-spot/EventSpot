@@ -18,12 +18,12 @@ export class EventsService implements OnModuleInit {
         this.userService = this.moduleRef.get(UsersService, {strict: false});
     }
     async findAllEvents(): Promise<Events[]>{
-        let events: Events[] = await this.eventRepo.find({relations: ['attendees', 'comments', 'comments.user']});
+        let events: Events[] = await this.eventRepo.find({relations: ['attendees', 'comments', 'comments.user', 'organizer']});
         return events;
     }
 
     async findEventById(id: number): Promise<Events> {
-        let event: Events = await this.eventRepo.findOne({where: {id: id}, relations: ['attendees', 'comments', 'comments.user']});
+        let event: Events = await this.eventRepo.findOne({where: {id: id}, relations: ['attendees', 'comments', 'comments.user', 'organizer']});
         return event;
     }
 
@@ -40,6 +40,7 @@ export class EventsService implements OnModuleInit {
         event.general_information = addEventArgs.general_information;
         event.competitions = addEventArgs.competitions;
         event.localization_details = addEventArgs.localization_details;
+        event.bannerImage = addEventArgs.bannerImage;
 
         await this.eventRepo.save(event);
         return "Event has been added";
@@ -53,6 +54,7 @@ export class EventsService implements OnModuleInit {
         event.general_information = updateEventArgs.general_information;
         event.competitions = updateEventArgs.competitions;
         event.localization_details = updateEventArgs.localization_details;
+        event.bannerImage = updateEventArgs.bannerImage;
        
 
         await this.eventRepo.save(event);
@@ -63,6 +65,7 @@ export class EventsService implements OnModuleInit {
         const currentDate = new Date();
         return this.eventRepo.createQueryBuilder('event')
             .leftJoinAndSelect('event.attendees', 'attendee')
+            .leftJoinAndSelect('event.organizer', 'organizer')
             .where('event.date >= :currentDate', { currentDate })
             .andWhere('attendee.id = :userId', { userId })
             .getMany();
@@ -72,10 +75,56 @@ export class EventsService implements OnModuleInit {
         const currentDate = new Date();
         return this.eventRepo.createQueryBuilder('event')
             .leftJoinAndSelect('event.attendees', 'attendee')
+            .leftJoinAndSelect('event.organizer', 'organizer')
             .where('event.date < :currentDate', { currentDate })
             .andWhere('attendee.id = :userId', { userId })
             .orderBy('event.date', 'DESC')
             .getMany();
+    }
+
+    async countAttendees(id: number): Promise<number> {
+        const event = await this.eventRepo.findOne({
+            where: { id},
+            relations: { attendees: true },
+        });
+        if (!event || !event.attendees) {
+            return 0;
+        }
+        return event.attendees.length;
+    }
+
+    async joinEvent(userId: number, eventId: number): Promise<string> {
+        const event = await this.eventRepo.findOne({ 
+            where: { id: eventId }, 
+            relations: ['attendees'] 
+        });
+        const user = await this.userService.findUserById(userId);
+
+        if (event.attendees.some(attendee => attendee.id === userId)) {
+            throw new Error('User already joined the event');
+        }
+
+        event.attendees.push(user);
+        await this.eventRepo.save(event);
+
+        return 'User has joined the event';
+    }
+
+    async leaveEvent(userId: number, eventId: number): Promise<string> {
+        const event = await this.eventRepo.findOne({ 
+            where: { id: eventId }, 
+            relations: ['attendees'] 
+        });
+
+        const index = event.attendees.findIndex(attendee => attendee.id === userId);
+        if (index === -1) {
+            throw new Error('User is not a participant of this event');
+        }
+
+        event.attendees.splice(index, 1);
+        await this.eventRepo.save(event);
+
+        return 'User has left the event';
     }
     
 }

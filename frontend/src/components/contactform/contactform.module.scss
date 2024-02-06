@@ -31,7 +31,8 @@
     .upA,
     .upB,
     .upC,
-    .upD {
+    .upD,
+    .upE {
       width: 100%;
      
     
@@ -41,7 +42,7 @@
         margin-bottom: 5px;
       }
 
-      input {
+      input, textarea {
         border: 2px solid $primary;
         font-weight: normal;
         border-radius: 5px;
@@ -50,9 +51,16 @@
         width: 100%;
         margin-bottom: 10px;
       }
+      textarea{
+        resize: none;
+        min-height:200px;
+        width:100%;
+        text-align:left;
+      }
+      
      
     }
-   .upD{
+   .upE{
       display:flex;
       flex-direction: column;
       justify-content: center;

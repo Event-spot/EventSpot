@@ -15,6 +15,7 @@ interface Person {
     eventsCount: number;
     followersCount: number;
     followingsCount: number;
+    avatarImage: string;
 }
 
 export default function Users() {
@@ -63,35 +64,30 @@ export default function Users() {
 
     return(
         <div className={styles.main}>
-            <div>
+            <div className={styles.upbar}>
             <UpBar 
             pageType="uzytkownicy"
             onSearchQueryChange={(query) => setSearchQuery(query)}
             onLocalizationFilterChange={(newLocalization) => setFilterLocalization(newLocalization)}
              onSortChange={(selectedSort) => setSortOption(selectedSort)} />
             </div>
-
-            <div className={styles.users}>
-            <div className={styles.pages}>
                 <div className={styles.container}>
                     {!loading && data?.users &&
                         currentOsoby.map((osoba: Person, index: number) => (
-                            // .sort((a:any, b:any) => a.eventsCount - b.eventsCount)
                             <Person
                             id={osoba.id}
                             key={index}
                             imie={osoba.firstname}
                             nazwisko={osoba.lastname}
-                            lokalizacja={osoba.localization}
+                            lokalizacja={osoba.localization || "Miejscowość"}
                             odwiedzoneSpoty={osoba.eventsCount}
                             obserwowani={osoba.followingsCount}
                             obserwujacy={osoba.followersCount}
+                            avatarImage={osoba.avatarImage}
                             />
                         ))
                     }
-                    </div>
                 </div>
-            </div>
           
             <div className={styles.downbar}>
                 <Pagination

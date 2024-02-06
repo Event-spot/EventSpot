@@ -19,8 +19,11 @@ type events {
   general_information: String
   competitions: String
   localization_details: String
+  bannerImage: String
   comments: [comments!]
   attendees: [users!]
+  organizer: users!
+  attendeesCount: Float!
 }
 
 """
@@ -45,10 +48,19 @@ type users {
   following: [users!]
   events: [events!]
   comments: [comments!]
+  organizedEvents: [events!]
   followers: [users!]!
   followingsCount: Float!
   followersCount: Float!
   eventsCount: Float!
+}
+
+type contact {
+  id: Int!
+  title: String!
+  email: String!
+  number: Int!
+  message: String!
 }
 
 type Query {
@@ -60,6 +72,7 @@ type Query {
   pastEvents(userId: Int!): [events!]!
   comments: [comments!]!
   commentById(commentId: Int!): comments!
+  contact: [contact!]!
 }
 
 type Mutation {
@@ -68,8 +81,8 @@ type Mutation {
   updateUser(updateUserArgs: UpdateUserArgs!): String!
   changeDescription(updateDescriptionInput: UpdateDescriptionInput!): String!
   deleteDescription(userId: Float!): String!
-  joinEvent(joinEventInput: JoinEventInput!): String!
-  leaveEvent(joinEventInput: JoinEventInput!): String!
+  joinEvent(eventId: Int!, userId: Int!): String!
+  leaveEvent(eventId: Int!, userId: Int!): String!
   follow(followInput: FollowInput!): String!
   unfollow(followInput: FollowInput!): String!
   addEvent(addEventArgs: AddEventArgs!): String!
@@ -78,6 +91,7 @@ type Mutation {
   deleteComment(commentId: Float!): String!
   addComment(addCommentInput: AddCommentInput!): String!
   updateComment(updateCommentInput: UpdateCommentInput!): String!
+  addContact(addContactArgs: AddContactArgs!): String!
 }
 
 input AddUserArgs {
@@ -112,11 +126,6 @@ input UpdateDescriptionInput {
   description: String!
 }
 
-input JoinEventInput {
-  userId: Int!
-  eventId: Int!
-}
-
 input FollowInput {
   userId: Int!
   followingId: Int!
@@ -129,6 +138,7 @@ input AddEventArgs {
   general_information: String
   competitions: String
   localization_details: String
+  bannerImage: String
 }
 
 input UpdateEventArgs {
@@ -139,6 +149,7 @@ input UpdateEventArgs {
   general_information: String
   competitions: String
   localization_details: String
+  bannerImage: String
 }
 
 input AddCommentInput {
@@ -150,4 +161,11 @@ input AddCommentInput {
 input UpdateCommentInput {
   id: Int!
   content: String!
+}
+
+input AddContactArgs {
+  title: String!
+  email: String!
+  number: Int!
+  message: String!
 }

@@ -11,8 +11,11 @@ import { RiYoutubeFill } from "react-icons/ri";
 import Followers from "../../../components/Followers/Followers";
 import EventHistory from "../../../components/EventHistory/EventHistory";
 import {useMutation, gql } from "@apollo/client";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import UploadForm from "@/components/UploadTest/Upload";
+import { useAuth } from "@/context/AuthContext";
+import { Notifications } from '@mantine/notifications';
+
 
 
 
@@ -22,7 +25,16 @@ type User = {
   lastname: string;
   following: User[];
 };
-
+interface Follower {
+  id: number;
+  firstname: string;
+  lastname: string;
+}
+interface Followersy {
+  id: number;
+  firstname: string;
+  lastname: string;
+}
 type Params = {
   params: {
     userID: string;
@@ -50,11 +62,13 @@ export default function Profile({ params: { userID } }: Params) {
                 id,
                 firstname,
                 lastname,
+                avatarImage,
             }
             followers{
               id,
               firstname,
               lastname,
+              avatarImage,
             }
             events {
               id,
@@ -68,12 +82,22 @@ export default function Profile({ params: { userID } }: Params) {
         name,
         date,
         localization,
+        bannerImage,
+        organizer {
+          id,
+          avatarImage
+        }
       }
       pastEvents(userId: ${userID}) {
         id,
         name,
         date,
-        localization
+        localization,
+        bannerImage,
+        organizer {
+          id,
+          avatarImage
+        }
       }
   }
 `;
@@ -82,9 +106,21 @@ const UPDATE_USER_MUTATION = gql`
     updateUser(updateUserArgs: $updateUserArgs) 
   }
 `;
+const FOLLOW_USER_MUTATION = gql`
+  mutation FollowUser($userId: Int!, $followingId: Int!) {
+    follow(followInput: { userId: $userId, followingId: $followingId })
+  }
+  `;
+  const UN_FOLLOW_USER_MUTATION = gql`
+  mutation UnFollowUser($userId: Int!, $followingId: Int!){
+    unfollow(followInput: { userId: $userId, followingId: $followingId })
+  }
+  `;
+
   const [selectedFile, setSelectedFile] = useState<File | null>(null);
   const [selectedBackground, setSelectedBackground] = useState<File | null>(null);
   const [isEditing, setIsEditing] = useState(false);
+  const {currentUser} = useAuth();
   const [state, setState] = useState({
     editedFirstName: '',
     editedLastName: '',
@@ -92,13 +128,27 @@ const UPDATE_USER_MUTATION = gql`
     editedFacebook: '',
     editedInstagram: '',
     editedTiktok: '',
-    editedYoutube: ''
+    editedYoutube: '',
+    editedLocalization: ''
   });
   const [updateUser] = useMutation(UPDATE_USER_MUTATION);
-  
-  
+  const [followUser] = useMutation(FOLLOW_USER_MUTATION);
+  const [unFollowUser] = useMutation(UN_FOLLOW_USER_MUTATION);
+  const { loading, error, data, refetch } = useQuery(GET_USERS_EVENTS_FOLLOWINGS);
+  const [isCurrentlyFollowing, setIsCurrentlyFollowing] = useState(false);
+  // const [followers, setFollowers] = useState<Follower[]>([]);
+  // const [following, setFollowing] = useState<Followersy[]>([]);
+  const [followersCount, setFollowersCount] = useState(0);
 
-  const { loading, error, data } = useQuery(GET_USERS_EVENTS_FOLLOWINGS);
+  useEffect(() => {
+    if (data && data.userById) {
+      // setFollowers(data.userById.followers || []);
+      // setFollowing(data.userById.following || []);
+      setFollowersCount(data.userById.followers.length || 0);
+      const isFollowing = data.userById.followers.some((follower: any) => follower.id === currentUser?.id);
+      setIsCurrentlyFollowing(isFollowing);
+    }
+  }, [data, currentUser?.id]);
 
   if (loading) return <p>Loading...</p>;
   if (error) return <p>Error: {error.message}</p>;
@@ -106,18 +156,17 @@ const UPDATE_USER_MUTATION = gql`
   const futureEvents = data.futureEvents;
   const pastEvents = data.pastEvents;
   if (!user) return <p>User not found</p>;
-  const followingCount = data?.userById?.followers?.length || 0;
+  // const followingCount = data?.userById?.followers?.length || 0;
+  // const isFollowing = user.followers.some((follower : any) => follower.id === currentUser?.id);
+  // console.log(following)
 
+  //Profile Edit
   const handleFileSelect = (file: File) => {
     setSelectedFile(file);
-    // opcjonalnie aktualizuj preview
   };
   const handleBackgroundSelect = (file: File) => {
     setSelectedBackground(file);
-    // const fileUrl = URL.createObjectURL(file);
-    // setBackgroundImage(fileUrl);
   };
-  //Profile Edit
   const toggleEditMode = () => {
     setIsEditing(!isEditing);
     setState({
@@ -128,7 +177,8 @@ const UPDATE_USER_MUTATION = gql`
       editedFacebook: user.facebook,
       editedInstagram: user.instagram,
       editedTiktok: user.tiktok,
-      editedYoutube: user.youtube
+      editedYoutube: user.youtube,
+      editedLocalization: user.localization
     });
   };
 
@@ -148,7 +198,6 @@ const UPDATE_USER_MUTATION = gql`
         method: 'POST',
         body: formData
       });
-      console.log(cloudinaryUrl);
       if (!response.ok) {
         throw new Error('Network response was not ok ' + response.statusText);
       }
@@ -165,11 +214,10 @@ const UPDATE_USER_MUTATION = gql`
       newBannerUrl = backgroundResult.secure_url;
     }
 
-      // Call the mutation function
       const response = await updateUser({
         variables: {
           updateUserArgs: {
-            id: parseInt(userID, 10), // Convert userID to an integer
+            id: parseInt(userID, 10),
             firstname: state.editedFirstName,
             lastname: state.editedLastName,
             description: state.editedDescription,
@@ -179,57 +227,53 @@ const UPDATE_USER_MUTATION = gql`
             youtube: state.editedYoutube,
             avatarImage: newAvatarUrl, 
             bannerImage: newBannerUrl,
+            localization: state.editedLocalization
           }
         }
       });
 
-  
-      // Check if the mutation was successful and returned the updated user data
-      if (response && response.data && response.data.updateUser) {
-        const updatedUser = response.data.updateUser;
-        
-  
-        // Optionally, if you're maintaining separate states for display and edit, update them too
-        // setEditedFirstName(updatedUser.firstname);
-        // setEditedLastName(updatedUser.lastname);
-        setState({
-          ...state,
-          editedFirstName:updatedUser.firstname,
-          editedLastName:updatedUser.lastname,
-          editedDescription:updatedUser.description,
-          editedFacebook:updatedUser.facebook,
-          editedInstagram:updatedUser.instagram,
-          editedTiktok:updatedUser.tiktok,
-          editedYoutube:updatedUser.youtube,          
-        })
-      }
-      
-      // revalidatePath('/uzytkownicy/[userID]');
-      window.location.reload();
-
-      // Toggle editing mode off
       setIsEditing(false);
+      await refetch();
     } catch (error) {
       console.error('Error updating user:', error);
-      // Handle error appropriately
     }
   };
 
   const cancelEdit = () => {
-    // Reset edited values to the original
-    setState({
-      ...state,
-      editedFirstName: user.firstname,
-      editedLastName: user.lastname,
-      editedDescription: user.description,
-      editedFacebook: user.facebook,
-      editedInstagram: user.instagram,
-      editedTiktok: user.tiktok,
-      editedYoutube: user.youtube
-    })
-    // Set isEditing to false to exit edit mode
     setIsEditing(false);
   };
+
+  const handleFollow = async () => {
+    if (!currentUser) {
+      Notifications.show({ title: 'Zaloguj się', message: 'Musisz być zalogowany, aby obserwować użytkownika.', color: 'red' });
+      return;
+    }
+    try {
+      if (isCurrentlyFollowing) {
+        await unFollowUser({
+          variables: {
+            userId: currentUser.id,
+            followingId: parseInt(userID, 10),
+          }
+        });
+        Notifications.show({ title: 'Sukces', message: 'Przestałeś obserwować użytkownika.', color: 'green' });
+      } else {
+        await followUser({
+          variables: {
+            userId: currentUser.id,
+            followingId: parseInt(userID, 10),
+          },
+        });
+        Notifications.show({ title: 'Sukces', message: 'Zacząłeś obserwować użytkownika.', color: 'green' });
+      }
+      setIsCurrentlyFollowing(!isCurrentlyFollowing);
+      refetch(); 
+    } catch (error) {
+      console.error('Error updating follow status:', error);
+      Notifications.show({ title: 'Błąd', message: 'Nie udało się zaktualizować statusu obserwacji.', color: 'red' });
+    }
+  };
+  
 
   return (
     <div className={styles.main}>
@@ -271,35 +315,57 @@ const UPDATE_USER_MUTATION = gql`
           </div>
           <div className={styles.profileName}>
             {isEditing ? (
-          <>
-            <input 
-              value={state.editedFirstName} 
-              onChange={(e) => setState({ ...state, editedFirstName: e.target.value })}
-            />
-            <input 
-              value={state.editedLastName} 
-              onChange={(e) => setState({ ...state, editedLastName: e.target.value })}
-            />
-          </>
-        ) : (
-          <>
-            <p>{user.firstname}</p>
-            <p>{user.lastname}</p>
-          </>
-        )}
+              <>
+                <div> 
+                  <input 
+                    value={state.editedFirstName} 
+                    onChange={(e) => setState({ ...state, editedFirstName: e.target.value })}
+                  />
+                  <input 
+                    value={state.editedLastName} 
+                    onChange={(e) => setState({ ...state, editedLastName: e.target.value })}
+                  />
+                </div>
+                <div> 
+                  <input 
+                    value={state.editedLocalization} 
+                    onChange={(e) => setState({ ...state, editedLocalization: e.target.value })}
+                  />
+                </div>
+              </>
+            ) : (
+              <>
+                <div className={styles.names}> 
+                  <p>{user.firstname}</p>
+                  <p>{user.lastname}</p>
+                </div>
+                <div className={styles.localization}> 
+                  <p>{user.localization}</p>
+                </div>
+              </>
+            )}
           </div>
           <div className={styles.followers}>
-            <p>Obserwujących: {followingCount}</p>
+            <p>Obserwujących: {followersCount}</p>
           </div>
         </div>
         <div className={styles.divButton}>
-          {isEditing ? (
-          <>
-            <button className={styles.button} onClick={handleSave}>Zapisz zmiany</button>
-            <button className={styles.buttonCancel} onClick={cancelEdit}>Anuluj</button>
-          </>
-        ) : (
-          <button className={styles.button} onClick={toggleEditMode}>Edytuj Profil</button>
+        {currentUser?.id === user.id ? (
+          isEditing ? (
+            <>
+              <button className={styles.button} onClick={handleSave}>Zapisz zmiany</button>
+              <button className={styles.buttonCancel} onClick={cancelEdit}>Anuluj</button>
+            </>
+          ) : (
+            <button className={styles.button} onClick={toggleEditMode}>Edytuj Profil</button>
+          )
+        ) : 
+        (
+          isCurrentlyFollowing  ? (
+            <button className={styles.buttonCancel} onClick={handleFollow}>Przestań obserwować</button>
+          ) : (
+            <button className={styles.button} onClick={handleFollow}>Obserwuj</button>
+          )
         )}
         </div>
       </div>
@@ -385,7 +451,10 @@ const UPDATE_USER_MUTATION = gql`
             />
             </div>
             <div className={styles.followersContainer}>
-              <Followers user={user}/>
+              <Followers 
+              following={user.following}
+              followers={user.followers}
+              />
             </div>        
       </div>
     </div>

@@ -22,7 +22,7 @@ const Kontakt = () => {
         <h3>Numer telefonu</h3>
         <p>+48 123 456 789</p>
         <h3>Adres e-mail</h3>
-        <p>kontakt@eventspot.com</p>
+        <p>eventspot.development@gmail.com</p>
         <h3>Adres</h3>
         <p>xxxxxxxxxx, 32-500 Chrzanów</p>
       </div>
