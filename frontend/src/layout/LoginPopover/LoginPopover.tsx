@@ -57,7 +57,7 @@ export default function LoginPopover(props: { isOpened: boolean, open: () => voi
                     {errors.password && <span className={styles.errorMsg}>To pole jest wymagane</span>}
                     <Button type='submit' classNames={{root: styles.button}}>Zaloguj się</Button>
                 </form>
-                <Link href={'/zarejestruj'} onClick={props.close} className={styles.registerLink}>
+                <Link href={'/auth?view=register'} onClick={props.close} className={styles.registerLink}>
                     <Text classNames={{root: styles.text}} ta='center'
                           size='sm'>Nie posiadasz konta? Zarejestruj je tutaj.</Text>
                 </Link>
