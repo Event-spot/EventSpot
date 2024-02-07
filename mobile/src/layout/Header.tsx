@@ -1,10 +1,11 @@
 import {StyleSheet, Text, View} from "react-native";
 import {colors} from '../constants/colors';
+import {Link} from "react-router-native";
 
 export default function Header() {
     return (
         <View style={styles.header}>
-            <Text style={styles.logo}>EventSpot</Text>
+            <Link to={'/'}><Text style={styles.logo}>EventSpot</Text></Link>
         </View>
     )
 }

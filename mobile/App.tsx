@@ -1,22 +1,36 @@
 import {StatusBar} from 'expo-status-bar';
-import {ImageBackground, SafeAreaView, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {AppRegistry, SafeAreaView, StyleSheet} from 'react-native';
 import React from "react";
 import Header from './src/layout/Header';
 import Navbar from "./src/layout/Navbar";
-import {NativeRouter} from 'react-router-native'
+import {NativeRouter, Route, Routes,} from 'react-router-native'
+import HomePage from "./src/routes/HomePage";
+import Events from "./src/routes/Events";
+import {ApolloClient, InMemoryCache, ApolloProvider} from "@apollo/client";
+import {apolloDevToolsInit} from 'react-native-apollo-devtools-client';
 
+
+const client = new ApolloClient({
+    uri: 'http://localhost:3001/graphql',
+    cache: new InMemoryCache(),
+})
+
+apolloDevToolsInit(client);
 export default function App() {
     return (
+        <ApolloProvider client={client}>
         <SafeAreaView style={styles.container}>
             {/*<StatusBar style={"dark"}/>*/}
+            <NativeRouter>
             <Header/>
-                <ImageBackground style={styles.bgImage} source={require('./src/assets/images/home_background.png')}>
-            <ScrollView>
-
-            </ScrollView>
-                </ImageBackground>
+                <Routes>
+                    <Route path={'/'} element={<HomePage/>}/>
+                    <Route path={'/events'} element={<Events/>}/>
+                </Routes>
             <Navbar/>
+            </NativeRouter>
         </SafeAreaView>
+        </ApolloProvider>
     );
 }
 
@@ -25,8 +39,6 @@ const styles = StyleSheet.create({
         flex: 1,
         backgroundColor: '#fff',
     },
-    bgImage: {
-        flex: 1,
-        resizeMode: 'cover'
-    },
 });
+
+AppRegistry.registerComponent('EventSpot', () => App);
