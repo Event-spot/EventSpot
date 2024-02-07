@@ -14,6 +14,17 @@
     padding: 20px 16px;
     background-color: $primary;
     min-height: 200px;
+
+    a{
+      text-decoration: none;
+      color: inherit;
+      &:hover, &:focus {
+        text-decoration: none;
+      }
+      &:active {
+        color: inherit;
+      }
+    }
   }
 
   .credentials{
@@ -55,18 +66,15 @@
   @media (max-width: 500px) {
     .navigation{
         justify-content: flex-start;
+        flex-direction: column;
+        align-items: center;
     }
-    .section1{
+    .section1, .section2, .section3, .section4, .contact{
         padding: 5px;
-    }
-    .section2{
-        padding: 5px;
-    }
-    .section3{
-        padding: 5px;
-    }
-    .section4{
-        padding: 5px;
+        text-align: center; 
+        width: 100%;
     }
   }
 }
+
+

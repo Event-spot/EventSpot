@@ -24,7 +24,8 @@ export default function Footer() {
                 <div className={styles.section2}>
                     <span className={styles.title}>Użytkownik</span>
                     <ul className={styles.footerNav}>
-                    {/* <Link href={`/uzytkownicy/${currentUser?.id}`}><li>Profil</li></Link> */}
+                    <Link href={`/auth`}><li>Zaloguj się</li></Link>
+                    <Link href={`/auth?view=register`}><li>Zarejestruj się</li></Link>
                     </ul>
                 </div>
                 <div className={styles.section3}>
@@ -52,10 +53,10 @@ export default function Footer() {
             <div className={styles.credentials}>
                 <p className={styles.credit}>© 2023 EventSpot</p>
                 <div className={styles.social}>
-                    <RiFacebookBoxFill />
-                    <RiInstagramFill />
-                    <RiTiktokFill />
-                    <RiLinkedinBoxFill />
+                    <Link href="https://www.facebook.com/"><RiFacebookBoxFill /></Link>
+                    <Link href="https://www.instagram.com/"><RiInstagramFill /></Link>
+                    <Link href="https://www.tiktok.com/"><RiTiktokFill /></Link>
+                    <Link href="https://www.linkedin.com/"><RiLinkedinBoxFill /></Link>
                 </div>
             </div>
         </div>
