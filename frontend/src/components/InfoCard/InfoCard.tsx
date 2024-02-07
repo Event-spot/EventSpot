@@ -50,8 +50,12 @@ export default function InfoCard({type}: InfoCardProps) {
                 <Link href="/wydarzenia" passHref>
                     <li className={styles.btn}>{content.buttonText}</li>
                 </Link>
-            ) : (
-                <button className={styles.btn}>{content.buttonText}</button>
+            ) : type === 'user' ?  (
+                <Link href="/auth?view=register" passHref>
+                <li className={styles.btn}>{content.buttonText}</li>
+                </Link>
+            ): (
+                <i>błąd</i>
             )}
         </div>
     );
