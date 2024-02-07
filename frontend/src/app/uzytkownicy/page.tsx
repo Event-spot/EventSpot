@@ -35,12 +35,12 @@ export default function Users() {
         let sortedOsoby = [...(data?.users.slice(startIndex, endIndex) || [])];
         if (filterLocalization) {
             sortedOsoby = sortedOsoby.filter(person => 
-                person.localization.toLowerCase().includes(filterLocalization.toLowerCase())
+                person.localization?.toLowerCase().includes(filterLocalization.toLowerCase())
             );
         }
         if (searchQuery) {
             sortedOsoby = sortedOsoby.filter(person =>
-                (person.firstname.toLowerCase() + ' ' + person.lastname.toLowerCase()).includes(searchQuery.toLowerCase())
+                (person.firstname?.toLowerCase() + ' ' + person.lastname?.toLowerCase()).includes(searchQuery.toLowerCase())
             );
         }
         
