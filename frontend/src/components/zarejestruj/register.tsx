@@ -1,13 +1,14 @@
 'use client'
 import {Button, PasswordInput, TextInput} from "@mantine/core";
 import React from "react";
-import styles from './zarejestruj.module.scss';
+import styles from './register.module.scss';
 import {SubmitHandler, useForm} from 'react-hook-form';
 import * as yup from 'yup'
 import {yupResolver} from "@hookform/resolvers/yup";
 import {gql, useMutation} from "@apollo/client";
 import axios from "axios";
 import {useAuth} from '../../context/AuthContext';
+import { useRouter } from "next/navigation";
 
 const CREATE_USER = gql`
     mutation addUser($addUserArgs: AddUserArgs!) {
@@ -34,14 +35,14 @@ const schema = yup.object({
         })
 })
 
-export default function Zarejestruj() {
+export default function RegisterPage() {
     const {
         register,
         handleSubmit,
         formState: {errors}
     } = useForm<Inputs>({resolver: yupResolver(schema)})
     const {setCurrentUser} = useAuth();
-
+    const router = useRouter();
     const [createUser] = useMutation(CREATE_USER)
 
 
@@ -59,8 +60,9 @@ export default function Zarejestruj() {
         });
 
         await axios.post('http://localhost:3001/auth/login', {email: userData.email, password: userData.password}, {withCredentials: true})
-            .then(response => setCurrentUser(response.data.user));
-
+            .then(response => 
+                setCurrentUser(response.data.user));
+                await router.push('/');
     }
 
     return (

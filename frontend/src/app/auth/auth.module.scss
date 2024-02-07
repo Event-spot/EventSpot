@@ -1,0 +1,13 @@
+@import "../../assets/styles/colors";
+.container{
+    display: flex;
+    flex-direction: column;
+    height: 100dvh;
+    justify-content: center;
+}
+.text {
+    color: $secondary;
+    width: 100%;
+    cursor: pointer;
+    text-align: center;
+  }
