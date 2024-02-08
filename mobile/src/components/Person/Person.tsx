@@ -1,6 +1,9 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { colors } from '../../constants/colors';
+import { useNavigation } from '@react-navigation/native';
+import { RootStackParamList } from '../../Types/navigationTypes';
+import { StackNavigationProp } from '@react-navigation/stack';
 const defaultAvatar = require('../../assets/images/question.png');
 
 interface PersonProps {
@@ -13,7 +16,7 @@ interface PersonProps {
     obserwujacy: number;
     avatarImage: string;
   }
-
+  type UserProfileNavigationProp = StackNavigationProp<RootStackParamList, 'UserProfile'>;
 const Person: React.FC<PersonProps> = ({
   id,
   imie,
@@ -24,6 +27,7 @@ const Person: React.FC<PersonProps> = ({
   obserwujacy,
   avatarImage,
 }) => {
+  const navigation = useNavigation<UserProfileNavigationProp>();
   return (
     <View style={styles.person}>
       <Image
@@ -48,8 +52,7 @@ const Person: React.FC<PersonProps> = ({
       </View>
       <TouchableOpacity
         style={styles.button}
-        // onPress={() => navigation.navigate('UserProfile', { userID: id })} // Zakładając, że 'UserProfile' to nazwa ekranu w Twoim Navigatorze
-        // onPress={() => navigation.goBack} // Zakładając, że 'UserProfile' to nazwa ekranu w Twoim Navigatorze
+        onPress={() => navigation.navigate('UserProfile', { userID: id })}
       >
         <Text style={styles.buttonText}>Zobacz Profil</Text>
       </TouchableOpacity>

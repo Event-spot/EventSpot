@@ -3,14 +3,16 @@ import { SafeAreaView, StyleSheet, AppRegistry, StatusBar  } from 'react-native'
 import {ApolloClient, InMemoryCache, ApolloProvider} from "@apollo/client";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {apolloDevToolsInit} from 'react-native-apollo-devtools-client';
 import Header from './src/layout/Header';
 import HomePage from "./src/routes/HomePage";
 import Events from "./src/routes/Events";
 import Users from './src/routes/Users';
 import Navbar from "./src/layout/Navbar";
-import {apolloDevToolsInit} from 'react-native-apollo-devtools-client';
+import UserProfile from "./src/routes/UserProfile";
+import { RootStackParamList } from '../mobile/src/Types/navigationTypes';
 
-const Stack = createNativeStackNavigator();
+const Stack = createNativeStackNavigator<RootStackParamList>();
 const client = new ApolloClient({
     uri: 'http://192.168.18.2:3001/graphql',
     cache: new InMemoryCache(),
@@ -28,6 +30,7 @@ export default function App() {
               <Stack.Screen name="Home" component={HomePage} />
               <Stack.Screen name="Events" component={Events} />
               <Stack.Screen name="Users" component={Users} />
+              <Stack.Screen name="UserProfile" component={UserProfile} />
             </Stack.Navigator>
             <Navbar />
           </NavigationContainer>

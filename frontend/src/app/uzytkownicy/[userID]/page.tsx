@@ -136,14 +136,10 @@ const FOLLOW_USER_MUTATION = gql`
   const [unFollowUser] = useMutation(UN_FOLLOW_USER_MUTATION);
   const { loading, error, data, refetch } = useQuery(GET_USERS_EVENTS_FOLLOWINGS);
   const [isCurrentlyFollowing, setIsCurrentlyFollowing] = useState(false);
-  // const [followers, setFollowers] = useState<Follower[]>([]);
-  // const [following, setFollowing] = useState<Followersy[]>([]);
   const [followersCount, setFollowersCount] = useState(0);
 
   useEffect(() => {
     if (data && data.userById) {
-      // setFollowers(data.userById.followers || []);
-      // setFollowing(data.userById.following || []);
       setFollowersCount(data.userById.followers.length || 0);
       const isFollowing = data.userById.followers.some((follower: any) => follower.id === currentUser?.id);
       setIsCurrentlyFollowing(isFollowing);
@@ -156,10 +152,6 @@ const FOLLOW_USER_MUTATION = gql`
   const futureEvents = data.futureEvents;
   const pastEvents = data.pastEvents;
   if (!user) return <p>User not found</p>;
-  // const followingCount = data?.userById?.followers?.length || 0;
-  // const isFollowing = user.followers.some((follower : any) => follower.id === currentUser?.id);
-  // console.log(following)
-
   //Profile Edit
   const handleFileSelect = (file: File) => {
     setSelectedFile(file);
@@ -182,7 +174,6 @@ const FOLLOW_USER_MUTATION = gql`
     });
   };
 
-  // Handle save changes
   const handleSave = async () => {
     try {
     const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL as string;
@@ -318,10 +309,12 @@ const FOLLOW_USER_MUTATION = gql`
               <>
                 <div> 
                   <input 
+                    placeholder="Imię"
                     value={state.editedFirstName} 
                     onChange={(e) => setState({ ...state, editedFirstName: e.target.value })}
                   />
                   <input 
+                    placeholder="Nazwisko"
                     value={state.editedLastName} 
                     onChange={(e) => setState({ ...state, editedLastName: e.target.value })}
                   />
@@ -329,6 +322,7 @@ const FOLLOW_USER_MUTATION = gql`
                 <div> 
                   <input 
                     value={state.editedLocalization} 
+                    placeholder="Lokalizacja"
                     onChange={(e) => setState({ ...state, editedLocalization: e.target.value })}
                   />
                 </div>
