@@ -339,6 +339,7 @@ const JOIN_EVENT_MUTATION = gql`
         {isEditing ? (
           <>
             <input 
+              placeholder="Nazwa wydarzenia"
               value={eventDetails.editedName} 
               onChange={(e) => setEventDetails({ ...eventDetails, editedName: e.target.value })}
             />

@@ -86,6 +86,7 @@ const Map: React.FC<MapProps> = ({lokalizacja, data, isEditing, handleDetailChan
             />
             <input 
               type="text"
+              placeholder="Lokalizacja"
               name="editedLocalization"
               value={editedLocalization}
               onChange={handleChange}

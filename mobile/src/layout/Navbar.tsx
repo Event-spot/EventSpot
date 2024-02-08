@@ -3,9 +3,12 @@ import {colors} from "../constants/colors";
 import Icon from 'react-native-vector-icons/Ionicons';
 import { Avatar } from '@rneui/themed';
 import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from '../Types/navigationTypes';
+import { StackNavigationProp } from '@react-navigation/stack';
 
+type UserProfileNavigationProp = StackNavigationProp<RootStackParamList, 'Events', 'Users'>;
 export default function Navbar() {
-    const navigation = useNavigation();
+    const navigation = useNavigation<UserProfileNavigationProp>();
 
     return(
         <View style={styles.navbar}>
