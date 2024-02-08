@@ -1,8 +1,6 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
 import { colors } from '../../constants/colors';
-// import { useNavigation } from '@react-navigation/native';
-
 const defaultAvatar = require('../../assets/images/question.png');
 
 interface PersonProps {
@@ -26,8 +24,6 @@ const Person: React.FC<PersonProps> = ({
   obserwujacy,
   avatarImage,
 }) => {
-//   const navigation = useNavigation();
-
   return (
     <View style={styles.person}>
       <Image
@@ -67,7 +63,7 @@ const styles = StyleSheet.create({
     height: 340,
     backgroundColor: '#D9D9D9',
     borderRadius: 20,
-    padding: 10,
+    padding: 5,
     margin: 20,
     alignItems: 'center',
     textAlign: 'center',

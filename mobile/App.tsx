@@ -1,16 +1,16 @@
-import {StatusBar} from 'expo-status-bar';
-import {AppRegistry, SafeAreaView, StyleSheet} from 'react-native';
 import React from "react";
+import { SafeAreaView, StyleSheet, AppRegistry, StatusBar  } from 'react-native';
+import {ApolloClient, InMemoryCache, ApolloProvider} from "@apollo/client";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Header from './src/layout/Header';
-import Navbar from "./src/layout/Navbar";
-import {NativeRouter, Route, Routes,} from 'react-router-native'
 import HomePage from "./src/routes/HomePage";
 import Events from "./src/routes/Events";
-import {ApolloClient, InMemoryCache, ApolloProvider} from "@apollo/client";
-import {apolloDevToolsInit} from 'react-native-apollo-devtools-client';
 import Users from './src/routes/Users';
+import Navbar from "./src/layout/Navbar";
+import {apolloDevToolsInit} from 'react-native-apollo-devtools-client';
 
-
+const Stack = createNativeStackNavigator();
 const client = new ApolloClient({
     uri: 'http://192.168.18.2:3001/graphql',
     cache: new InMemoryCache(),
@@ -19,22 +19,22 @@ const client = new ApolloClient({
 apolloDevToolsInit(client);
 export default function App() {
     return (
-        <ApolloProvider client={client}>
+      <ApolloProvider client={client}>
+        <StatusBar barStyle="light-content" />
         <SafeAreaView style={styles.container}>
-            {/*<StatusBar style={"dark"}/>*/}
-            <NativeRouter>
-            <Header/>
-                <Routes>
-                    <Route path={'/'} element={<HomePage/>}/>
-                    <Route path={'/events'} element={<Events/>}/>
-                    <Route path={'/users'} element={<Users/>}/>
-                </Routes>
-            <Navbar/>
-            </NativeRouter>
+          <NavigationContainer>
+            <Header />
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+              <Stack.Screen name="Home" component={HomePage} />
+              <Stack.Screen name="Events" component={Events} />
+              <Stack.Screen name="Users" component={Users} />
+            </Stack.Navigator>
+            <Navbar />
+          </NavigationContainer>
         </SafeAreaView>
-        </ApolloProvider>
+      </ApolloProvider>
     );
-}
+  }
 
 const styles = StyleSheet.create({
     container: {
