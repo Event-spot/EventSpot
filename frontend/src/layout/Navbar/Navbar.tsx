@@ -48,9 +48,11 @@ export default function Navbar() {
                 <Link href={'/wydarzenia'}>
                     <li className={styles.option}>Wydarzenia</li>
                 </Link>
-                <Link href={'/createevent'}>
-                    <li className={styles.option}>Utwórz Wydarzenie</li>
-                </Link>
+                {currentUser && (
+                    <Link href={'/createevent'}>
+                        <li className={styles.option}>Utwórz Wydarzenie</li>
+                    </Link>
+                )}
                 <Link href={'/uzytkownicy'}>
                     <li className={styles.option}>Użytkownicy</li>
                 </Link>

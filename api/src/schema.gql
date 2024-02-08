@@ -139,6 +139,7 @@ input AddEventArgs {
   competitions: String
   localization_details: String
   bannerImage: String
+  organizerId: Int!
 }
 
 input UpdateEventArgs {

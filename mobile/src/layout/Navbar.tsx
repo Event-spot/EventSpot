@@ -12,7 +12,7 @@ export default function Navbar() {
                                               icon={{ name: "pencil", type: "font-awesome" }}
                                               containerStyle={{ backgroundColor: colors.darkGray }}
             rounded/></View>
-            <View style={styles.item}><Icon name={'people-sharp'} size={35} color={colors.secondary}/></View>
+            <Link style={styles.link} to={'/users'}><View style={styles.item}><Icon name={'people-sharp'} size={35} color={colors.secondary}/></View></Link>
         </View>
     )
 }

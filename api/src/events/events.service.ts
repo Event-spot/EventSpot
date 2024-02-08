@@ -34,6 +34,7 @@ export class EventsService implements OnModuleInit {
 
     async addEvent(addEventArgs: AddEventArgs): Promise<string> {
         let event: Events = new Events();
+        const user= await this.userService.findUserById(addEventArgs.organizerId)
         event.name = addEventArgs.name;
         event.localization = addEventArgs.localization;
         event.date = addEventArgs.date;
@@ -41,6 +42,7 @@ export class EventsService implements OnModuleInit {
         event.competitions = addEventArgs.competitions;
         event.localization_details = addEventArgs.localization_details;
         event.bannerImage = addEventArgs.bannerImage;
+        event.organizer = user;
 
         await this.eventRepo.save(event);
         return "Event has been added";

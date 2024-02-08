@@ -8,10 +8,11 @@ import HomePage from "./src/routes/HomePage";
 import Events from "./src/routes/Events";
 import {ApolloClient, InMemoryCache, ApolloProvider} from "@apollo/client";
 import {apolloDevToolsInit} from 'react-native-apollo-devtools-client';
+import Users from './src/routes/Users';
 
 
 const client = new ApolloClient({
-    uri: 'http://localhost:3001/graphql',
+    uri: 'http://192.168.18.2:3001/graphql',
     cache: new InMemoryCache(),
 })
 
@@ -26,6 +27,7 @@ export default function App() {
                 <Routes>
                     <Route path={'/'} element={<HomePage/>}/>
                     <Route path={'/events'} element={<Events/>}/>
+                    <Route path={'/users'} element={<Users/>}/>
                 </Routes>
             <Navbar/>
             </NativeRouter>

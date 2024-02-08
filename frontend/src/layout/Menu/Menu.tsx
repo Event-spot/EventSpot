@@ -38,7 +38,9 @@ export default function Menu({ className, onClose }: MenuProps) {
         </li>
       )}
       <li className={styles.option} onClick={onClose}><Link href='/wydarzenia'>Wydarzenia</Link></li>
+      {currentUser && (
       <li className={styles.option} onClick={onClose}><Link href='/createevent'>Utwórz Wydarzenie</Link></li>
+      )}
       <li className={styles.option} onClick={onClose}><Link href='/uzytkownicy'>Użytkownicy</Link></li>
       <li className={styles.option} onClick={onClose}><Link href='/kontakt'>Kontakt</Link></li>
       {currentUser ? (

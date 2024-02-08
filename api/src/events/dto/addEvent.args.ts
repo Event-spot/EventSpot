@@ -23,4 +23,7 @@ export default class AddEventArgs {
 
     @Field({nullable: true})
     bannerImage?: string;
+    
+    @Field(type => Int)
+    organizerId: number;
 }

@@ -65,8 +65,7 @@ export class Events {
     @Field(type => [Users], {nullable: true} )
     attendees?: Users[];
     
-    @ManyToOne(() => Users, user => user.organizedEvents, {nullable: true, onDelete: "CASCADE"})
+    @ManyToOne(() => Users, user => user.organizedEvents, {onDelete: "CASCADE"})
     @Field(type => Users)
-    organizer?: Users;
-    //TODO: Organizer nullable: false
+    organizer: Users;
 }
