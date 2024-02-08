@@ -6,6 +6,8 @@ import * as yup from 'yup';
 import { gql, useMutation } from "@apollo/client";
 import{yupResolver} from '@hookform/resolvers/yup';
 import UploadForm from '../UploadTest/Upload';
+import { useAuth } from "@/context/AuthContext";
+import { Notifications } from '@mantine/notifications';
 
 
 const CREATE_EVENT_MUTATION = gql `
@@ -24,6 +26,8 @@ export const EventCreator = () => {
     const now = new Date();
     return now.toISOString().slice(0, 16);
   };
+  const {currentUser} = useAuth();
+
 //   const combineDateAndTime = (date:any, time:any) => {
 //     const dateTime = new Date(date + 'T' + time);
 //     return dateTime.toISOString();};
@@ -61,6 +65,10 @@ export const EventCreator = () => {
     const [createEvent] = useMutation(CREATE_EVENT_MUTATION);
     
     const onSubmit = async (data:any) => {
+      if (!currentUser) {
+        Notifications.show({ title: 'Zaloguj się', message: 'Musisz być zalogowany, aby utworzyć wydarzenie.', color: 'red' });
+        return;
+      }
 
         const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL as string;
 
@@ -95,6 +103,7 @@ export const EventCreator = () => {
             competitions: data.EventCompetitions,
             localization_details: data.EventDriveTips,
             bannerImage: newBannerUrl,
+            organizerId: currentUser.id,
             // Uwaga: Obrazy będą wymagały specjalnego traktowania
         };
 
@@ -106,7 +115,6 @@ export const EventCreator = () => {
                 console.error("Błąd GraphQL:", error);
             });
             setIsFormSubmitted(true);
-            console.log(eventData)  ;
     };
       
 
