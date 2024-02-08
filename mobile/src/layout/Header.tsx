@@ -1,11 +1,15 @@
-import {StyleSheet, Text, View} from "react-native";
+import {StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import {colors} from '../constants/colors';
-import {Link} from "react-router-native";
+import { useNavigation } from "@react-navigation/native";
+
 
 export default function Header() {
+    const navigation = useNavigation();
     return (
         <View style={styles.header}>
-            <Link to={'/'}><Text style={styles.logo}>EventSpot</Text></Link>
+            <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+                <Text style={styles.logo}>EventSpot</Text>
+            </TouchableOpacity>
         </View>
     )
 }
