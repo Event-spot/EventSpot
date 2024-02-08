@@ -1,6 +1,5 @@
 import styles from './page.module.scss'
 import InfoCard from "@/components/InfoCard/InfoCard";
-import Button from '@/components/Button/Button';
 import Image from "next/image";
 import Skyline from '../assets/images/skyline.png';
 
@@ -8,9 +7,7 @@ export default function Home() {
     return (
         <div className={styles.container}>
             <div className={styles.welcomeSection}>
-                <div className={styles.btnContainer}>
-                    <Button/>
-                </div>
+                
                 <Image className={styles.skyline} src={Skyline} alt={'Nissan Skyline R34 GT-R'}/>
                 <svg className={styles.mobileShape} xmlns="http://www.w3.org/2000/svg" width="430" height="388"
                      viewBox="0 0 430 388" fill="none">
