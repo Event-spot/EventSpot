@@ -1,10 +1,12 @@
 import {StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import {colors} from '../constants/colors';
 import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from '../Types/navigationTypes';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-
+type UserProfileNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 export default function Header() {
-    const navigation = useNavigation();
+    const navigation = useNavigation<UserProfileNavigationProp>();
     return (
         <View style={styles.header}>
             <TouchableOpacity onPress={() => navigation.navigate("Home")}>
