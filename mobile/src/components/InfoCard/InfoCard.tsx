@@ -1,7 +1,8 @@
 import React from 'react';
 import { View, Text, TouchableOpacity, StyleSheet } from 'react-native';
 import { useNavigation } from "@react-navigation/native";
-
+import { RootStackParamList } from '../../Types/navigationTypes';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 interface InfoCardProps {
     type:'event';
@@ -26,10 +27,10 @@ const data: Record<InfoCardProps['type'], InfoData> = {
         buttonText: "Odkryj wydarzenia",
     },
 };
-
+type UserProfileNavigationProp = StackNavigationProp<RootStackParamList, 'Events'>;
 export default function InfoCard({ type }: InfoCardProps) {
     const content = data[type];
-    const navigation = useNavigation();
+    const navigation = useNavigation<UserProfileNavigationProp>();
    
     return (
         <View style={styles.container}>
