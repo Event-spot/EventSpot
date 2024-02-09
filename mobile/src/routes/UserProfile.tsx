@@ -5,6 +5,8 @@ import { useNavigation, RouteProp  } from '@react-navigation/native';
 import { RootStackParamList } from '../Types/navigationTypes';
 import { colors } from '../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
+import EventHistory from '../components/EventHistory/EventHistory';
+import Followers from '../components/Followers/Followers';
 
 // Assuming you have an AuthContext set up for React Native as well
 // import { useAuth } from '@/context/AuthContext';
@@ -36,12 +38,14 @@ const UserProfile: React.FC<Props> = ({ route}) => {
                   firstname,
                   lastname,
                   avatarImage,
+                  localization,
               }
               followers{
                 id,
                 firstname,
                 lastname,
                 avatarImage,
+                localization,
               }
               events {
                 id,
@@ -438,6 +442,15 @@ const UserProfile: React.FC<Props> = ({ route}) => {
                     </View>
                 )}
             </View>
+            <EventHistory
+            futureEvents={futureEvents}
+            pastEvents={pastEvents}
+            />
+
+            <Followers
+            following={user.following}
+            followers={user.followers}
+            />
         </View>
       </View>
     </ScrollView>

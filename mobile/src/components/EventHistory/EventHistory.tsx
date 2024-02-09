@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { RootStackParamList } from '../../Types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { colors } from '../../constants/colors';
+import defaultImage from '../../assets/images/illegalzone.png';
 
 interface Organizer {
   id: number;
@@ -31,26 +33,35 @@ type UserProfileNavigationProp = StackNavigationProp<RootStackParamList, 'EventD
 const EventHistory: React.FC<Props> = ({ futureEvents, pastEvents }) => {
   const [activeTab, setActiveTab] = useState<string>('upcomingEvents');
   const navigation = useNavigation<UserProfileNavigationProp>();
-
+  const scrollViewRef = useRef<ScrollView | null>(null);
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
+    scrollViewRef.current?.scrollTo({ x: 0, y: 0, animated: true });
   };
 
   const renderEventItem = (event: Event) => (
-    <TouchableOpacity
-      key={event.id}
-      style={styles.eventItem}
-      onPress={() => navigation.navigate('EventDetails', { eventId: event.id })}>
+    <View key={event.id} style={styles.eventItem}>
       <Image
-        source={{ uri: event.bannerImage }}
+        source={{ uri: event.bannerImage || Image.resolveAssetSource(defaultImage).uri}}
         style={styles.eventBanner}
       />
-      <Text style={styles.eventTitle}>{event.name}</Text>
-      <Text style={styles.eventLocalization}>{event.localization}</Text>
-      <Text style={styles.eventDate}>{formatDate(event.date)}</Text>
-    </TouchableOpacity>
-  );
+      <View style={styles.eventInfoContainer}>
+        <View>
+          <Text style={styles.eventTitle}>{event.name}</Text>
+          <Text style={styles.eventLocalization}>{event.localization}</Text>
+          <Text style={styles.eventDate}>{formatDate(event.date)}</Text>
+        </View>
+        <TouchableOpacity
+          style={styles.button}
+          onPress={() => navigation.navigate('EventDetails', { eventId: event.id })}
+        >
+          <Text style={styles.buttonText}>Szczegóły</Text>
+        </TouchableOpacity>
+      </View>
 
+    </View>
+  );
+    
   return (
     <View style={styles.container}>
       <View style={styles.tabHeaders}>
@@ -67,62 +78,25 @@ const EventHistory: React.FC<Props> = ({ futureEvents, pastEvents }) => {
           <Text>Historia Wydarzeń</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView style={styles.tabContent}>
+      <ScrollView
+        ref={scrollViewRef}
+        style={styles.tabContent}
+        horizontal={true}
+        pagingEnabled={true}
+        showsHorizontalScrollIndicator={true}
+      >
         {activeTab === 'upcomingEvents' ? futureEvents.map(renderEventItem) : pastEvents.map(renderEventItem)}
       </ScrollView>
     </View>
   );
 };
 
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     margin: 10,
-//   },
-//   tabHeaders: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-around',
-//     marginBottom: 10,
-//   },
-//   tabHeader: {
-//     padding: 10,
-//   },
-//   activeTab: {
-//     borderBottomWidth: 2,
-//     borderBottomColor: '#000', // Example active color
-//   },
-//   tabContent: {
-//     // Add your styles here
-//   },
-//   eventItem: {
-//     marginBottom: 20,
-//   },
-//   eventBanner: {
-//     width: '100%',
-//     height: 200, // Adjust based on your needs
-//     resizeMode: 'cover',
-//   },
-//   eventTitle: {
-//     fontSize: 18,
-//     fontWeight: 'bold',
-//     marginTop: 5,
-//   },
-//   eventLocalization: {
-//     fontSize: 16,
-//     color: '#666', // Example color
-//   },
-//   eventDate: {
-//     fontSize: 14,
-//     color: '#999', // Example color
-//   },
-//   // Add more styles as needed
-// });
-
+const { width } = Dimensions.get('window');
 const styles = StyleSheet.create({
     container: {
       flex: 1,
       margin: 10,
-      backgroundColor: '#fff', // Assuming a white background for the container
+      // backgroundColor: '#fff',
     },
     tabHeaders: {
       flexDirection: 'row',
@@ -130,16 +104,11 @@ const styles = StyleSheet.create({
       marginBottom: 10,
     },
     tabHeader: {
-      paddingVertical: 10,
-      paddingHorizontal: 20,
-      backgroundColor: '#E0E0E0', // Light grey background for tabs
-      borderRadius: 10, // Rounded corners for the tab headers
+      padding: 10,
     },
     activeTab: {
-      borderBottomWidth: 3,
-      borderBottomColor: '#007BFF', // Bright blue to indicate active tab
-      backgroundColor: '#007BFF', // Same color for the active tab background
-      color: '#ffffff', // White text color for active tab
+      borderBottomWidth: 2,
+      borderBottomColor: colors.secondary,
     },
     tabContent: {
       flex: 1,
@@ -147,24 +116,47 @@ const styles = StyleSheet.create({
       backgroundColor: '#F0F0F0', // Light grey background for the content area
     },
     eventItem: {
-      backgroundColor: '#FFFFFF', // White background for each event item
+      width: width - 80, // Odejmujemy marginesy, jeśli są potrzebne
+      backgroundColor: '#FFFFFF',
       borderRadius: 10,
       padding: 15,
       marginBottom: 20,
-      shadowColor: '#000', // Shadow for elevation effect
+      marginRight: 20, 
+      shadowColor: '#000',
       shadowOffset: {
         width: 0,
         height: 2,
       },
       shadowOpacity: 0.25,
       shadowRadius: 3.84,
-      elevation: 5, // For Android shadow effect
+      elevation: 5,
     },
     eventBanner: {
       width: '100%',
       height: 200,
-      borderRadius: 10, // Rounded corners for the banner image
-      marginBottom: 10, // Margin bottom for spacing between the image and the text
+      borderRadius: 10,
+      marginBottom: 10,
+    },
+    eventInfoContainer: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    button: {
+      position: 'absolute',
+      right: 2,
+      bottom: 0,
+      backgroundColor: '#FFF',
+      borderColor: colors.primary,
+      borderWidth: 2,
+      borderRadius: 12,
+      paddingVertical: 10, // Wewnętrzny odstęp pionowy
+      paddingHorizontal: 20, // Wewnętrzny odstęp poziomy
+      textAlign: 'center', // Wyśrodkowanie tekstu
+    },
+    buttonText: {
+      color: colors.black, // Kolor tekstu
+      fontSize: 14,
+      fontWeight: 'bold',
     },
     eventTitle: {
       fontSize: 18,
