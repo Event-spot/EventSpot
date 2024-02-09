@@ -1,17 +1,25 @@
 import {StyleSheet, Text, View, TouchableOpacity } from "react-native";
 import {colors} from '../constants/colors';
-import { useNavigation } from "@react-navigation/native";
+import {NavigationProp, useNavigation} from "@react-navigation/native";
+import {useAuth} from "../context/AuthContext";
 
 
 export default function Header() {
-    const navigation = useNavigation();
-    return (
-        <View style={styles.header}>
-            <TouchableOpacity onPress={() => navigation.navigate("Home")}>
-                <Text style={styles.logo}>EventSpot</Text>
-            </TouchableOpacity>
-        </View>
-    )
+    const navigation: NavigationProp<any> = useNavigation();
+    const {currentUser} = useAuth();
+
+    if(currentUser) {
+        return (
+            <View style={styles.header}>
+                <TouchableOpacity onPress={() => navigation.navigate("Home")}>
+                    <Text style={styles.logo}>EventSpot</Text>
+                </TouchableOpacity>
+            </View>
+        )
+    } else {
+        return null;
+    }
+
 }
 
 const styles = StyleSheet.create({

@@ -1,5 +1,7 @@
-import React from "react";
+import React, {useEffect} from "react";
 import {StyleSheet, ScrollView, ImageBackground} from "react-native";
+import {useAuth} from "../context/AuthContext";
+import {NavigationProp, useNavigation} from "@react-navigation/native";
 
 export default function HomePage(){
     return (
