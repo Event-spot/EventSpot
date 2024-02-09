@@ -1,154 +1,159 @@
-import React, { useState } from 'react';
-import { View, Text, TouchableOpacity, Image, ScrollView, StyleSheet } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, TouchableOpacity, Image, FlatList, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { RootStackParamList } from '../../Types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { RootStackParamList } from '../../Types/navigationTypes';
+import defaultImage from '../../assets/images/question.png';
+import { colors } from '../../constants/colors';
+import { Dimensions } from 'react-native';
 
 interface User {
   id: number;
   firstname: string;
   lastname: string;
   avatarImage: string;
+  localization: string;
 }
 
 interface Props {
   followers: User[];
   following: User[];
 }
+
 type UserProfileNavigationProp = StackNavigationProp<RootStackParamList, 'UserProfile'>;
+
 const Followers: React.FC<Props> = ({ followers, following }) => {
   const [activeTab, setActiveTab] = useState<string>('obserwujacy');
   const navigation = useNavigation<UserProfileNavigationProp>();
-
+  const flatListRef = useRef<FlatList<User> | null>(null);
   const handleTabClick = (tab: string) => {
     setActiveTab(tab);
+    flatListRef.current?.scrollToOffset({ animated: true, offset: 0 });
   };
 
-  const renderUserItem = (user: User) => (
+  const renderUserItem = ({ item }: { item: User }) => (
     <TouchableOpacity
-      key={user.id}
-      style={styles.followerItem}
-      onPress={() => navigation.navigate('UserProfile', { userID: user.id })}>
+      key={item.id}
+      style={styles.card}
+      onPress={() => navigation.navigate('UserProfile', { userID: item.id })}>
       <Image
-        source={user.avatarImage ? { uri: user.avatarImage } : require('../../assets/images/question.png')}
-        style={styles.accountImage}
+        style={styles.userImage}
+        source={{ uri: item.avatarImage || Image.resolveAssetSource(defaultImage).uri}}
       />
-      <Text style={styles.userName}>{user.firstname} {user.lastname}</Text>
+      <View style={styles.cardFooter}>
+        <Text style={styles.name}>{item.firstname} {item.lastname}</Text>
+        <Text style={styles.lokalization}>{item.localization}</Text>
+        {/* You can add follow button or other interactive elements here */}
+      </View>
     </TouchableOpacity>
   );
+  
+
+  const data = activeTab === 'obserwujacy' ? followers : following;
 
   return (
     <View style={styles.details}>
       <View style={styles.tabHeaders}>
         <TouchableOpacity
           style={[styles.tabHeader, activeTab === 'obserwujacy' && styles.active]}
-          onPress={() => handleTabClick('obserwujacy')}
-        >
-          <Text>Obserwujący</Text>
+          onPress={() => handleTabClick('obserwujacy')}>
+          <Text style={[styles.buttonText, activeTab === 'obserwujacy' && styles.active]}>Obserwujący</Text>
         </TouchableOpacity>
         <TouchableOpacity
           style={[styles.tabHeader, activeTab === 'obserwowani' && styles.active]}
-          onPress={() => handleTabClick('obserwowani')}
-        >
-          <Text>Obserwowani</Text>
+          onPress={() => handleTabClick('obserwowani')}>
+          <Text style={[styles.buttonText, activeTab === 'obserwowani' && styles.active]}>Obserwowani</Text>
         </TouchableOpacity>
       </View>
-      <ScrollView style={styles.tabContent}>
-        {activeTab === 'obserwujacy' ? followers.map(renderUserItem) : following.map(renderUserItem)}
-      </ScrollView>
+      <FlatList
+        scrollEnabled={data.length > 1}
+        ref={flatListRef}
+        data={data}
+        horizontal
+        renderItem={renderUserItem}
+        keyExtractor={item => item.id.toString()}
+        contentContainerStyle={styles.listContainer}
+      />
     </View>
   );
 };
-
-// const styles = StyleSheet.create({
-//   details: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     margin: 10,
-//   },
-//   tabHeaders: {
-//     flexDirection: 'row',
-//     justifyContent: 'space-around',
-//   },
-//   tabHeader: {
-//     // Your styles for tabHeader
-//   },
-//   active: {
-//     // Your styles for active tabHeader
-//   },
-//   tabContent: {
-//     // Your styles for tabContent
-//   },
-//   followerItem: {
-//     flexDirection: 'row',
-//     alignItems: 'center',
-//     padding: 5,
-//   },
-//   accountImage: {
-//     width: 25,
-//     height: 25,
-//     borderRadius: 12.5,
-//   },
-//   userName: {
-//     paddingLeft: 5,
-//   },
-//   // Define more styles as needed
-// });
+const screenWidth = Dimensions.get('window').width;
+const cardWidth = (screenWidth / 2) - 40;
+// Updated styles to include grid layout styles
 const styles = StyleSheet.create({
-    details: {
-      flex: 1,
-      justifyContent: 'center',
-      margin: 10,
-      backgroundColor: '#fff', // Assuming a white background
+  details: {
+    flex: 1,
+    justifyContent: 'center',
+    margin: 10,
+  },
+  tabHeaders: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#F5F5F5',
+  },
+  tabHeader: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderRadius: 10,
+    margin: 5,
+    borderWidth: 2,
+    borderColor: colors.secondary,
+  },
+  active: {
+    backgroundColor: colors.secondary,
+    color: colors.white,
+  },
+  buttonText: {
+    color: colors.secondary,
+    fontWeight: 'bold',
+    fontSize: 14,
+  },
+  listContainer: {
+    // alignItems: 'center',
+  },
+  card: {
+    shadowColor: '#00000021',
+    width: cardWidth,
+    shadowOffset: {
+      width: 0,
+      height: 6,
     },
-    tabHeaders: {
-      flexDirection: 'row',
-      justifyContent: 'space-around',
-      backgroundColor: '#F5F5F5', // Light gray background for tab headers
-    },
-    tabHeader: {
-      flex: 1,
-      alignItems: 'center',
-      paddingVertical: 10,
-      backgroundColor: '#E0E0E0', // Slightly darker gray for tab header
-      borderTopLeftRadius: 10,
-      borderTopRightRadius: 10,
-      margin: 5,
-      borderWidth: 2,
-      borderColor: '#BDBDBD', // Secondary border color
-    },
-    active: {
-      backgroundColor: '#9E9E9E', // Active tab background color
-      borderBottomWidth: 0,
-    },
-    tabContent: {
-      flex: 1,
-      backgroundColor: '#ECEFF1', // Background color for the tab content
-      borderColor: '#BDBDBD', // Border color for tab content
-      borderWidth: 3,
-      borderBottomLeftRadius: 10,
-      borderBottomRightRadius: 10,
-      marginTop: -3, // Overlap the tabs slightly to hide the bottom border of the active tab
-      maxHeight: 440,
-      overflow: 'hidden',
-    },
-    followerItem: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      padding: 10,
-      borderBottomWidth: 1,
-      borderBottomColor: '#CFD8DC', // Light border for items
-    },
-    accountImage: {
-      width: 50,
-      height: 50,
-      borderRadius: 25,
-      marginRight: 10,
-    },
-    userName: {
-      fontSize: 16,
-      color: '#263238', // Text color
-    },
-  });
+    shadowOpacity: 0.37,
+    shadowRadius: 7.49,
+    elevation: 12,
+    marginVertical: 5,
+    backgroundColor: 'white',
+    flexBasis: '46%',
+    marginHorizontal: 5,
+    alignItems: 'center',
+    padding: 10,
+  },
+  cardHeader: {
+    // Adjust cardHeader styles as needed
+  },
+  userImage: {
+    height: 100,
+    width: 100,
+    borderRadius: 60,
+    alignSelf: 'center',
+    borderColor: colors.secondary,
+    borderWidth: 2,
+    marginBottom: 10,
+  },
+  name: {
+    fontSize: 18,
+    alignSelf: 'center',
+    color: colors.secondary,
+    fontWeight: 'bold',
+  },
+  cardFooter: {
+    // Adjust cardFooter styles as needed
+  },
+  lokalization: {
+    color: colors.black,
+    alignSelf: 'center',
+  }
+});
 
 export default Followers;
