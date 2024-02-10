@@ -6,7 +6,7 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
-    TouchableWithoutFeedback, Keyboard
+    TouchableWithoutFeedback, Keyboard, ImageBackground
 } from "react-native";
 import React, {useState} from "react";
 import {colors} from "../constants/colors";
@@ -32,7 +32,7 @@ export default function Register() {
     });
 
     const onSubmit = async (data: FormData) => {
-
+        console.log(data)
     }
 
     const handleFocus = (field: string) => {
@@ -45,6 +45,7 @@ export default function Register() {
     return (
         <KeyboardAvoidingView style={styles.container} behavior={Platform.OS === 'ios' ? 'padding' : 'height'}>
             <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+                <ImageBackground style={styles.bgImage} source={require('../assets/images/registerBackground.png')}>
                 <View style={styles.inner}>
                     <View style={styles.registerBox}>
                         <Text style={styles.loginTitle}>Utwórz konto</Text>
@@ -175,6 +176,7 @@ export default function Register() {
                         </TouchableOpacity>
                     </View>
                 </View>
+                </ImageBackground>
             </TouchableWithoutFeedback>
         </KeyboardAvoidingView>
     )
@@ -190,6 +192,14 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         height: '100%',
         width: '100%',
+    },
+    bgImage: {
+        flex: 1,
+        resizeMode: 'cover',
+        width: '100%',
+        height: '100%',
+        justifyContent: 'center',
+        alignItems: 'center'
     },
     registerBox: {
         backgroundColor: 'rgba(00, 00, 00, 0.8)',

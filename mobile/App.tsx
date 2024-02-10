@@ -11,7 +11,7 @@ import {config} from '@gluestack-ui/config';
 import {GluestackUIProvider} from "@gluestack-ui/themed";
 
 const client = new ApolloClient({
-    uri: 'http://192.168.0.38:3001/graphql',
+    uri: 'http://192.168.0.49:3001/graphql',
     cache: new InMemoryCache(),
 })
 

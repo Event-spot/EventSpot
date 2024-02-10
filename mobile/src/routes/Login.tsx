@@ -30,7 +30,7 @@ export default function Login() {
     const navigation: NavigationProp<any> = useNavigation();
 
     const onSubmit = async (data: FormData) => {
-        await axios.post('http://192.168.0.38:3001/auth/login', {email: data.email, password: data.password})
+        await axios.post('http://192.168.0.49:3001/auth/login', {email: data.email, password: data.password})
             .then(async response => {
                 await SecureStore.setItemAsync('jwt', response.data.access_token);
                 setCurrentUser(response.data.user)
