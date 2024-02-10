@@ -10,7 +10,9 @@ import Events from "./src/routes/Events";
 import Users from './src/routes/Users';
 import Navbar from "./src/layout/Navbar";
 import UserProfile from "./src/routes/UserProfile";
+import Kontakt from "./src/routes/Kontakt";
 import { RootStackParamList } from '../mobile/src/Types/navigationTypes';
+import CreateEvent from "./src/routes/CreateEvent";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const client = new ApolloClient({
@@ -31,6 +33,8 @@ export default function App() {
               <Stack.Screen name="Events" component={Events} />
               <Stack.Screen name="Users" component={Users} />
               <Stack.Screen name="UserProfile" component={UserProfile} />
+              <Stack.Screen name="Kontakt" component={Kontakt} />
+              <Stack.Screen name="CreateEvent" component={CreateEvent} />
             </Stack.Navigator>
             <Navbar />
           </NavigationContainer>

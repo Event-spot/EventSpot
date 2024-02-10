@@ -7,6 +7,8 @@ import { colors } from '../constants/colors';
 import Icon from 'react-native-vector-icons/Ionicons';
 import EventHistory from '../components/EventHistory/EventHistory';
 import Followers from '../components/Followers/Followers';
+import * as ImagePicker from 'expo-image-picker';
+import * as FileSystem from 'expo-file-system';
 
 // Assuming you have an AuthContext set up for React Native as well
 // import { useAuth } from '@/context/AuthContext';
@@ -95,8 +97,6 @@ const UserProfile: React.FC<Props> = ({ route}) => {
     `;
   const navigation = useNavigation();
 
-  const [selectedFile, setSelectedFile] = useState<File | null>(null);
-  const [selectedBackground, setSelectedBackground] = useState<File | null>(null);
   const [isEditing, setIsEditing] = useState(false);
 //   const {currentUser} = useAuth();
   const [state, setState] = useState({
@@ -115,6 +115,9 @@ const UserProfile: React.FC<Props> = ({ route}) => {
   const { loading, error, data, refetch } = useQuery(GET_USERS_EVENTS_FOLLOWINGS);
   const [isCurrentlyFollowing, setIsCurrentlyFollowing] = useState(false);
   const [followersCount, setFollowersCount] = useState(0);
+  const [image, setImage] = useState<string | null>(null);
+  const [avatarImage, setAvatarImage] = useState<string | null>(null);
+
 
 //   useEffect(() => {
 //     if (data && data.userById) {
@@ -130,12 +133,6 @@ const UserProfile: React.FC<Props> = ({ route}) => {
   const user = data.userById;
   const futureEvents = data.futureEvents;
   const pastEvents = data.pastEvents;
-  const handleFileSelect = (file: File) => {
-    setSelectedFile(file);
-  };
-  const handleBackgroundSelect = (file: File) => {
-    setSelectedBackground(file);
-  };
   const toggleEditMode = () => {
     setIsEditing(!isEditing);
     setState({
@@ -150,42 +147,65 @@ const UserProfile: React.FC<Props> = ({ route}) => {
       editedLocalization: user.localization
     });
   };
+  const pickImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [4, 3],
+      quality: 1,
+    });
+  
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      const uri = result.assets[0].uri;
+      setImage(uri);
+    }
+  };
+  const pickAvatarImage = async () => {
+    let result = await ImagePicker.launchImageLibraryAsync({
+      mediaTypes: ImagePicker.MediaTypeOptions.Images,
+      allowsEditing: true,
+      aspect: [1, 1],
+      quality: 1,
+    });
+  
+    if (!result.canceled && result.assets && result.assets.length > 0) {
+      const uri = result.assets[0].uri;
+      setAvatarImage(uri);
+    }
+  };
+  const uploadToCloudinary = async (uri: any) => {
+    const cloudinaryUrl = 'https://api.cloudinary.com/v1_1/dvqdz02cp/upload';
 
+    try {
+      const uploadResponse = await FileSystem.uploadAsync(cloudinaryUrl, uri, {
+        httpMethod: 'POST',
+        uploadType: FileSystem.FileSystemUploadType.MULTIPART,
+        fieldName: 'file',
+        parameters: {
+          'upload_preset': 'EventSpot',
+        },
+      });
+
+      const uploadResult = await JSON.parse(uploadResponse.body);
+      return uploadResult.secure_url;
+    } catch (e) {
+      console.error('Upload to Cloudinary failed:', e);
+      throw e;
+    }
+  };
   const handleSave = async () => {
     try {
-    const cloudinaryUrl = process.env.NEXT_PUBLIC_CLOUDINARY_URL as string;
-
-    let newAvatarUrl: string | undefined, newBannerUrl: string | undefined;
-
-    const uploadToCloudinary = async (file: File) => {
-      const formData = new FormData();
-      formData.append('file', file);
-      formData.append('upload_preset', "EventSpot");
-
-      const response = await fetch(cloudinaryUrl, {
-        method: 'POST',
-        body: formData
-      });
-      if (!response.ok) {
-        throw new Error('Network response was not ok ' + response.statusText);
+      let bannerUrl;
+      if (image) {
+        bannerUrl = await uploadToCloudinary(image);
       }
-      return response.json();
-    };
-
-    if (selectedFile) {
-      const uploadResult = await uploadToCloudinary(selectedFile);
-      newAvatarUrl = uploadResult.secure_url;
-    }
-
-    if (selectedBackground) {
-      const backgroundResult = await uploadToCloudinary(selectedBackground);
-      newBannerUrl = backgroundResult.secure_url;
-    }
-
+      let avatarUrl;
+      if (avatarImage) {
+        avatarUrl = await uploadToCloudinary(avatarImage);
+      }
       const response = await updateUser({
         variables: {
           updateUserArgs: {
-            // id: parseInt(userID, 10),
             id: userID,
             firstname: state.editedFirstName,
             lastname: state.editedLastName,
@@ -194,8 +214,8 @@ const UserProfile: React.FC<Props> = ({ route}) => {
             instagram: state.editedInstagram,
             tiktok: state.editedTiktok,
             youtube: state.editedYoutube,
-            avatarImage: newAvatarUrl, 
-            bannerImage: newBannerUrl,
+            avatarImage: avatarUrl, 
+            bannerImage: bannerUrl,
             localization: state.editedLocalization
           }
         }
@@ -252,8 +272,12 @@ const UserProfile: React.FC<Props> = ({ route}) => {
     <ScrollView style={styles.main}>
       <View style={styles.up}>
         {isEditing ? (
-            // <UploadForm onFileSelect={handleBackgroundSelect} />
-            <Text>Upload Image</Text>
+            <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+            <TouchableOpacity onPress={pickImage}>
+              <Text style={styles.buttonsSelectImageText}>Ustaw Banner Użytkownika</Text>
+            </TouchableOpacity>
+            {image && <Image source={{ uri: image }} style={{ width: '100%', height: 200 }} />}
+          </View>
         ) : (
             <View>
             <Image
@@ -270,8 +294,12 @@ const UserProfile: React.FC<Props> = ({ route}) => {
             <View style={styles.profileSquare}>
             {isEditing ? (
                 <>
-                {/* <UploadForm onFileSelect={handleFileSelect} /> */}
-                <Text>Upload Image</Text>
+                  <TouchableOpacity onPress={pickAvatarImage}>
+                    <Text style={styles.buttonsSelectAvatarText}>Ustaw Avatar</Text>
+                  </TouchableOpacity>
+                  {avatarImage && (
+                    <Image source={{ uri: avatarImage }} style={{ width: 100, height: 100 }} />
+                  )}
                 </>
             ) : (
                 <Image 
@@ -599,6 +627,14 @@ const styles = StyleSheet.create({
   socialIcons: {
     flexDirection: 'row',
     gap: 10,
+  },
+  buttonsSelectImageText: {
+    marginTop: 20,
+    color: colors.secondary,
+    
+  },
+  buttonsSelectAvatarText: {
+    color: colors.secondary,
   }
 });
 
