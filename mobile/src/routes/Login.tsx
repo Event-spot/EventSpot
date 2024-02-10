@@ -31,7 +31,7 @@ export default function Login() {
 
     const onSubmit = async (data: FormData) => {
         await axios.post('http://192.168.0.49:3001/auth/login', {email: data.email, password: data.password})
-            .then(async response => {
+            .then(async (response: any) => {
                 await SecureStore.setItemAsync('jwt', response.data.access_token);
                 setCurrentUser(response.data.user)
             });

@@ -1,7 +1,6 @@
-import {StyleSheet, Text, View, TouchableOpacity} from "react-native";
+import {StyleSheet, Text, View, TouchableOpacity, TouchableWithoutFeedback} from "react-native";
 import {colors} from "../constants/colors";
 import Icon from 'react-native-vector-icons/Ionicons';
-import {NavigationProp, useNavigation} from "@react-navigation/native";
 import {useAuth} from "../context/AuthContext";
 import {Avatar, AvatarImage, Menu, MenuItem, MenuItemLabel} from '@gluestack-ui/themed';
 import {useState} from "react";
@@ -9,6 +8,8 @@ import * as SecureStore from 'expo-secure-store';
 import { useNavigation } from "@react-navigation/native";
 import { RootStackParamList } from '../Types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
+
+type UserProfileNavigationProp = StackNavigationProp<RootStackParamList, 'Events', 'Users'>;
 
 export default function Navbar() {
     const navigation = useNavigation<UserProfileNavigationProp>();
@@ -29,7 +30,7 @@ export default function Navbar() {
     }
 
     const navigateToProfile = () => {
-        navigation.navigate('Users', {id: currentUser?.id})
+        navigation.navigate('UserProfile', {userID: currentUser?.id})
     }
 
     if (currentUser) {

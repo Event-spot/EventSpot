@@ -17,16 +17,14 @@ import {GluestackUIProvider} from "@gluestack-ui/themed";
 import UserProfile from "./src/routes/UserProfile";
 import Kontakt from "./src/routes/Kontakt";
 import EventDetails from "./src/routes/EventDetails";
-import { RootStackParamList } from '../mobile/src/Types/navigationTypes';
+import { RootStackParamList } from './src/Types/navigationTypes';
 import CreateEvent from "./src/routes/CreateEvent";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const client = new ApolloClient({
-    uri: 'http://192.168.18.2:3001/graphql',
+    uri: 'http://192.168.0.49:3001/graphql',
     cache: new InMemoryCache(),
 })
-
-apolloDevToolsInit(client);
 export default function App() {
     return (
         <AuthProvider>
@@ -35,15 +33,7 @@ export default function App() {
                 <SafeAreaView style={styles.container}>
                     <NavigationContainer>
                         <Header/>
-                        <Stack.Navigator screenOptions={{headerShown: false}}>
-                            <Stack.Screen name="Home" component={HomePage}/>
-                            <Stack.Screen name="Events" component={Events}/>
-                            <Stack.Screen name="Users" component={Users}/>
-                            <Stack.Screen name="UserProfile" component={UserProfile}/>
-                            <Stack.Screen name="Kontakt" component={Kontakt}/>
-                            <Stack.Screen name="CreateEvent" component={CreateEvent}/>
-                            <Stack.Screen name="EventDetails" component={EventDetails}/>
-                        </Stack.Navigator>
+                            <Navigation/>
                         <Navbar/>
                     </NavigationContainer>
                 </SafeAreaView>

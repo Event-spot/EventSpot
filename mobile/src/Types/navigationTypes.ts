@@ -1,5 +1,5 @@
 export type RootStackParamList = {
-    UserProfile: { userID: number };
+    UserProfile: { userID: number | undefined };
     Home: undefined;
     Users: undefined;
     Events: undefined;
