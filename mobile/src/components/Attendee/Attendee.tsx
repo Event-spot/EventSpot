@@ -1,83 +1,122 @@
-import React from 'react';
-import { View, Text, Image, TouchableOpacity, StyleSheet } from 'react-native';
+import React, { useState, useRef } from 'react';
+import { View, Text, Image, TouchableOpacity, StyleSheet, FlatList, Dimensions } from 'react-native';
 import { useNavigation } from '@react-navigation/native'; 
 import { RootStackParamList } from '../../Types/navigationTypes';
-import { StackNavigationProp } from '@react-navigation/stack';// Zakładając, że używasz react-navigation
+import { colors } from '../../constants/colors';
+import { StackNavigationProp } from '@react-navigation/stack';
 
-// Przykładowe ścieżki, dostosuj do swojej struktury projektu
 const QuestionImage = require('../../assets/images/question.png');
-
-type EventAttendeeProps = {
+type AttendeeType = {
   id: number;
-  imie: string;
-  nazwisko: string;
+  firstname: string;
+  lastname: string;
+  localization:string;
   avatarImage: string;
 };
+
+type AttendeeProps = {
+  data: AttendeeType[];
+};
 type UserProfileNavigationProp = StackNavigationProp<RootStackParamList, 'UserProfile'>;
-const Attendee: React.FC<EventAttendeeProps> = ({
-  id,
-  imie,
-  nazwisko,
-  avatarImage,
-}) => {
-    const navigation = useNavigation<UserProfileNavigationProp>();
+const Attendee: React.FC<AttendeeProps> = ({ data }) => {
+  const navigation = useNavigation<UserProfileNavigationProp>();
 
-  // Funkcja do obsługi nawigacji
-  
-
+  const renderUserItem = ({ item }: { item: AttendeeType }) => (
+    <TouchableOpacity
+      style={styles.card}
+      onPress={() => navigation.navigate('UserProfile', { userID: item.id })}>
+      <Image
+        style={styles.userImage}
+        source={item.avatarImage ? { uri: item.avatarImage } : QuestionImage}
+      />
+      <View style={styles.cardFooter}>
+        <Text style={styles.name}>{item.firstname} {item.lastname}</Text>
+        <Text style={styles.lokalization}>{item.localization}</Text>
+      </View>
+    </TouchableOpacity>
+  );
 
   return (
-    <View style={styles.tableContent}>
-      <TouchableOpacity onPress={() => navigation.navigate('UserProfile', { userID: id })} style={styles.row}>
-        <View style={styles.account}>
-          <Image 
-            style={styles.accountimage}
-            source={avatarImage ? { uri: avatarImage } : QuestionImage}
-          />
-        </View>
-        <View style={styles.cell}>
-          <Text>{imie} {nazwisko}</Text>
-        </View>
-      </TouchableOpacity>
-    </View>
+    <FlatList
+      scrollEnabled={data.length > 1}
+      data={data}
+      renderItem={renderUserItem}
+      keyExtractor={(item) => item.id.toString()}
+      horizontal={true}
+    />
   );
 };
-
+const screenWidth = Dimensions.get('window').width;
+const cardWidth = (screenWidth / 2) - 15;
 
 
 const styles = StyleSheet.create({
-  row: {
-    flexDirection: 'row',
+ 
+  details: {
+    flex: 1,
     justifyContent: 'center',
-    alignItems: 'center',
-    paddingVertical: 5,
-    paddingHorizontal: 5,
-    overflow: 'hidden',
+    margin: 10,
   },
-  tableContent: {
+  tabHeaders: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    backgroundColor: '#F5F5F5',
+  },
+  tabHeader: {
+    flex: 1,
+    alignItems: 'center',
+    paddingVertical: 10,
+    borderRadius: 10,
+    margin: 5,
+    borderWidth: 2,
+    borderColor: colors.secondary,
+  },
+  active: {
+    backgroundColor: colors.secondary,
+    color: colors.white,
+  },
+  listContainer: {
 
   },
+  card: {
+    shadowColor: '#00000021',
+    width: cardWidth,
+    elevation: 12,
+    marginVertical: 5,
+    backgroundColor: 'white',
+    flexBasis: '46%',
+    marginHorizontal: 5,
+    alignItems: 'center',
+    padding: 10,
+  },
   account: {
-    
     width: '20%',
     justifyContent: 'center',
     alignItems: 'center',
   },
-  accountimage: {
-    marginTop: 5,
-    borderRadius: 50, // React Native używa pikseli, nie procentów dla borderRadius, ale 50% w CSS odpowiada dużemu borderRadius w RN, by uzyskać efekt koła
-    width: 20, // Musisz zdefiniować zarówno szerokość, jak i wysokość w React Native
-    height: 20,
+  cardHeader: {
+
   },
-  cell: {
-    width: '80%',
-    padding: 5,
-    justifyContent: 'flex-start', // W React Native "justifyContent: left" nie jest poprawne, używamy "flex-start"
-    textAlign: 'left', // textAlign jest stosowany bezpośrednio do tekstu wewnątrz komponentów <Text>
-    // Stylizacja dla tagów <a> z CSS nie jest bezpośrednio przekładalna na RN. Możesz użyć TouchableOpacity z onPress do nawigacji
+  userImage: {
+    height: 100,
+    width: 100,
+    borderRadius: 60,
+    borderColor: colors.secondary,
+    borderWidth: 2,
+    marginBottom: 10,
   },
-  // W React Native nie ma bezpośredniego odpowiednika dla :hover czy innych pseudoklas CSS
-  // Tekst musi być umieszczony w komponentach <Text>, które mogą być stylizowane oddzielnie
+  name: {
+    fontSize: 18,
+    marginTop:5,
+    color: colors.secondary,
+    fontWeight: 'bold',
+  },
+  cardFooter: {
+  },
+  lokalization: {
+    color: colors.black,
+    alignSelf: 'center',
+  }
 });
 
 export default Attendee;

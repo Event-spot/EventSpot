@@ -53,7 +53,7 @@ const EventHistory: React.FC<Props> = ({ futureEvents, pastEvents }) => {
         </View>
         <TouchableOpacity
           style={styles.button}
-          onPress={() => navigation.navigate('EventDetails', { eventId: event.id })}
+          onPress={() => navigation.navigate('EventDetails', { eventID: event.id })}
         >
           <Text style={styles.buttonText}>Szczegóły</Text>
         </TouchableOpacity>

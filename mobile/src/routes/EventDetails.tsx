@@ -1,11 +1,14 @@
 import React, { useState, useEffect, useRef} from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, TextInput, StyleSheet, Linking } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, TextInput,Dimensions, StyleSheet, Linking } from 'react-native';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { useNavigation, RouteProp  } from '@react-navigation/native';
 import { RootStackParamList } from '../Types/navigationTypes';
 import { StackNavigationProp } from '@react-navigation/stack';
 import Attendee from '../components/Attendee/Attendee';
+import { colors } from '../constants/colors';
+import Map from '../components/Map/Map';
 import Detail from '../components/Detail/Detail';
+import Comment from '../components/Comments/Comment';
 import Icon from 'react-native-vector-icons/Ionicons';
 
 type Event = {
@@ -42,16 +45,18 @@ type Event = {
       eventID: string;
     };
   };
-  type EventProfileRouteProp = RouteProp<RootStackParamList, 'EventDetails'>;
+  type UserProfileRouteProp = RouteProp<RootStackParamList, 'EventDetails'>;
   type Props = {
-      route: EventProfileRouteProp;
+      route: UserProfileRouteProp;
     };
-
+  
+   
  const EventDetails: React.FC<Props> = ({route}) => {
     const textareaRef = useRef<HTMLTextAreaElement>(null);
     const defaultBanner = require('../assets/images/isb.png');
     const defaultAvatar = require('../assets/images/question.png');
     const { eventID } = route.params;
+    const navigation = useNavigation<UserProfileRouteProp>();
     const GET_EVENTS= gql`
   query{
     eventById(eventId: ${eventID}){
@@ -74,6 +79,7 @@ type Event = {
         id,
         firstname,
         lastname,
+        localization,
         avatarImage
       }
       comments {
@@ -123,20 +129,20 @@ type Event = {
       editedCompetitions: '',
       editedLocalization_details: ''
     });
-    // const { currentUser } = useAuth();
+    const { currentUser } = useAuth();
     const [isOrganizer, setIsOrganizer] = useState(false);
     const [isAlreadyIn, setIsAlreadyIn] = useState(false);
     const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
     const [joinEvent] = useMutation(JOIN_EVENT_MUTATION);
     const [leaveEvent] = useMutation(LEAVE_EVENT_MUTATION);
     const [addComment ] = useMutation(ADD_COMMENT_MUTATION);
-    // useEffect(() => {
-    //     if (data && data.eventById && currentUser) {
-    //       setIsOrganizer(data.eventById.organizer.id === currentUser.id);
-    //       const isParticipant = data.eventById.attendees.some((attendee: any)=> attendee.id === currentUser.id);
-    //       setIsAlreadyIn(isParticipant);
-    //     }
-    //   }, [data, currentUser]);
+    useEffect(() => {
+        if (data && data.eventById && currentUser) {
+          setIsOrganizer(data.eventById.organizer.id === currentUser.id);
+          const isParticipant = data.eventById.attendees.some((attendee: any)=> attendee.id === currentUser.id);
+          setIsAlreadyIn(isParticipant);
+        }
+      }, [data, currentUser]);
     
       if (loading) return <Text>Loading...</Text>;
       if (error) return <Text>Error: {error.message}</Text>;
@@ -278,18 +284,17 @@ type Event = {
     //           textareaRef.current.value = '';
     //         }
 
-            //     Notifications.show({ title: 'Sukces', message: 'Komentarz został dodany.', color: 'green' });
-            // } catch (error) {
-            //   console.error('Error submitting comment:', error);
-            //   Notifications.show({ title: 'Błąd', message: 'Nie udało się dodać komentarza.', color: 'red' });
-            // }
-            // }
-            // };
-            type UserProfileNavigationProp = StackNavigationProp<RootStackParamList, 'Events'>;
-             const navigation = useNavigation<UserProfileNavigationProp>();
+    //             Notifications.show({ title: 'Sukces', message: 'Komentarz został dodany.', color: 'green' });
+    //         } catch (error) {
+    //           console.error('Error submitting comment:', error);
+    //           Notifications.show({ title: 'Błąd', message: 'Nie udało się dodać komentarza.', color: 'red' });
+    //         }
+    //         }
+    //         };
+           
             return (
                 <ScrollView style={styles.main}>
-                <View style={styles.main}>
+                
                 
                   
                   <View style={styles.up}>
@@ -312,7 +317,7 @@ type Event = {
       <View style={styles.eventDiv}>
         <View style={styles.eventLeft}>
           <View style={styles.eventSquare}>
-            <TouchableOpacity onPress={() => navigation.navigate("Events")}>
+            <TouchableOpacity /*onPress={() => navigation.navigate("Events")}*/>
                 <Image 
                  // style={styles.avatar} 
                   source={event.organizer.avatarImage ? { uri: event.organizer.avatarImage } : require('../assets/images/question.png')}
@@ -372,16 +377,9 @@ type Event = {
           <Text>Wezmą udział: {event.attendeesCount}</Text> 
           </View>
           <View style={styles.participantsTable}>
-         {event.attendees?.map((attendee: Attendee, index: number) => (
           <Attendee
-                key={index}
-                id={attendee.id}
-                imie={attendee.firstname}
-                nazwisko={attendee.lastname}
-                avatarImage={attendee.avatarImage}
-              />
-            ))
-          }
+        data={data.eventById.attendees}
+        />
         </View>
         </View>
         </View>
@@ -397,27 +395,27 @@ type Event = {
         </View>
 
         <View style={styles.insidenext3}>
-        {/* <Map
+        <Map
           lokalizacja={event.localization}        
           data={new Date(event.date)}
           isEditing={isEditing}
           handleDetailChange={handleDetailChange}
-        /> */}
+        />
         </View>
       </View>
 
         <View style={styles.afternext}>
           <View style={styles.komentarze}>
-            {/* {currentUser && (
-              <div className={styles.write}>
+            { currentUser && (
+              <View style={styles.write}>
                 <textarea
                   ref={textareaRef}
                   placeholder='Napisz komentarz'
-                /> */}
-                {/* <Button fullWidth onClick={handleSubmitComment} color="#8A5FC0" radius="xl">Wyślij</Button> */}
-              {/* </div> */}
-            {/* )} */}
-            {/* {event.comments?.map((comment: Comment, index: number) => (
+                />
+                 <TouchableOpacity  onPress={handleSubmitComment}><Text>Wyślij</Text></TouchableOpacity> 
+               </View> 
+             )}
+             {event.comments?.map((comment: Comment, index: number) => (
               <Comment
                 key={index}
                 id={comment.id}
@@ -429,23 +427,18 @@ type Event = {
                 avatarImage={comment.user.avatarImage}
               />
                 ))
-              } */}
+              } 
           </View>
         </View>
-    </View>
+   
     </ScrollView>
   );
 };
 
+const screenWidth = Dimensions.get('window').width;
+const cardWidth = (screenWidth / 2) - 15;
 
 
-const colors = {
-    primary:'#2E1A47',
-    background: '#f3f2f3;', 
-    secondary: '#8A5FC0',
-    white: '#FFFFFF',
-    cancel: '#C70000',
-  };
 
 const styles = StyleSheet.create({
 
@@ -456,6 +449,7 @@ const styles = StyleSheet.create({
       main: {
         flex: 1,
         padding: 5,
+        
       },
       up: {
         position: 'relative',
@@ -499,9 +493,9 @@ const styles = StyleSheet.create({
       },
       eventName: {
         alignItems: 'center',
-        // Wewnątrz stylów nie możemy definiować stylów dla tagów p - każdy z nich będzie musiał być stylizowany oddzielnie
+       
       },
-      eventNameText: { // Styl dla tagów <p> wewnątrz eventName
+      eventNameText: {
         padding: 4,
         fontSize: 22,
         fontWeight: 'bold',
@@ -531,9 +525,10 @@ const styles = StyleSheet.create({
       },
       
       insidenext1: {
-        height: '100%',
+        minHeight: 100, // Przykład, dostosuj do swoich potrzeb
         width: '100%',
       },
+      
       participantscomp: {
         flexDirection: 'column',
         justifyContent: 'center',
@@ -545,33 +540,28 @@ const styles = StyleSheet.create({
       },
       participantsTable: {
        textAlign:'center',
-        borderWidth: 2,
-        borderColor: colors.secondary,
-        borderRadius: 10,
-        minHeight:100,
+        minHeight:220,
         maxHeight: 300,
-        minWidth:250,
+        minWidth:cardWidth,
       },
       insidenext2: {
-        backgroundColor: colors.primary,
-        height:100,
-        
+        minHeight: 300,
         width: '100%',
       },
       insidenext3: {
-        height: '100%',
+      
+        minHeight:350,
         width: '100%',
-        
       },
-
+    
       afternext: {
         width: '100%',
         flexDirection: 'column',
-        alignItems: 'stretch', // W React Native "stretch" jest domyślną wartością dla alignItems
+        alignItems: 'stretch',
       },
       komentarze: {
         width: '60%',
-        alignSelf: 'center', // "margin: auto" można osiągnąć za pomocą "alignSelf: 'center'"
+        alignSelf: 'center', 
         alignItems: 'center',
         flexDirection: 'column',
       },
@@ -584,10 +574,8 @@ const styles = StyleSheet.create({
         width: '100%',
         minHeight: 100,
         borderRadius: 20,
-        // W React Native nie ma właściwości "resize", ponieważ nie ma potrzeby dostosowywania rozmiaru inputów przez użytkownika
         padding: 10,
-        // Nie ma również właściwości "box-sizing" w React Native
-        overflow: 'hidden', // W React Native "overflow-y" nie jest dostępne; używaj "overflow"
+        overflow: 'hidden', 
       },
 });
 
