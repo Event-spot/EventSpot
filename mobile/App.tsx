@@ -11,6 +11,7 @@ import Users from './src/routes/Users';
 import Navbar from "./src/layout/Navbar";
 import UserProfile from "./src/routes/UserProfile";
 import Kontakt from "./src/routes/Kontakt";
+import EventDetails from "./src/routes/EventDetails";
 import { RootStackParamList } from '../mobile/src/Types/navigationTypes';
 import CreateEvent from "./src/routes/CreateEvent";
 
@@ -35,6 +36,7 @@ export default function App() {
               <Stack.Screen name="UserProfile" component={UserProfile} />
               <Stack.Screen name="Kontakt" component={Kontakt} />
               <Stack.Screen name="CreateEvent" component={CreateEvent} />
+              <Stack.Screen name="EventDetails" component={EventDetails} />
             </Stack.Navigator>
             <Navbar />
           </NavigationContainer>
