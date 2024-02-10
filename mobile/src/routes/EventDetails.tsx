@@ -129,20 +129,20 @@ type Event = {
       editedCompetitions: '',
       editedLocalization_details: ''
     });
-    const { currentUser } = useAuth();
+    // const { currentUser } = useAuth();
     const [isOrganizer, setIsOrganizer] = useState(false);
     const [isAlreadyIn, setIsAlreadyIn] = useState(false);
     const [updateEvent] = useMutation(UPDATE_EVENT_MUTATION);
     const [joinEvent] = useMutation(JOIN_EVENT_MUTATION);
     const [leaveEvent] = useMutation(LEAVE_EVENT_MUTATION);
     const [addComment ] = useMutation(ADD_COMMENT_MUTATION);
-    useEffect(() => {
-        if (data && data.eventById && currentUser) {
-          setIsOrganizer(data.eventById.organizer.id === currentUser.id);
-          const isParticipant = data.eventById.attendees.some((attendee: any)=> attendee.id === currentUser.id);
-          setIsAlreadyIn(isParticipant);
-        }
-      }, [data, currentUser]);
+    // useEffect(() => {
+    //     if (data && data.eventById && currentUser) {
+    //       setIsOrganizer(data.eventById.organizer.id === currentUser.id);
+    //       const isParticipant = data.eventById.attendees.some((attendee: any)=> attendee.id === currentUser.id);
+    //       setIsAlreadyIn(isParticipant);
+    //     }
+    //   }, [data, currentUser]);
     
       if (loading) return <Text>Loading...</Text>;
       if (error) return <Text>Error: {error.message}</Text>;
@@ -406,7 +406,7 @@ type Event = {
 
         <View style={styles.afternext}>
           <View style={styles.komentarze}>
-            { currentUser && (
+            {/* { currentUser && (
               <View style={styles.write}>
                 <textarea
                   ref={textareaRef}
@@ -414,7 +414,7 @@ type Event = {
                 />
                  <TouchableOpacity  onPress={handleSubmitComment}><Text>Wyślij</Text></TouchableOpacity> 
                </View> 
-             )}
+             )} */}
              {event.comments?.map((comment: Comment, index: number) => (
               <Comment
                 key={index}
