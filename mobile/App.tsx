@@ -10,6 +10,7 @@ import Events from "./src/routes/Events";
 import Users from './src/routes/Users';
 import Navbar from "./src/layout/Navbar";
 import UserProfile from "./src/routes/UserProfile";
+import EventDetails from "./src/routes/EventDetails";
 import { RootStackParamList } from '../mobile/src/Types/navigationTypes';
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
@@ -31,6 +32,7 @@ export default function App() {
               <Stack.Screen name="Events" component={Events} />
               <Stack.Screen name="Users" component={Users} />
               <Stack.Screen name="UserProfile" component={UserProfile} />
+              <Stack.Screen name="EventDetails" component={EventDetails} />
             </Stack.Navigator>
             <Navbar />
           </NavigationContainer>

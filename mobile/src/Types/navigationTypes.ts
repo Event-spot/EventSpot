@@ -3,5 +3,5 @@ export type RootStackParamList = {
     Home: undefined;
     Users: undefined;
     Events: undefined;
-    EventDetails: { eventId: number };
+    EventDetails: { eventID: number };
   };
