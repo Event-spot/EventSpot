@@ -31,7 +31,7 @@ const Event: React.FC<EventProps> = ({ id, nazwa, lokalizacja, data, bannerImage
     <View style={styles.event}>
       <Image
         style={styles.eventbanner}
-        source={bannerImage || defaultBanner}
+        source={bannerImage ? { uri: bannerImage } : defaultBanner}
         resizeMode="cover"
       />
       <View style={styles.down}>

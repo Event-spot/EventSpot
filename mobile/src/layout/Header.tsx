@@ -12,6 +12,9 @@ export default function Header() {
             <TouchableOpacity onPress={() => navigation.navigate("Home")}>
                 <Text style={styles.logo}>EventSpot</Text>
             </TouchableOpacity>
+            <TouchableOpacity onPress={() => navigation.navigate("Kontakt")}>
+                <Text style={styles.contact}>Kontakt</Text>
+            </TouchableOpacity>
         </View>
     )
 }
@@ -23,12 +26,20 @@ const styles = StyleSheet.create({
         shadowColor: colors.black,
         elevation: 20,
         display: "flex",
-        justifyContent: 'center'
+        justifyContent: 'space-between',
+        flexDirection: 'row',
+        paddingRight: 10,
+        alignItems: 'center',
     },
     logo: {
         fontSize: 32,
         color: colors.primary,
         fontWeight: 'bold',
         marginLeft: 15
+    },
+    contact: {
+        fontSize: 20,
+        fontWeight: 'bold',
+        color: colors.primary,
     }
 })
