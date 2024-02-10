@@ -1,4 +1,4 @@
-import {StyleSheet, Text, View, TouchableWithoutFeedback, TouchableOpacity} from "react-native";
+import {StyleSheet, Text, View, TouchableOpacity} from "react-native";
 import {colors} from "../constants/colors";
 import Icon from 'react-native-vector-icons/Ionicons';
 import {NavigationProp, useNavigation} from "@react-navigation/native";
@@ -6,9 +6,12 @@ import {useAuth} from "../context/AuthContext";
 import {Avatar, AvatarImage, Menu, MenuItem, MenuItemLabel} from '@gluestack-ui/themed';
 import {useState} from "react";
 import * as SecureStore from 'expo-secure-store';
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from '../Types/navigationTypes';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 export default function Navbar() {
-    const navigation: NavigationProp<any> = useNavigation();
+    const navigation = useNavigation<UserProfileNavigationProp>();
     const {currentUser, setCurrentUser} = useAuth();
     const [isOpen, setIsOpen] = useState<boolean>(false);
 

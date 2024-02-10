@@ -1,6 +1,8 @@
 import React from 'react';
 import { View, Text, Image, StyleSheet, TouchableOpacity } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from '../../Types/navigationTypes';
+import { StackNavigationProp } from '@react-navigation/stack';
 
 interface EventProps {
   id: number;
@@ -9,9 +11,9 @@ interface EventProps {
   data: Date;
   bannerImage: string;
 }
-
+type UserProfileNavigationProp = StackNavigationProp<RootStackParamList, 'EventDetails'>;
 const Event: React.FC<EventProps> = ({ id, nazwa, lokalizacja, data, bannerImage }) => {
-//   const navigation = useNavigation(); 
+  const navigation = useNavigation<UserProfileNavigationProp>();
 
   const truncatedName = nazwa.length > 27 ? `${nazwa.slice(0, 27)}...` : nazwa;
   const defaultBanner = require('../../assets/images/illegalzone.png');
@@ -29,7 +31,7 @@ const Event: React.FC<EventProps> = ({ id, nazwa, lokalizacja, data, bannerImage
     <View style={styles.event}>
       <Image
         style={styles.eventbanner}
-        source={bannerImage || defaultBanner}
+        source={bannerImage ? { uri: bannerImage } : defaultBanner}
         resizeMode="cover"
       />
       <View style={styles.down}>
@@ -40,7 +42,7 @@ const Event: React.FC<EventProps> = ({ id, nazwa, lokalizacja, data, bannerImage
         <View style={styles.down2}>
           <Text style={styles.name}>{truncatedName}</Text>
           <TouchableOpacity 
-        //   onPress={() => navigation.navigate('EventDetails', { eventId: id })}
+          onPress={() => navigation.navigate('EventDetails', { eventID: id })}
           >
             <Text style={styles.button}>Zobacz więcej</Text>
           </TouchableOpacity>

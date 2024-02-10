@@ -1,10 +1,13 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, ScrollView, StyleSheet } from 'react-native';
+import { View, Text, ScrollView, StyleSheet, TouchableOpacity } from 'react-native';
 import { gql, useQuery } from '@apollo/client';
 import Upbar from '../components/Upbar/Upbar';
 import Event from '../components/Event/Event';
 import Pagination from '../components/Pagination/Pagination';
-
+import { useNavigation } from "@react-navigation/native";
+import { RootStackParamList } from '../Types/navigationTypes';
+import { StackNavigationProp } from '@react-navigation/stack';
+import { colors } from '../constants/colors';
 interface Event {
     id:number;
    name:string;
@@ -35,6 +38,7 @@ const GET_EVENTS = gql`
 interface EventsQueryResponse {
     events: Event[];
 }
+type UserProfileNavigationProp = StackNavigationProp<RootStackParamList, 'Home'>;
 export default function Wydarzenia() {
     const { loading, error, data } = useQuery<EventsQueryResponse>(GET_EVENTS);
     const [currentPage, setCurrentPage] = useState(1);
@@ -42,7 +46,7 @@ export default function Wydarzenia() {
     const [searchQuery, setSearchQuery] = useState('');
     const [sortOption, setSortOption] = useState('');
     const [originalEvents, setOriginalEvents] = useState<Event[]>([]);
-  
+    const navigation = useNavigation<UserProfileNavigationProp>();
     useEffect(() => {
       if (data?.events) {
         // Przypisanie danych do stanu oryginalnych eventów
@@ -78,6 +82,9 @@ export default function Wydarzenia() {
   return (
     <View style={styles.main}>
       <ScrollView>
+        <TouchableOpacity onPress={() => navigation.navigate("CreateEvent")}>
+            <Text style={styles.createEventText}>Utwórz wydarzenie</Text>
+        </TouchableOpacity>
         <Upbar
           pageType="wydarzenia"
           onSortChange={setSortOption}
@@ -116,5 +123,18 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
+  },
+  createEventText: {
+    backgroundColor: colors.secondary,
+    borderColor: colors.secondary,
+    borderWidth: 2,
+    borderRadius: 12,
+    color: colors.white,
+    fontSize: 14,
+    fontWeight: 'bold',
+    paddingVertical: 10,
+    paddingHorizontal: 10, 
+    textAlign: 'center', 
+    marginBottom: 10,
   },
 });

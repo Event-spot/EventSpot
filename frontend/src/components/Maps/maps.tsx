@@ -86,6 +86,7 @@ const Map: React.FC<MapProps> = ({lokalizacja, data, isEditing, handleDetailChan
             />
             <input 
               type="text"
+              placeholder="Lokalizacja"
               name="editedLocalization"
               value={editedLocalization}
               onChange={handleChange}
@@ -100,9 +101,7 @@ const Map: React.FC<MapProps> = ({lokalizacja, data, isEditing, handleDetailChan
           </>
         )}
       </div>
-      {/* <div className={styles.address}>
-      <div className={styles.addressname}>{lokalizacja}</div>
-      </div> */}
+     
       <button className={styles.buttonnav} onClick={handleNavigation}><p>Nawiguj &gt;</p></button>
       <div className={styles.mapa} ref={mapRef}>
       
