@@ -123,7 +123,7 @@ export default function Login() {
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 1
     },
     input: {
         width: '80%',
