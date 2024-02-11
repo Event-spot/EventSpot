@@ -3,7 +3,6 @@ import { SafeAreaView, StyleSheet, AppRegistry, StatusBar  } from 'react-native'
 import {ApolloClient, InMemoryCache, ApolloProvider} from "@apollo/client";
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import {apolloDevToolsInit} from 'react-native-apollo-devtools-client';
 import Header from './src/layout/Header';
 import HomePage from "./src/routes/HomePage";
 import Events from "./src/routes/Events";
@@ -21,7 +20,6 @@ const client = new ApolloClient({
     cache: new InMemoryCache(),
 })
 
-apolloDevToolsInit(client);
 export default function App() {
     return (
       <ApolloProvider client={client}>
