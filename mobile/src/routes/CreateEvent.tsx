@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { View, Text, TextInput, Button, StyleSheet, Alert, Image, ScrollView, TouchableOpacity, Platform } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TextInput, StyleSheet, Alert, Image, ScrollView, TouchableOpacity } from 'react-native';
 import { useForm, Controller } from 'react-hook-form';
 import { gql, useMutation } from '@apollo/client';
 import DateTimePicker from '@react-native-community/datetimepicker';

@@ -20,7 +20,7 @@ export class AuthController {
             // secure: true,
             maxAge: 7 * 24 * 60 * 60 * 1000
         })
-        return response.send({user})
+        return response.send({access_token, user})
     }
 
     @Get('verify')

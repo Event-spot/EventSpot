@@ -9,6 +9,7 @@ import EventHistory from '../components/EventHistory/EventHistory';
 import Followers from '../components/Followers/Followers';
 import * as ImagePicker from 'expo-image-picker';
 import * as FileSystem from 'expo-file-system';
+import {useAuth} from "../context/AuthContext";
 
 // Assuming you have an AuthContext set up for React Native as well
 // import { useAuth } from '@/context/AuthContext';
@@ -21,6 +22,7 @@ type Props = {
 
 const UserProfile: React.FC<Props> = ({ route}) => {
     const { userID } = route.params;
+    const {currentUser} = useAuth();
     const GET_USERS_EVENTS_FOLLOWINGS = gql`
     query  {
       userById(userId: ${userID}) {
@@ -256,7 +258,7 @@ const UserProfile: React.FC<Props> = ({ route}) => {
 //         Notifications.show({ title: 'Sukces', message: 'Zacząłeś obserwować użytkownika.', color: 'green' });
 //       }
 //       setIsCurrentlyFollowing(!isCurrentlyFollowing);
-//       refetch(); 
+//       refetch();
 //     } catch (error) {
 //       console.error('Error updating follow status:', error);
 //       Notifications.show({ title: 'Błąd', message: 'Nie udało się zaktualizować statusu obserwacji.', color: 'red' });
@@ -358,7 +360,7 @@ const UserProfile: React.FC<Props> = ({ route}) => {
 
              {
             //  currentUser?.id
-             user.id === user.id ? ( 
+             currentUser?.id === user.id ? (
             isEditing ? (
                 <>
                 <View style={styles.buttonView}>
