@@ -1,8 +1,8 @@
 import React from "react";
 import {SafeAreaView, StyleSheet, AppRegistry, StatusBar} from 'react-native';
 import {ApolloClient, InMemoryCache, ApolloProvider} from "@apollo/client";
-import { NavigationContainer } from '@react-navigation/native';
-import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {NavigationContainer} from '@react-navigation/native';
+import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import {apolloDevToolsInit} from 'react-native-apollo-devtools-client';
 import Header from './src/layout/Header';
 import HomePage from "./src/routes/HomePage";
@@ -17,27 +17,29 @@ import {GluestackUIProvider} from "@gluestack-ui/themed";
 import UserProfile from "./src/routes/UserProfile";
 import Kontakt from "./src/routes/Kontakt";
 import EventDetails from "./src/routes/EventDetails";
-import { RootStackParamList } from './src/Types/navigationTypes';
+import {RootStackParamList} from './src/Types/navigationTypes';
 import CreateEvent from "./src/routes/CreateEvent";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const client = new ApolloClient({
-    uri: 'http://192.168.0.49:3001/graphql',
+    uri: 'http://192.168.0.38:3001/graphql',
     cache: new InMemoryCache(),
 })
 export default function App() {
     return (
         <AuthProvider>
-            <ApolloProvider client={client}>
-                <StatusBar barStyle="light-content"/>
-                <SafeAreaView style={styles.container}>
-                    <NavigationContainer>
-                        <Header/>
+            <GluestackUIProvider config={config}>
+                <ApolloProvider client={client}>
+                    <StatusBar barStyle="light-content"/>
+                    <SafeAreaView style={styles.container}>
+                        <NavigationContainer>
+                            <Header/>
                             <Navigation/>
-                        <Navbar/>
-                    </NavigationContainer>
-                </SafeAreaView>
-            </ApolloProvider>
+                            <Navbar/>
+                        </NavigationContainer>
+                    </SafeAreaView>
+                </ApolloProvider>
+            </GluestackUIProvider>
         </AuthProvider>
     );
 }

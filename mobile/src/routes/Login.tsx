@@ -26,13 +26,13 @@ type FormData = {
 export default function Login() {
     const {control, handleSubmit} = useForm<FormData>();
     const [isFocused, setIsFocused] = useState({email: false, password: false});
-    const {setCurrentUser} = useAuth();
+    const {setCurrentUser, currentUser} = useAuth();
     const navigation: NavigationProp<any> = useNavigation();
 
     const onSubmit = async (data: FormData) => {
-        await axios.post('http://192.168.0.49:3001/auth/login', {email: data.email, password: data.password})
-            .then(async (response: any) => {
-                await SecureStore.setItemAsync('jwt', response.data.access_token);
+        await axios.post('http://192.168.0.38:3001/auth/login', {email: data.email, password: data.password})
+            .then((response: any) => {
+                SecureStore.setItemAsync('jwt', response.data.access_token);
                 setCurrentUser(response.data.user)
             });
     };

@@ -17,11 +17,12 @@ export default function AuthorizationCheck({children}: React.PropsWithChildren) 
             if(token){
                 api.defaults.headers.common['Authorization'] = `Bearer ${token}`;
             } else {
-                delete api.defaults.headers.common['Authorization'];
+                // delete api.defaults.headers.common['Authorization'];
+
             }
 
             try {
-                const userData = await axios.get('http://192.168.0.38:3001/auth/verify').catch(error => {
+                const userData = await axios.get('http://192.168.0.38:3001/auth/verify', {withCredentials: true}).catch(error => {
                     console.log(error);
                 });
                 if (userData) {

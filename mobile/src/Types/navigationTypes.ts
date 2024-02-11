@@ -6,4 +6,6 @@ export type RootStackParamList = {
     Kontakt: undefined;
     EventDetails: { eventId: number };
     CreateEvent: undefined;
+    Register: undefined;
+    Login: undefined;
   };

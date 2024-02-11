@@ -1,6 +1,7 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View, Text, ImageBackground, ScrollView, StyleSheet } from 'react-native';
 import InfoCard from "../components/InfoCard/InfoCard";
+import {useAuth} from "../context/AuthContext";
 
 
 export default function HomePage() {

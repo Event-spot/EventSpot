@@ -11,6 +11,10 @@ import {
 import React, {useState} from "react";
 import {colors} from "../constants/colors";
 import {Controller, useForm} from "react-hook-form";
+import {gql, useMutation} from "@apollo/client";
+import * as  yup from 'yup';
+import {yupResolver} from "@hookform/resolvers/yup";
+import {useNavigation} from "@react-navigation/native";
 
 type FormData = {
     email: string;
@@ -20,9 +24,23 @@ type FormData = {
     retypePassword: string;
 }
 
+const ADD_USER = gql`
+mutation AddUser($addUserArgs: AddUserArgs!) {
+    addUser(addUserArgs: $addUserArgs)
+}
+`
+const schema = yup.object().shape({
+    email: yup.string().email('Wpisz poprawny email').required('Email jest wymagany'),
+    firstName: yup.string().required('Imię jest wymagane'),
+    lastName: yup.string().required('Nazwisko jest wymagane'),
+    password: yup.string().required('Hasło jest wymagane').min(3, 'Hasło musi zawierać min. 3 znaki')
+})
 
 export default function Register() {
-    const {control, handleSubmit} = useForm<FormData>()
+    const {control, handleSubmit} = useForm<FormData>({
+        resolver: yupResolver(schema)
+    })
+    const navigation = useNavigation();
     const [isFocused, setIsFocused] = useState({
         email: false,
         firstName: false,
@@ -30,9 +48,30 @@ export default function Register() {
         password: false,
         retypePassword: false
     });
+    const [addUser] = useMutation(ADD_USER);
+
+    const navigateToLogin = async () => {
+        navigation.navigate('Login');
+    }
 
     const onSubmit = async (data: FormData) => {
         console.log(data)
+
+        const userData = {
+            email: data.email,
+            firstname: data.firstName,
+            lastname: data.lastName,
+            password: data.password,
+        }
+
+        try {
+            await addUser({
+                variables: { addUserArgs: userData}
+            })
+        } catch (error) {
+            console.error('Błąd GraphQL: ', error)
+        }
+        await navigateToLogin();
     }
 
     const handleFocus = (field: string) => {
