@@ -1,11 +1,12 @@
-import React from 'react';
+import React, {useEffect} from 'react';
 import { View, Text, ImageBackground, ScrollView, StyleSheet } from 'react-native';
 import InfoCard from "../components/InfoCard/InfoCard";
+import {useAuth} from "../context/AuthContext";
 
 
 export default function HomePage() {
-    return ( 
-    
+    return (
+
         <ScrollView style={styles.container}>
             <View style={styles.overlaytop}>
                     <ImageBackground style={styles.bgImage} source={require('../assets/images/home_background.png')}>
@@ -18,16 +19,16 @@ export default function HomePage() {
             <View style={styles.overlaybottom}>
                      <InfoCard type='event'/>
             </View>
-            
+
         </ScrollView>
-    
+
     );
 }
 
 const styles = StyleSheet.create({
-  
+
     container: {
-        flex: 1,  
+        flex: 1,
     },
     bgImage: {
         flex: 1,
@@ -36,30 +37,30 @@ const styles = StyleSheet.create({
     overlaytop: {
         flex:1,
         minHeight:600,
-       
+
     },
     overlaybottom: {
         flex:1,
         marginTop:10,
         alignItems:'center'
-        
+
     },
     content: {
-        marginTop: 50, 
+        marginTop: 50,
         height:150,
         justifyContent:'center',
-        backgroundColor: 'rgba(0, 0, 0, 0.7)', 
+        backgroundColor: 'rgba(0, 0, 0, 0.7)',
     },
     title: {
         fontSize: 48,
         fontWeight: 'bold',
         color: '#FFFFFF',
-        textAlign: 'center', 
+        textAlign: 'center',
     },
     text: {
         fontSize: 18,
         fontWeight: '300',
         color: '#FFFFFF',
-        textAlign: 'center', 
+        textAlign: 'center',
     },
 });

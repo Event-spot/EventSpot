@@ -60,9 +60,7 @@ export default function RegisterPage() {
         });
 
         await axios.post('http://localhost:3001/auth/login', {email: userData.email, password: userData.password}, {withCredentials: true})
-            .then(response => 
-                setCurrentUser(response.data.user));
-                await router.push('/');
+        router.push('/');
     }
 
     return (
