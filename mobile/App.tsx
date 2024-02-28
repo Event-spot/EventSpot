@@ -21,7 +21,7 @@ import CreateEvent from "./src/routes/CreateEvent";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const client = new ApolloClient({
-    uri: 'http://192.168.0.38:3001/graphql',
+    uri: 'http://192.168.18.2:3001/graphql',
     cache: new InMemoryCache(),
 })
 export default function App() {

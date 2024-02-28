@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { View, Text, Image, TouchableOpacity, ScrollView, TextInput, StyleSheet, Linking } from 'react-native';
+import { View, Text, Image, TouchableOpacity, ScrollView, TextInput, StyleSheet, Linking, Alert, RefreshControl } from 'react-native';
 import { useQuery, gql, useMutation } from '@apollo/client';
 import { useNavigation, RouteProp  } from '@react-navigation/native';
 import { RootStackParamList } from '../Types/navigationTypes';
@@ -119,15 +119,16 @@ const UserProfile: React.FC<Props> = ({ route}) => {
   const [followersCount, setFollowersCount] = useState(0);
   const [image, setImage] = useState<string | null>(null);
   const [avatarImage, setAvatarImage] = useState<string | null>(null);
+  const [refreshing, setRefreshing] = useState(false);
 
 
-//   useEffect(() => {
-//     if (data && data.userById) {
-//       setFollowersCount(data.userById.followers.length || 0);
-//       const isFollowing = data.userById.followers.some((follower: any) => follower.id === currentUser?.id);
-//       setIsCurrentlyFollowing(isFollowing);
-//     }
-//   }, [data, currentUser?.id]);
+  useEffect(() => {
+    if (data && data.userById) {
+      setFollowersCount(data.userById.followers.length || 0);
+      const isFollowing = data.userById.followers.some((follower: any) => follower.id === currentUser?.id);
+      setIsCurrentlyFollowing(isFollowing);
+    }
+  }, [data, currentUser?.id]);
 
   if (loading) return <Text>Loading...</Text>;
   if (error) return <Text>Error: {error.message}</Text>;
@@ -234,44 +235,59 @@ const UserProfile: React.FC<Props> = ({ route}) => {
     setIsEditing(false);
   };
 
-//   const handleFollow = async () => {
-//     if (!currentUser) {
-//       Notifications.show({ title: 'Zaloguj się', message: 'Musisz być zalogowany, aby obserwować użytkownika.', color: 'red' });
-//       return;
-//     }
-//     try {
-//       if (isCurrentlyFollowing) {
-//         await unFollowUser({
-//           variables: {
-//             userId: currentUser.id,
-//             followingId: parseInt(userID, 10),
-//           }
-//         });
-//         Notifications.show({ title: 'Sukces', message: 'Przestałeś obserwować użytkownika.', color: 'green' });
-//       } else {
-//         await followUser({
-//           variables: {
-//             userId: currentUser.id,
-//             followingId: parseInt(userID, 10),
-//           },
-//         });
-//         Notifications.show({ title: 'Sukces', message: 'Zacząłeś obserwować użytkownika.', color: 'green' });
-//       }
-//       setIsCurrentlyFollowing(!isCurrentlyFollowing);
-//       refetch();
-//     } catch (error) {
-//       console.error('Error updating follow status:', error);
-//       Notifications.show({ title: 'Błąd', message: 'Nie udało się zaktualizować statusu obserwacji.', color: 'red' });
-//     }
-//   };
+  const handleFollow = async () => {
+    if (!currentUser) {
+      Alert.alert("Zaloguj się", "Musisz być zalogowany, aby obserwować użytkownika.");
+      return;
+    }
+    try {
+      if (isCurrentlyFollowing) {
+        await unFollowUser({
+          variables: {
+            userId: currentUser.id,
+            followingId: userID,
+          }
+        });
+        Alert.alert("Sukces", "Przestałeś obserwować użytkownika.");
+
+      } else {
+        await followUser({
+          variables: {
+            userId: currentUser.id,
+            followingId: userID,
+          },
+        });
+        Alert.alert("Sukces", "Zacząłeś obserwować użytkownika.");
+      }
+      setIsCurrentlyFollowing(!isCurrentlyFollowing);
+      refetch();
+    } catch (error) {
+      console.error('Error updating follow status:', error);
+      Alert.alert("Błąd", "Nie udało się zaktualizować statusu obserwacji.");
+    }
+  };
     const handleIconPress = (url:string) => {
         if (url) {
             Linking.openURL(url);
           }
     };
-
+    // const onRefresh = React.useCallback(() => {
+    //   setRefreshing(true);
+  
+    //   refetch();
+    //   setTimeout(() => {
+    //     setRefreshing(false);
+    //   }, 2000);
+    // }, []);
   return (
-    <ScrollView style={styles.main}>
+    <ScrollView style={styles.main}
+    // refreshControl={
+    //   <RefreshControl
+    //     refreshing={refreshing}
+    //     onRefresh={onRefresh}
+    //   />
+    // }
+  >
       <View style={styles.up}>
         {isEditing ? (
             <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
@@ -375,13 +391,13 @@ const UserProfile: React.FC<Props> = ({ route}) => {
             (
             isCurrentlyFollowing  ? (
                 <TouchableOpacity style={styles.buttonCancel} 
-                // onClick={handleFollow}
+                onPress={handleFollow}
                 >
                     <Text>Przestań obserwować</Text>
                     </TouchableOpacity>
             ) : (
                 <TouchableOpacity style={styles.button} 
-                // onClick={handleFollow}
+                onPress={handleFollow}
                 >
                     <Text style={styles.buttonText}>Obserwuj</Text>
                     </TouchableOpacity>
