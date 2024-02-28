@@ -1,9 +1,8 @@
 import React from "react";
 import {SafeAreaView, StyleSheet, AppRegistry, StatusBar} from 'react-native';
 import {ApolloClient, InMemoryCache, ApolloProvider} from "@apollo/client";
-import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {apolloDevToolsInit} from 'react-native-apollo-devtools-client';
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Header from './src/layout/Header';
 import HomePage from "./src/routes/HomePage";
 import Events from "./src/routes/Events";
@@ -22,7 +21,7 @@ import CreateEvent from "./src/routes/CreateEvent";
 
 const Stack = createNativeStackNavigator<RootStackParamList>();
 const client = new ApolloClient({
-    uri: 'http://192.168.0.38:3001/graphql',
+    uri: 'http://192.168.18.2:3001/graphql',
     cache: new InMemoryCache(),
 })
 export default function App() {

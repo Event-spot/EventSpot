@@ -10,7 +10,7 @@ export default function AuthorizationCheck({children}: React.PropsWithChildren) 
     useEffect(() => {
         const verifyUser = async () => {
             const api = axios.create({
-                baseURL: 'http://192.168.0.38:3001'
+                baseURL: 'http://192.168.18.2:3001'
             });
 
             const token = await SecureStore.getItemAsync('jwt');
@@ -22,7 +22,7 @@ export default function AuthorizationCheck({children}: React.PropsWithChildren) 
             }
 
             try {
-                const userData = await axios.get('http://192.168.0.38:3001/auth/verify', {withCredentials: true}).catch(error => {
+                const userData = await axios.get('http://192.168.18.2:3001/auth/verify', {withCredentials: true}).catch(error => {
                     console.log(error);
                 });
                 if (userData) {
