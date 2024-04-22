@@ -10,7 +10,7 @@
   },
   "dependencies": {
     "@apollo/client": "^3.8.0-rc.2",
-    "@apollo/experimental-nextjs-app-support": "^0.6.0",
+    "@apollo/experimental-nextjs-app-support": "^0.7.0",
     "@cloudinary/react": "^1.11.2",
     "@cloudinary/url-gen": "^1.16.0",
     "@googlemaps/js-api-loader": "^1.16.2",
